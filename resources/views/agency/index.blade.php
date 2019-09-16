@@ -10,10 +10,12 @@
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Agencies') }}</h3>
+                                <h3 class="mb-0">{{ __('Accrediting Agencies') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                <a href="{{ route('agency.create') }}" class="btn btn-sm btn-primary">{{ __('Add Agency') }}</a>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#agencyModal">
+                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Accrediting Agency
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -72,7 +74,39 @@
                 </div>
             </div>
         </div>
-            
+        
+        <!-- Modal -->
+        <div class="modal fade" id="agencyModal" tabindex="-1" role="dialog" aria-labelledby="agencyModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="agencyModalLabel">Add Agency</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form role="form">
+                        <div class="modal-body">
+                            <div class="form-group mb-3">
+                            <label class="form-control-label">Agency Name</label>
+                            <div class="input-group input-group-alternative">
+                                <input class="form-control" type="text">
+                            </div>
+                            </div>
+                            <div class="form-group mb-3">
+                            <label class="form-control-label">Agency Code</label>
+                            <div class="input-group input-group-alternative">
+                                <input class="form-control" type="text">
+                            </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         @include('layouts.footers.auth')
     </div>
 @endsection

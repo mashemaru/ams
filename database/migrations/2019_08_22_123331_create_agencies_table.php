@@ -16,6 +16,7 @@ class CreateAgenciesTable extends Migration
         Schema::create('agencies', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('agency_name');
+            $table->text('agency_code');
             $table->timestamps();
         });
     }

@@ -11,5 +11,8 @@ class Agency extends Model
      *
      * @var array
      */
-    protected $fillable = ['agency_name'];
+    protected $fillable = [
+        'agency_name',
+        'agency_code',
+    ];
 }

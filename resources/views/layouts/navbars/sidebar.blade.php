@@ -79,65 +79,105 @@
             <!-- Navigation -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">
-                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Dashboard') }}
+                    <a class=" nav-link" href="{{ route('home') }}"> 
+                        <i class="ni ni-tv-2 text-primary"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-examples">
-                        <i class="fab fa-laravel"></i>
-                        <span class="nav-link-text">{{ __('User') }}</span>
-                    </a>
-
-                    <div class="collapse show" id="navbar-examples">
-                        <ul class="nav nav-sm flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('profile.edit') }}">
-                                    {{ __('User profile') }}
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">
-                                    {{ __('User Management') }}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('agency.index') }}">
-                        <i class="ni ni-planet text-blue"></i> {{ __('Agency') }}
+                    <a class="nav-link" href="../screens/tasks.html">
+                        <i class="ni ni-check-bold text-blue"></i> Tasks
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('program.index') }}">
-                        <i class="ni ni-circle-08 text-pink"></i> {{ __('Program') }}
+                    <a class="nav-link" href="../screens/notifications.html">
+                        <i class="ni ni-bell-55 text-blue"></i> Notifications
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="../screens/activities.html">
+                        <i class="ni ni-calendar-grid-58 text-orange"></i> Activities
                     </a>
                 </li>
             </ul>
             <!-- Divider -->
             <hr class="my-3">
             <!-- Heading -->
-            <h6 class="navbar-heading text-muted">Documentation</h6>
-            <!-- Navigation -->
-            <ul class="navbar-nav mb-md-3">
+            <h6 class="navbar-heading text-muted">Administration & Setup</h6>
+            <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/getting-started/overview.html">
-                        <i class="ni ni-spaceship"></i> Getting started
+                    <a class="nav-link" href="{{ route('agency.index') }}">
+                        <i class="ni ni-building text-blue"></i> Agencies
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/foundation/colors.html">
-                        <i class="ni ni-palette"></i> Foundation
+                    <a class="nav-link " href="{{ route('program.index') }}">
+                        <i class="ni ni-hat-3 text-orange"></i> Programs
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/components/alerts.html">
-                        <i class="ni ni-ui-04"></i> Components
+                    <a class="nav-link " href="{{ route('user.index') }}">
+                        <i class="ni ni-single-02 text-yellow"></i> Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="../screens/docuoutlines.html">
+                        <i class="ni ni-single-copy-04 text-red"></i> Document Outlines
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="#">
+                        <i class="ni ni-building text-blue"></i> Accreditations
+                    </a>
+                </li>
+            </ul>
+            <!-- Divider -->
+            <hr class="my-3">
+            <!-- Heading -->
+            <h6 class="navbar-heading text-muted">Configuration</h6>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="../screens/newaccreditation.html">
+                        <i class="ni ni-paper-diploma text-blue"></i> New Accreditation
+                    </a>
+                </li>
+            </ul>
+            <!-- Divider -->
+            <hr class="my-3">
+            <!-- Heading -->
+            <h6 class="navbar-heading text-muted">Documents</h6>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="../screens/filerepo.html">
+                        <i class="ni ni-single-copy-04 text-blue"></i> File Repository
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../screens/evidences.html">
+                        <i class="ni ni-single-copy-04 text-blue"></i> Evidences
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="ni ni-single-copy-04 text-blue"></i> Completed Reports
                     </a>
                 </li>
             </ul>
         </div>
+
+    <!-- Collapse -->
+      <div class="collapse navbar-collapse" id="sidenav-collapse-main">
+        <!-- Form -->
+        <form class="mt-4 mb-3 d-md-none">
+          <div class="input-group input-group-rounded input-group-merge">
+            <input type="search" class="form-control form-control-rounded form-control-prepended" placeholder="Search" aria-label="Search">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <span class="fa fa-search"></span>
+              </div>
+            </div>
+          </div>
+        </form>
+        
+      </div>
     </div>
 </nav>
