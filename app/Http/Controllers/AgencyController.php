@@ -37,6 +37,7 @@ class AgencyController extends Controller
     {
         $validate = $request->validate([
             'agency_name' => 'required|min:4',
+            'agency_code' => 'required|min:4',
         ]);
 
         Agency::create($validate);
@@ -77,6 +78,7 @@ class AgencyController extends Controller
     {
         $validate = $request->validate([
             'agency_name' => 'required|min:4',
+            'agency_code' => 'required|min:4',
         ]);
 
         $agency->update($validate);

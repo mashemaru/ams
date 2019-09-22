@@ -36,6 +36,7 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Agency Name') }}</th>
+                                    <th scope="col">{{ __('Agency Code') }}</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -43,6 +44,7 @@
                                 @foreach ($agencies as $agency)
                                     <tr>
                                         <td>{{ $agency->agency_name }}</td>
+                                        <td>{{ $agency->agency_code }}</td>
                                         <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

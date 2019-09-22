@@ -99,6 +99,7 @@
                     </a>
                 </li>
             </ul>
+        @role('super-admin')
             <!-- Divider -->
             <hr class="my-3">
             <!-- Heading -->
@@ -162,6 +163,7 @@
                     </a>
                 </li>
             </ul>
+        @endrole
         </div>
 
     <!-- Collapse -->
