@@ -22,5 +22,7 @@ class UsersTableSeeder extends Seeder
             'updated_at' => now()
         ]);
         $user->assignRole('super-admin');
+
+        factory(App\User::class, 50)->create();
     }
 }

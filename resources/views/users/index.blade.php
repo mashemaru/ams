@@ -34,6 +34,7 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
+                                    <th scope="col">{{ __('User Type') }}</th>
                                     <th scope="col">{{ __('Email') }}</th>
                                     <th scope="col">{{ __('Roles') }}</th>
                                     <th scope="col"></th>
@@ -43,15 +44,16 @@
                                 @foreach ($users as $user)
                                     <tr>
                                         <td>{{ $user->name }}</td>
+                                        <td>{{ title_case($user->user_type) }}</td>
                                         <td>
                                             <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
                                         </td>
-                                    <td>
-                                        @foreach($user->roles as $role)
-                                        <span class="badge badge-dot mr-4">
-                                            <i class="{{ ($role->name == 'super-admin') ? 'bg-success' : 'bg-info' }}"></i> {{ $role->label }}</span><br>
-                                        @endforeach
-                                    </td>
+                                        <td>
+                                            @foreach($user->roles as $role)
+                                            <span class="badge badge-dot mr-4">
+                                                <i class="{{ ($role->name == 'super-admin') ? 'bg-success' : 'bg-info' }}"></i> {{ $role->label }}</span><br>
+                                            @endforeach
+                                        </td>
                                         <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
