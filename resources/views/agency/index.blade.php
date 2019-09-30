@@ -21,6 +21,18 @@
                     </div>
                     
                     <div class="col-12">
+                        @if ($errors->any())
+                            <div class="alert alert-danger alert-dismissible fade show">
+                                <ul class="m-0 pl-4">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
                         @if (session('status'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 {{ session('status') }}
@@ -85,19 +97,26 @@
                         <h5 class="modal-title" id="agencyModalLabel">Add Agency</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
-                    <form role="form">
+                    <form method="post" action="{{ route('agency.store') }}" autocomplete="off">
+                        @csrf
                         <div class="modal-body">
-                            <div class="form-group mb-3">
-                            <label class="form-control-label">Agency Name</label>
-                            <div class="input-group input-group-alternative">
-                                <input class="form-control" type="text">
+                            <div class="form-group{{ $errors->has('agency_name') ? ' has-danger' : '' }} mb-3">
+                                <label class="form-control-label" for="input-name">{{ __('Agency Name') }}</label>
+                                <input type="text" name="agency_name" id="input-name" class="form-control form-control-alternative{{ $errors->has('agency_name') ? ' is-invalid' : '' }}" placeholder="{{ __('Agency Name') }}" value="{{ old('agency_name') }}" required autofocus>
+                                @if ($errors->has('agency_name'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('agency_name') }}</strong>
+                                    </span>
+                                @endif
                             </div>
-                            </div>
-                            <div class="form-group mb-3">
-                            <label class="form-control-label">Agency Code</label>
-                            <div class="input-group input-group-alternative">
-                                <input class="form-control" type="text">
-                            </div>
+                            <div class="form-group{{ $errors->has('agency_code') ? ' has-danger' : '' }} mb-3">
+                                <label class="form-control-label" for="input-name">{{ __('Agency Code') }}</label>
+                                <input type="text" name="agency_code" id="input-name" class="form-control form-control-alternative{{ $errors->has('agency_code') ? ' is-invalid' : '' }}" placeholder="{{ __('Agency Code') }}" value="{{ old('agency_code') }}" required>
+                                @if ($errors->has('agency_code'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('agency_code') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                         <div class="modal-footer">
