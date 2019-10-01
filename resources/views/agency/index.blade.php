@@ -33,14 +33,6 @@
                                 </button>
                             </div>
                         @endif
-                        @if (session('status'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                {{ session('status') }}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        @endif
                     </div>
 
                     <div class="table-responsive">
@@ -92,7 +84,7 @@
         <!-- Modal -->
         <div class="modal fade" id="agencyModal" tabindex="-1" role="dialog" aria-labelledby="agencyModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
+                <div class="modal-content bg-secondary">
                     <div class="modal-header">
                         <h5 class="modal-title" id="agencyModalLabel">Add Agency</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

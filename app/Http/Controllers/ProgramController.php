@@ -42,7 +42,7 @@ class ProgramController extends Controller
 
         Program::create($validate);
 
-        return redirect()->route('program.index')->withStatus(__('Program successfully created.'));
+        return redirect()->route('program.index')->withToastSuccess(__('Program successfully created.'));
     }
 
     /**
@@ -83,7 +83,7 @@ class ProgramController extends Controller
 
         $program->update($validate);
 
-        return redirect()->route('program.index')->withStatus(__('Program successfully updated.'));
+        return redirect()->route('program.index')->withToastSuccess(__('Program successfully updated.'));
     }
 
     /**
@@ -96,6 +96,6 @@ class ProgramController extends Controller
     {
         $program->delete();
 
-        return redirect()->route('program.index')->withStatus(__('Program successfully deleted.'));
+        return redirect()->route('program.index')->withToastSuccess(__('Program successfully deleted.'));
     }
 }

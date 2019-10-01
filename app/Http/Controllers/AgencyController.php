@@ -42,7 +42,7 @@ class AgencyController extends Controller
 
         Agency::create($validate);
 
-        return redirect()->route('agency.index')->withStatus(__('Agency successfully created.'));
+        return redirect()->route('agency.index')->withToastSuccess(__('Agency successfully created.'));
     }
 
     /**
@@ -83,7 +83,7 @@ class AgencyController extends Controller
 
         $agency->update($validate);
 
-        return redirect()->route('agency.index')->withStatus(__('Agency successfully updated.'));
+        return redirect()->route('agency.index')->withToastSuccess(__('Agency successfully updated.'));
     }
 
     /**
@@ -96,6 +96,6 @@ class AgencyController extends Controller
     {
         $agency->delete();
 
-        return redirect()->route('agency.index')->withStatus(__('Agency successfully deleted.'));
+        return redirect()->route('agency.index')->withToastSuccess(__('Agency successfully deleted.'));
     }
 }
