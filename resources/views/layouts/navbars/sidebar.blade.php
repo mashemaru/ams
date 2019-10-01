@@ -116,6 +116,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link " href="{{ route('scoring.index') }}">
+                        <i class="ni ni-ruler-pencil text-teal"></i> Scoring Types
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link " href="{{ route('user.index') }}">
                         <i class="ni ni-single-02 text-yellow"></i> Users
                     </a>

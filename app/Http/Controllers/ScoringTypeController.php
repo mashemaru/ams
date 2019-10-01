@@ -12,9 +12,9 @@ class ScoringTypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ScoringType $scoring_type)
     {
-        //
+        return view('scoring.index', ['scoring_type' => $scoring_type->paginate(15)]);
     }
 
     /**
@@ -24,7 +24,7 @@ class ScoringTypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('scoring.create');
     }
 
     /**
@@ -35,7 +35,15 @@ class ScoringTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'scoring_name' => 'required|min:4',
+        ]);
+        $validate['scoring_description'] = $request->scoring_description;
+        $validate['scores'] = $request->scoring;
+
+        ScoringType::create($validate);
+
+        return redirect()->route('scoring.index')->withToastSuccess(__('Scoring Type successfully created.'));
     }
 
     /**

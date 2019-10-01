@@ -16,15 +16,18 @@ class CreateScoringTypesTable extends Migration
         Schema::create('scoring_types', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->text('scoring_name');
-            $table->text('scoring_description');
+            $table->text('scoring_description')->nullable();
             $table->mediumText('scores')->nullable();
             $table->timestamps();
         });
 
         Schema::create('program_scoring', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('scoring_id');
-            $table->unsignedInteger('program_id');
+            $table->unsignedBigInteger('scoring_id');
+            $table->unsignedBigInteger('program_id');
+
+            $table->foreign('scoring_id')->references('id')->on('scoring_types')->onDelete('cascade');
+            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
         });
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Program;
+use App\ScoringType;
 use Illuminate\Http\Request;
 
 class ProgramController extends Controller
@@ -62,9 +63,11 @@ class ProgramController extends Controller
      * @param  \App\Program  $program
      * @return \Illuminate\Http\Response
      */
-    public function edit(Program $program)
+    public function edit()
     {
-        return view('program.edit', compact('program'));
+        $program = Program::with('score_types')->firstOrFail();
+        $scoringType = ScoringType::all();
+        return view('program.edit', compact('program','scoringType'));
     }
 
     /**
@@ -81,6 +84,7 @@ class ProgramController extends Controller
             'program_code' => 'required',
         ]);
 
+        $program->score_types()->sync($request->scoring_type);
         $program->update($validate);
 
         return redirect()->route('program.index')->withToastSuccess(__('Program successfully updated.'));

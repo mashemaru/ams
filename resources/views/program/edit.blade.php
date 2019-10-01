@@ -44,6 +44,15 @@
                                     @endif
                                 </div>
 
+                                <div class="form-group">
+                                    <label class="form-control-label">{{ __('Scoring Type') }}</label>
+                                    <select id="scoring_type" class="scoring_type form-control" name="scoring_type[]" multiple="multiple">
+                                        @foreach ($scoringType as $score)
+                                            <option value="{{$score->id}}" @foreach($program->score_types as $scoreType) {{ ($scoreType->id == $score->id) ? 'selected="selected"' : '' }} @endforeach>{{ $score->scoring_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                                 </div>
