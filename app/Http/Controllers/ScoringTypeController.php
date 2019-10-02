@@ -36,9 +36,9 @@ class ScoringTypeController extends Controller
     public function store(Request $request)
     {
         $validate = $request->validate([
-            'scoring_name' => 'required|min:4',
+            'scoring_name'          => 'required|min:4',
+            'scoring_description'   => 'nullable',
         ]);
-        $validate['scoring_description'] = $request->scoring_description;
         $validate['scores'] = $request->scoring;
 
         ScoringType::create($validate);
