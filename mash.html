@@ -32,44 +32,81 @@
   <!-- CSS Files -->
   <link href="../assets/css/argon-dashboard.css?v=1.1.0" rel="stylesheet" />
   <!-- JQuery -->
-  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.4.1.js"></script> -->
   <style>
-body.dragging, body.dragging * {
-  cursor: move !important;
+.dd { position: relative; display: block; margin: 0; padding: 0; list-style: none; font-size: 13px; line-height: 20px; }
+
+.dd-list { display: block; position: relative; margin: 0; padding: 0; list-style: none; }
+.dd-list .dd-list { padding-left: 30px; }
+.dd-collapsed .dd-list { display: none; }
+
+.dd-item,
+.dd-empty,
+.dd-placeholder { display: block; position: relative; margin: 0; padding: 0; min-height: 20px; font-size: 13px; line-height: 20px; }
+
+.dd-handle { display: block;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+.dd-handle:hover { color: #2ea8e5; }
+
+.dd-item > button { display: block; position: relative; cursor: pointer; float: left; width: 25px; height: 20px; margin: 5px 0; padding: 0; text-indent: 100%; white-space: nowrap; overflow: hidden; border: 0; background: transparent; font-size: 12px; line-height: 1; text-align: center; font-weight: bold; }
+.dd-item > button:before {     content: "\ea31";
+    display: block;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    text-indent: 0;
+    font: normal normal normal 16px/1 NucleoIcons; }
+.dd-item > button[data-action="collapse"]:before { content: "\ea32"; }
+
+.dd-item > .form-inline {
+  padding-bottom: .5rem;
 }
 
-.dragged {
-  position: absolute;
-  opacity: 0.5;
-  z-index: 2000;
+.dd-placeholder,
+.dd-empty { margin: 5px 0; padding: 0; min-height: 30px; background: #f2fbff; border: 1px dashed #b6bcbf; box-sizing: border-box; -moz-box-sizing: border-box; }
+.dd-empty { border: 1px dashed #bbb; min-height: 100px; background-color: #e5e5e5;
+    background-image: -webkit-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff),
+                      -webkit-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff);
+    background-image:    -moz-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff),
+                         -moz-linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff);
+    background-image:         linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff),
+                              linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff);
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
 }
 
-ul li.placeholder {
-  position: relative;
-  /** More li styles **/
+.dd-dragel { position: absolute; pointer-events: none; z-index: 9999; }
+.dd-dragel > .dd-item .dd-handle { margin-top: 0; }
+.dd-dragel .dd-handle {
+    -webkit-box-shadow: 2px 4px 6px 0 rgba(0,0,0,.1);
+            box-shadow: 2px 4px 6px 0 rgba(0,0,0,.1);
 }
-ul li.placeholder:before {
-  position: absolute;
-  /** Define arrowhead **/
+@media only screen and (min-width: 700px) {
+.dd + .dd { margin-left: 2%; }
 }
+
+.dd-hover > .dd-handle { background: #2ea8e5 !important; }
   </style>
 </head>
 
 <body class="">
   <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
     <div class="container-fluid" id="navbar">
-      <script>
-        $( "#navbar" ).load( "navbar.html" );
-      </script>
     </div>
   </nav>
   <div class="main-content">
     <!-- Navbar -->
     <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
       <div class="container-fluid" id="header">
-        <script>
-          $( "#header" ).load( "header.html" );
-        </script>
       </div>
     </nav>
     <!-- End Navbar -->
@@ -88,7 +125,7 @@ ul li.placeholder:before {
             <div class="card-header border-1">
               <h3 class="mb-0">Create Document Outline</h3>
             </div>
-            <div class="card-body px-lg-5 py-lg-5">
+            <div class="card-body bg-secondary px-lg-5 py-lg-5">
               <form role="form">
                 <div class="row">
                   <div class="col-6">
@@ -141,38 +178,53 @@ ul li.placeholder:before {
                     </li>
                   </ul>
                 </div> -->
-                <div class="dd" id="nestable">
-                  <ol class="dd-list">
-                    <li class="dd-item" data-id="1">
-                        <div class="dd-handle">Item 1</div>
-                    </li><li class="dd-item" data-id="2"><button data-action="collapse" type="button">Collapse</button><button data-action="expand" type="button" style="display: none;">Expand</button>
-                        <div class="dd-handle">Item 2</div>
-                        <ol class="dd-list">
-                            <li class="dd-item" data-id="3"><div class="dd-handle">Item 3</div></li>
-                            <li class="dd-item" data-id="4"><div class="dd-handle">Item 4</div></li>
-                            <li class="dd-item" data-id="5"><button data-action="collapse" type="button">Collapse</button><button data-action="expand" type="button" style="display: none;">Expand</button>
-                                <div class="dd-handle">Item 5</div>
-                                <ol class="dd-list">
-                                    <li class="dd-item" data-id="6"><div class="dd-handle">Item 6</div></li>
-                                    <li class="dd-item" data-id="7"><div class="dd-handle">Item 7</div></li>
-                                    <li class="dd-item" data-id="8"><div class="dd-handle">Item 8</div></li>
-                                </ol>
-                            </li>
-                            <li class="dd-item" data-id="9"><div class="dd-handle">Item 9</div></li>
-                            <li class="dd-item" data-id="10"><div class="dd-handle">Item 10</div></li>
-                        </ol>
-                    </li>
-                    <li class="dd-item" data-id="11">
-                        <div class="dd-handle">Item 11</div>
-                    </li>
-                    <li class="dd-item" data-id="12">
-                        <div class="dd-handle">Item 12</div>
-                    </li>
-                  </ol>
-                </div>
+                  <div class="dd">
+                    <ol id="dd-list" class="dd-list">
+                      <li class="dd-item" data-id="1">
+                        <div class="form-inline">
+                          <div class="dd-handle"><i class="fas fa-arrows-alt"></i></div>
+                          <div class="form-group mr-3">
+                            <div class="input-group input-group-alternative">
+                              <input class="form-control section" placeholder="Section" type="text">
+                            </div>
+                          </div>
+                          <div class="form-group mr-3">
+                            <div class="input-group input-group-alternative">
+                              <select class="form-control">
+                                  <option>Narrative</option>
+                                  <option>Score Type 1</option>
+                                  <option>Score Type 2</option>                   
+                              </select>
+                            </div>
+                          </div>
+                          <button class="btn btn-icon btn-2 btn-danger" type="button">x</button>
+                        </div>
+                      </li>
+                      <li class="dd-item" data-id="2">
+                        <div class="form-inline">
+                          <div class="dd-handle"><i class="fas fa-arrows-alt"></i></div>
+                          <div class="form-group mr-3">
+                            <div class="input-group input-group-alternative">
+                              <input class="form-control section" placeholder="Section" type="text">
+                            </div>
+                          </div>
+                          <div class="form-group mr-3">
+                            <div class="input-group input-group-alternative">
+                              <select class="form-control">
+                                  <option>Narrative</option>
+                                  <option>Score Type 1</option>
+                                  <option>Score Type 2</option>                   
+                              </select>
+                            </div>
+                          </div>
+                          <button class="btn btn-icon btn-2 btn-danger" type="button">x</button>
+                        </div>
+                      </li>
+                    </ol>
+                  </div>
               </form>
             </div>
-            <div class="card-footer py-4">
+            <div class="card-footer bg-secondary py-4">
               <div class="text-right">
                 <a href="docuoutlines.html"><button type="button" class="btn btn-primary">Save</button></a>
               </div>
@@ -214,74 +266,34 @@ ul li.placeholder:before {
   <!--   Optional JS   -->
   <!--   Argon JS   -->
   <script src="../assets/js/argon-dashboard.min.js?v=1.1.0"></script>
-  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
-  <script>
-    window.TrackJS &&
-      TrackJS.install({
-        token: "ee6fab19c5a04ac1a32a645abde4613a",
-        application: "argon-dashboard-free"
-      });
-  </script>
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sortable/0.9.13/jquery-sortable-min.js"></script>
   <script>
   $(function  () {
     $("#nested-section").sortable();
   }); -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Nestable/2012-10-15/jquery.nestable.min.js"></script>
+  <script src="../assets/js/jquery.nestable.min.js"></script>
   <script>
-    $(function  () {
-      $('.dd').nestable({
-        group: 1,
-        listNodeName: 'ul'
-      });
+  var listCount = $('#dd-list .dd-item').length;
+  $(function  () {
+    $('.dd').nestable({
+      group: 1,
+      maxDepth: 10,
+      expandBtnHTML: '',
+      collapseBtnHTML: '',
     });
-  </script>
-  <script>
-    function save() {
-      console.log(JSON.stringify($(".dd").nestable('serialize'), null));
-      // console.log(JSON.stringify($("#nested-section").sortable('serialize').get(), null));
-    }
-    function addSection(){
-      var x = '<li class="section dd-item" data-id="1"><div class="dd-handle">Drag</div><div class="form-group mb-3"><div class="input-group input-group-alternative"> <input class="form-control" placeholder="Section" type="text"></div></div><div class="form-group mb-3"><div class="input-group input-group-alternative"> <select class="form-control"><option>Narrative</option><option>Score Type 1</option><option>Score Type 2</option> </select></div></div> <button class="btn btn-icon btn-2 btn-danger" type="button">x</button><ul class="dd-list"></ul></li>';
-
-      document.getElementById('nested-section').insertAdjacentHTML('beforeend', x);
-    }
-  </script>
-  <script>
-    function addSub1(parentDiv){
-      var x = '<div class="row"><div class="col-1"></div><div class="col-1"><button class="btn btn-icon btn-2 btn-outline-success" type="button" onclick="addSub2(this.parentElement.parentElement)">+</button></div><div class="col-6"><div class="form-group mb-3"><div class="input-group input-group-alternative"><input class="form-control" placeholder="Section" type="text"></div></div></div><div class="col-2"><div class="form-group mb-3"><div class="input-group input-group-alternative"><select class="form-control"><option>Narrative</option><option>Score Type 1</option><option>Score Type 2</option></select></div></div></div><div class="col-1"><button class="btn btn-icon btn-2 btn-danger" type="button" onclick="this.parentElement.parentElement.style.display = '+"'"+'none'+"'"+'"'+'>x</button></div></div>';
-
-        var div = parentDiv.parentElement;
-
-        div.insertAdjacentHTML('beforeend', x);
-    }
-  </script>
-  <script>
-    function addSub2(parentDiv){
-      var x = '<div class="row"><div class="col-2"></div><div class="col-1"><button class="btn btn-icon btn-2 btn-outline-success" type="button" onclick="addSub3(this.parentElement.parentElement)">+</button></div><div class="col-5"><div class="form-group mb-3"><div class="input-group input-group-alternative"><input class="form-control" placeholder="Section" type="text"></div></div></div><div class="col-2"><div class="form-group mb-3"><div class="input-group input-group-alternative"><select class="form-control"><option>Narrative</option><option>Score Type 1</option><option>Score Type 2</option></select></div></div></div><div class="col-1"><button class="btn btn-icon btn-2 btn-danger" type="button" onclick="this.parentElement.parentElement.style.display = '+"'"+'none'+"'"+'"'+'>x</button></div></div>';
-
-        var div = parentDiv.parentElement;
-
-        div.insertAdjacentHTML('beforeend', x);
-    }
-  </script>
-  <script>
-    function addSub3(parentDiv){
-      var x = '<div class="row"><div class="col-3"></div><div class="col-1"><button class="btn btn-icon btn-2 btn-outline-success" type="button" onclick="addSub4(this.parentElement.parentElement)">+</button></div><div class="col-4"><div class="form-group mb-3"><div class="input-group input-group-alternative"><input class="form-control" placeholder="Section" type="text"></div></div></div><div class="col-2"><div class="form-group mb-3"><div class="input-group input-group-alternative"><select class="form-control"><option>Narrative</option><option>Score Type 1</option><option>Score Type 2</option></select></div></div></div><div class="col-1"><button class="btn btn-icon btn-2 btn-danger" type="button" onclick="this.parentElement.parentElement.style.display = '+"'"+'none'+"'"+'"'+'>x</button></div></div>';
-
-        var div = parentDiv.parentElement;
-
-        div.insertAdjacentHTML('beforeend', x);
-    }
-  </script>
-  <script>
-    function addSub4(parentDiv){
-      var x = '<div class="row"><div class="col-4"></div><div class="col-1"><button class="btn btn-icon btn-2 btn-outline-success" type="button" onclick="addSub5(this.parentElement.parentElement)">+</button></div><div class="col-3"><div class="form-group mb-3"><div class="input-group input-group-alternative"><input class="form-control" placeholder="Section" type="text"></div></div></div><div class="col-2"><div class="form-group mb-3"><div class="input-group input-group-alternative"><select class="form-control"><option>Narrative</option><option>Score Type 1</option><option>Score Type 2</option></select></div></div></div><div class="col-1"><button class="btn btn-icon btn-2 btn-danger" type="button" onclick="this.parentElement.parentElement.style.display = '+"'"+'none'+"'"+'"'+'>x</button></div></div>';
-
-        var div = parentDiv.parentElement;
-
-        div.insertAdjacentHTML('beforeend', x);
-    }
+  });
+  function addSection(){
+    var x = '<li class="dd-item" data-id="'+listCount+'"><div class="form-inline"><div class="dd-handle"><i class="fas fa-arrows-alt"></i></div><div class="form-group mr-3"><div class="input-group input-group-alternative"><input class="form-control" placeholder="Section" type="text"></div></div><div class="form-group mr-3"><div class="input-group input-group-alternative"><select class="form-control"><option>Narrative</option><option>Score Type 1</option><option>Score Type 2</option></select></div></div><button class="btn btn-icon btn-2 btn-danger" type="button">x</button></div></li>';
+    document.getElementById('dd-list').insertAdjacentHTML('beforeend', x);
+    listCount++;
+  }
+  function save() {
+    console.log(JSON.stringify($(".dd").nestable('serialize')));
+    // console.log(JSON.stringify($("#nested-section").sortable('serialize').get(), null));
+  }
+  $("#dd-list .dd-item .section").on('change', function(){
+    console.log(this.value)
+  });
   </script>
 </body>
 
