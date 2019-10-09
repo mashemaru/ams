@@ -21,13 +21,13 @@ class CreateScoringTypesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('program_scoring', function (Blueprint $table) {
+        Schema::create('agency_scoring', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('scoring_id');
-            $table->unsignedBigInteger('program_id');
+            $table->unsignedBigInteger('agency_id');
 
             $table->foreign('scoring_id')->references('id')->on('scoring_types')->onDelete('cascade');
-            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
+            $table->foreign('agency_id')->references('id')->on('agencies')->onDelete('cascade');
         });
     }
 

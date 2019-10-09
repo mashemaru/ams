@@ -313,3 +313,11 @@
 .dd-hover>.dd-handle {
 	background: #2ea8e5 !important;
 }
+.dd-list input.section {
+    width: 350px;
+}
+@media only screen and (min-width: 768px) {
+	.dd-list input.section {
+		width: 800px;
+	}
+}

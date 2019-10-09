@@ -18094,7 +18094,7 @@ textarea[resize='horizontal']
     line-height: 19px;
 
     position: absolute;
-    top: 2px;
+    top: 50%;
     right: 15px;
 
     display: inline-block;
@@ -18102,7 +18102,7 @@ textarea[resize='horizontal']
     width: 19px;
     height: 19px;
 
-    transform: translateY(50%);
+    transform: translateY(-50%);
     text-align: center;
 
     opacity: 1; 

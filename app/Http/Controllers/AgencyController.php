@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Agency;
+use App\ScoringType;
 use Illuminate\Http\Request;
 
 class AgencyController extends Controller
@@ -15,16 +16,6 @@ class AgencyController extends Controller
     public function index(Agency $agency)
     {
         return view('agency.index', ['agencies' => $agency->paginate(15)]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('agency.create');
     }
 
     /**
@@ -62,9 +53,11 @@ class AgencyController extends Controller
      * @param  \App\Agency  $agency
      * @return \Illuminate\Http\Response
      */
-    public function edit(Agency $agency)
+    public function edit()
     {
-        return view('agency.edit', compact('agency'));
+        $agency = Agency::with('score_types')->firstOrFail();
+        $scoringType = ScoringType::all();
+        return view('agency.edit', compact('agency','scoringType'));
     }
 
     /**
@@ -81,6 +74,7 @@ class AgencyController extends Controller
             'agency_code' => 'required|min:4',
         ]);
 
+        $agency->score_types()->sync($request->scoring_type);
         $agency->update($validate);
 
         return redirect()->route('agency.index')->withToastSuccess(__('Agency successfully updated.'));

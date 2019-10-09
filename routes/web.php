@@ -20,8 +20,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::resource('agency', 'AgencyController', ['except' => ['show']]);
-	Route::resource('program', 'ProgramController', ['except' => ['show']]);
+	Route::resource('agency', 'AgencyController', ['except' => ['show','create']]);
+	Route::resource('program', 'ProgramController', ['except' => ['show','create']]);
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
 	Route::resource('document', 'DocumentController', ['except' => ['show']]);

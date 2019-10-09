@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Document;
+use App\Agency;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
@@ -24,7 +25,8 @@ class DocumentController extends Controller
      */
     public function create()
     {
-        return view('document.create');
+        $agency = Agency::all();
+        return view('document.create', ['agencies' => $agency]);
     }
 
     /**
@@ -35,7 +37,26 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $request->validate([
+            'agency_id'        => 'required|exists:agencies,id',
+            'document_name'    => 'required',
+            'sections'         => 'required',
+        ]);
+
+        $document = Document::create($validate);
+
+        foreach(json_decode($request->sections) as $s) {
+            $root = $document->outlines()->create([
+                'parent_id'     => 0,
+                'section'       => $s->section,
+                'score_type'    => isset($s->score) ?: 1,
+            ]);
+            if(isset($s->children)) {
+                $document->saveChildrenRecursively($s, $root);
+            }
+        }
+
+        return redirect()->route('document.index')->withToastSuccess(__('Document successfully created.'));
     }
 
     /**

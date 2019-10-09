@@ -17,6 +17,7 @@ class CreateDocumentsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('agency_id');
             $table->text('document_name');
+            $table->longText('sections');
             $table->timestamps();
 
             $table->foreign('agency_id')->references('id')->on('agencies');
@@ -27,7 +28,7 @@ class CreateDocumentsTable extends Migration
             $table->unsignedBigInteger('document_id');
             $table->unsignedBigInteger('parent_id')->default(0);
             $table->text('section');
-            $table->unsignedBigInteger('score_type');
+            $table->unsignedBigInteger('score_type')->default(0);
             $table->timestamps();
 
             $table->foreign('document_id')->references('id')->on('documents');

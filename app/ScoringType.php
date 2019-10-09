@@ -16,6 +16,6 @@ class ScoringType extends Model
 
     public function programs()
     {
-        return $this->belongsToMany('App\Program', 'program_scoring', 'scoring_id', 'program_id');
+        return $this->belongsToMany('App\Program', 'agency_scoring', 'scoring_id', 'agency_id');
     }
 }
