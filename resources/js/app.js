@@ -27,7 +27,10 @@ $("body").on("click",".removeclass", function(e) { //user click on remove text
             var inputDescription = $(this).find("input.description");
             inputDescription.attr('name', 'scoring['+x+'][description]');
             x++;
-        }); 
+        });
+    }
+    if( $("#dd-list").length ) {
+        $(this).closest('.dd-item').remove();
     }
     return false;
 });

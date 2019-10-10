@@ -79,7 +79,7 @@
             <!-- Navigation -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class=" nav-link" href="{{ route('home') }}"> 
+                    <a class="nav-link" href="{{ route('home') }}"> 
                         <i class="ni ni-tv-2 text-primary"></i> Dashboard
                     </a>
                 </li>
@@ -94,7 +94,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="../screens/activities.html">
+                    <a class="nav-link" href="../screens/activities.html">
                         <i class="ni ni-calendar-grid-58 text-orange"></i> Activities
                     </a>
                 </li>
@@ -126,7 +126,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="../screens/docuoutlines.html">
+                    <a class="nav-link " href="{{ route('document.index') }}">
                         <i class="ni ni-single-copy-04 text-red"></i> Document Outlines
                     </a>
                 </li>
@@ -184,7 +184,7 @@
             </div>
           </div>
         </form>
-        
+
       </div>
     </div>
 </nav>

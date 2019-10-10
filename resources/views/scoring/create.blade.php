@@ -17,58 +17,59 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-lg-5">
                         <form method="post" action="{{ route('scoring.store') }}" autocomplete="off">
                             @csrf
-                            
-                            <div class="pl-lg-4">
-                                <div class="form-group{{ $errors->has('scoring_name') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-scoring_name">{{ __('Scoring Name') }}</label>
-                                    <input type="text" name="scoring_name" id="input-scoring_name" class="form-control form-control-alternative{{ $errors->has('scoring_name') ? ' is-invalid' : '' }}" placeholder="{{ __('Scoring Name') }}" value="{{ old('scoring_name') }}" required autofocus>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group{{ $errors->has('scoring_name') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-scoring_name">{{ __('Scoring Name') }}</label>
+                                        <input type="text" name="scoring_name" id="input-scoring_name" class="form-control form-control-alternative{{ $errors->has('scoring_name') ? ' is-invalid' : '' }}" placeholder="{{ __('Scoring Name') }}" value="{{ old('scoring_name') }}" required autofocus>
 
-                                    @if ($errors->has('scoring_name'))
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $errors->first('scoring_name') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                                <div class="form-group{{ $errors->has('scoring_description') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-scoring_description">{{ __('Scoring Description') }}</label>
-                                    <input type="text" name="scoring_description" id="input-scoring_description" class="form-control form-control-alternative{{ $errors->has('scoring_description') ? ' is-invalid' : '' }}" placeholder="{{ __('Scoring Description') }}" value="{{ old('scoring_description') }}" required>
-
-                                    @if ($errors->has('scoring_description'))
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $errors->first('scoring_description') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
-                                
-                                <button type="button" class="btn btn-success mb-3" id="addfield">+</button>
-                                <div id="InputsWrapper">
-                                    <div class="row">
-                                        <div class="col-2">
-                                            <div class="form-group mb-3">
-                                                <div class="input-group input-group-alternative">
-                                                    <input class="form-control score" name="scoring[0][score]" placeholder="Score" type="text">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-9">
-                                            <div class="form-group mb-3">
-                                                <div class="input-group input-group-alternative">
-                                                    <input class="form-control description" name="scoring[0][description]" placeholder="Description" type="text">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-1">
-                                            <button class="btn btn-icon btn-2 btn-danger removeclass">x</button>
-                                        </div>
+                                        @if ($errors->has('scoring_name'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('scoring_name') }}</strong>
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="form-group{{ $errors->has('scoring_description') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-scoring_description">{{ __('Scoring Description') }}</label>
+                                        <input type="text" name="scoring_description" id="input-scoring_description" class="form-control form-control-alternative{{ $errors->has('scoring_description') ? ' is-invalid' : '' }}" placeholder="{{ __('Scoring Description') }}" value="{{ old('scoring_description') }}" required>
 
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
+                                        @if ($errors->has('scoring_description'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('scoring_description') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
+                            </div>
+                            <button type="button" class="btn btn-success mb-3" id="addfield">+</button>
+                            <div id="InputsWrapper">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <div class="form-group mb-3">
+                                            <div class="input-group input-group-alternative">
+                                                <input class="form-control score" name="scoring[0][score]" placeholder="Score" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="form-group mb-3">
+                                            <div class="input-group input-group-alternative">
+                                                <input class="form-control description" name="scoring[0][description]" placeholder="Description" type="text">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-1">
+                                        <button class="btn btn-icon btn-2 btn-danger removeclass">x</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                             </div>
                         </form>
                     </div>

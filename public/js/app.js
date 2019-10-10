@@ -36562,6 +36562,10 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").on("click", ".removeclass"
     });
   }
 
+  if (jquery__WEBPACK_IMPORTED_MODULE_0___default()("#dd-list").length) {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).closest('.dd-item').remove();
+  }
+
   return false;
 });
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(function () {
@@ -36633,8 +36637,8 @@ if (token) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/mash/Sites/ams-project/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/mash/Sites/ams-project/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\EderaA\Laravel\ams-project\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\EderaA\Laravel\ams-project\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

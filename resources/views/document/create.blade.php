@@ -17,7 +17,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body px-lg-5 py-lg-5">
+                    <div class="card-body p-lg-5">
                         <form id="document" method="post" action="{{ route('document.store') }}" autocomplete="off">
                             @csrf
                             <input type="hidden" name="sections">
@@ -71,7 +71,7 @@
                                                 </select>
                                             </div>
                                             </div>
-                                            <button class="btn btn-icon btn-2 btn-danger" type="button">x</button>
+                                            <button class="btn btn-icon btn-2 btn-danger removeclass" type="button">x</button>
                                         </div>
                                     </li>
                                 </ol>
@@ -108,7 +108,7 @@ $(function () {
 });
 function addSection(){
     listCount++;
-    var x = '<li class="dd-item" data-section data-id="'+listCount+'"><div class="form-inline"><div class="dd-handle"><i class="fas fa-arrows-alt"></i></div><div class="form-group mr-3"><div class="input-group input-group-alternative"><input class="form-control section" placeholder="Section" type="text"></div></div><div class="form-group mr-3"><div class="input-group input-group-alternative"><select class="form-control score"><option value="1">Narrative</option><option value="2">Score Type 1</option><option value="3">Score Type 2</option></select></div></div><button class="btn btn-icon btn-2 btn-danger" type="button">x</button></div></li>';
+    var x = '<li class="dd-item" data-section data-id="'+listCount+'"><div class="form-inline"><div class="dd-handle"><i class="fas fa-arrows-alt"></i></div><div class="form-group mr-3"><div class="input-group input-group-alternative"><input class="form-control section" placeholder="Section" type="text"></div></div><div class="form-group mr-3"><div class="input-group input-group-alternative"><select class="form-control score"><option value="1">Narrative</option><option value="2">Score Type 1</option><option value="3">Score Type 2</option></select></div></div><button class="btn btn-icon btn-2 btn-danger removeclass" type="button">x</button></div></li>';
     document.getElementById('dd-list').insertAdjacentHTML('beforeend', x);
 }
 $('#dd-list').on('input', 'input.section', function () {
