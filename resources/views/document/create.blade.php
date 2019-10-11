@@ -53,28 +53,7 @@
                             <hr>
                             <button type="button" class="btn btn-default mb-4" onclick="addSection()">Add Section</button>
                             <div class="dd">
-                                <ol id="dd-list" class="dd-list">
-                                    <li class="dd-item" data-section data-id="1">
-                                        <div class="form-inline">
-                                            <div class="dd-handle"><i class="fas fa-arrows-alt"></i></div>
-                                            <div class="form-group mr-3">
-                                            <div class="input-group input-group-alternative">
-                                                <input class="form-control section" placeholder="Section" type="text">
-                                            </div>
-                                            </div>
-                                            <div class="form-group mr-3">
-                                            <div class="input-group input-group-alternative">
-                                                <select class="form-control score">
-                                                    <option value="1">Narrative</option>
-                                                    <option value="2">Score Type 1</option>
-                                                    <option value="3">Score Type 2</option>                   
-                                                </select>
-                                            </div>
-                                            </div>
-                                            <button class="btn btn-icon btn-2 btn-danger removeclass" type="button">x</button>
-                                        </div>
-                                    </li>
-                                </ol>
+                                <ol id="dd-list" class="dd-list"></ol>
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
@@ -86,6 +65,7 @@
         </div>
 
         @include('layouts.footers.auth')
+        <div class="d-none agency-score-type"></div>
     </div>
 @endsection
 
@@ -97,7 +77,6 @@ $("#document button[type='submit']").click(function(e) {
     $('#document input[name="sections"]').val(JSON.stringify($(".dd").nestable('serialize')));
     $('#document').submit();
 });
-var listCount = $('#dd-list .dd-item').length;
 $(function () {
     $('.dd').nestable({
         group: 1,
@@ -107,8 +86,8 @@ $(function () {
     });
 });
 function addSection(){
-    listCount++;
-    var x = '<li class="dd-item" data-section data-id="'+listCount+'"><div class="form-inline"><div class="dd-handle"><i class="fas fa-arrows-alt"></i></div><div class="form-group mr-3"><div class="input-group input-group-alternative"><input class="form-control section" placeholder="Section" type="text"></div></div><div class="form-group mr-3"><div class="input-group input-group-alternative"><select class="form-control score"><option value="1">Narrative</option><option value="2">Score Type 1</option><option value="3">Score Type 2</option></select></div></div><button class="btn btn-icon btn-2 btn-danger removeclass" type="button">x</button></div></li>';
+    var scores = $( ".agency-score-type").html();
+    var x = '<li class="dd-item" data-section> <div class="form-inline"> <div class="dd-handle"><i class="fas fa-arrows-alt"></i></div><div class="form-group mr-3"> <div class="input-group input-group-alternative"> <input class="form-control section" placeholder="Section" type="text"> </div></div><div class="form-group mr-3"> <div class="input-group input-group-alternative"> <select class="form-control score">'+scores+'</select> </div></div><button class="btn btn-icon btn-2 btn-danger removeclass" type="button">x</button> </div></li>';
     document.getElementById('dd-list').insertAdjacentHTML('beforeend', x);
 }
 $('#dd-list').on('input', 'input.section', function () {
@@ -116,6 +95,16 @@ $('#dd-list').on('input', 'input.section', function () {
 });
 $('#dd-list').on('change', 'select.score', function () {
     $(this).closest('.dd-item').data( 'score', this.value );
+});
+$('#document').on('change', 'select[name="agency_id"]', function () {
+    $("#dd-list").html('');
+    $.getJSON( "/getAgencyScoring/" + this.value, function( data ) {
+        var items = [];
+        $.each( data, function( key, value) {
+            items.push( "<option value='" + value.id + "'>" +  value.name + "</option>" );
+        });
+        $( ".agency-score-type").html( items );
+    });
 });
 </script>
 @endpush

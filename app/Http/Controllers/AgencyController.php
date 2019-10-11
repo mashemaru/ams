@@ -31,8 +31,8 @@ class AgencyController extends Controller
             'agency_code' => 'required|min:4',
         ]);
 
-        Agency::create($validate);
-
+        $agency = Agency::create($validate);
+        $agency->score_types()->sync(1); // Auto Add Narrative Score type
         return redirect()->route('agency.index')->withToastSuccess(__('Agency successfully created.'));
     }
 
@@ -53,9 +53,8 @@ class AgencyController extends Controller
      * @param  \App\Agency  $agency
      * @return \Illuminate\Http\Response
      */
-    public function edit()
+    public function edit(Agency $agency)
     {
-        $agency = Agency::with('score_types')->firstOrFail();
         $scoringType = ScoringType::all();
         return view('agency.edit', compact('agency','scoringType'));
     }
@@ -91,5 +90,17 @@ class AgencyController extends Controller
         $agency->delete();
 
         return redirect()->route('agency.index')->withToastSuccess(__('Agency successfully deleted.'));
+    }
+
+    public function get_agency_scoring(Agency $agency)
+    {
+        $scores = [];
+        foreach($agency->score_types as $score) {
+            $scores[] = [
+                'id'    => $score->id,
+                'name'  => $score->scoring_name,
+            ];
+        }
+        return response()->json($scores);
     }
 }

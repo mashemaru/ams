@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
 	Route::resource('document', 'DocumentController', ['except' => ['show']]);
+	Route::get('getAgencyScoring/{agency}', 'AgencyController@get_agency_scoring');
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
