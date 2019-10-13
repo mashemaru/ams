@@ -12,9 +12,19 @@ class ScoreTypeSeeder extends Seeder
      */
     public function run()
     {
-        ScoringType::create([
-            'scoring_name'  => 'Narrative',
-            'scoring_description'  => 'Narrative',
+        ScoringType::insert([
+            [
+                'scoring_name'  => 'Narrative',
+                'scoring_description'  => 'Narrative',
+            ],
+            [
+                'scoring_name'  => 'Narrative w/ Table',
+                'scoring_description'  => 'Narrative w/ Table',
+            ],
+            [
+                'scoring_name'  => 'Narrative w/ Table & Score',
+                'scoring_description'  => 'Narrative w/ Table & Score',
+            ],
         ]);
     }
 }

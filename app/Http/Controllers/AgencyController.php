@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Agency;
 use App\ScoringType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AgencyController extends Controller
 {
@@ -26,13 +27,21 @@ class AgencyController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
+        $validate = Validator::make($request->all(), [
             'agency_name' => 'required|min:4',
             'agency_code' => 'required|min:4',
         ]);
-
-        $agency = Agency::create($validate);
-        $agency->score_types()->sync(1); // Auto Add Narrative Score type
+    
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
+    
+        $agency = Agency::create([
+            'agency_name' => $request->agency_name,
+            'agency_code' => $request->agency_code,
+        ]);
+        $agency->score_types()->sync([1,2,3]); // Auto Add Narrative Score type
+    
         return redirect()->route('agency.index')->withToastSuccess(__('Agency successfully created.'));
     }
 
@@ -68,13 +77,20 @@ class AgencyController extends Controller
      */
     public function update(Request $request, Agency $agency)
     {
-        $validate = $request->validate([
+        $validate = Validator::make($request->all(), [
             'agency_name' => 'required|min:4',
             'agency_code' => 'required|min:4',
         ]);
-
+    
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
+    
         $agency->score_types()->sync($request->scoring_type);
-        $agency->update($validate);
+        $agency->update([
+            'agency_name' => $request->agency_name,
+            'agency_code' => $request->agency_code,
+        ]);
 
         return redirect()->route('agency.index')->withToastSuccess(__('Agency successfully updated.'));
     }

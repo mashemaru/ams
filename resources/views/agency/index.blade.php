@@ -19,21 +19,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="col-12">
-                        @if ($errors->any())
-                            <div class="alert alert-danger alert-dismissible fade show">
-                                <ul class="m-0 pl-4">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        @endif
-                    </div>
 
                     <div class="table-responsive">
                         <table class="table align-items-center table-flush">

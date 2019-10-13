@@ -31,5 +31,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         Role::create(['name' => 'faculty', 'label' => 'Faculty']);
         Role::create(['name' => 'survey-exec', 'label' => 'Survey Executive']);
+        Role::create(['name' => 'member', 'label' => 'Member']);
+        Role::create(['name' => 'team-head', 'label' => 'Team Head']);
     }
 }

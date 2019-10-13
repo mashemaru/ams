@@ -14,8 +14,8 @@ class ScoringType extends Model
         'scores' => 'array',
     ];
 
-    public function programs()
+    public function agencies()
     {
-        return $this->belongsToMany('App\Program', 'agency_scoring', 'scoring_id', 'agency_id');
+        return $this->belongsToMany('App\Agency', 'agency_scoring', 'scoring_id', 'agency_id');
     }
 }

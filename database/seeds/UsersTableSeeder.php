@@ -18,11 +18,13 @@ class UsersTableSeeder extends Seeder
             'email' => 'admin@test.com',
             'user_type' => 'admin',
             'password' => Hash::make('dev123'),
-            'created_at' => now(),
-            'updated_at' => now()
         ]);
         $user->assignRole('super-admin');
 
-        factory(App\User::class, 50)->create();
+        $users = factory(App\User::class, 50)
+            ->create()
+            ->each(function ($user) {
+                $user->assignRole('member');
+            });
     }
 }

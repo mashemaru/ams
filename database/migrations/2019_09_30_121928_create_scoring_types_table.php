@@ -22,7 +22,6 @@ class CreateScoringTypesTable extends Migration
         });
 
         Schema::create('agency_scoring', function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->unsignedBigInteger('scoring_id');
             $table->unsignedBigInteger('agency_id');
 
