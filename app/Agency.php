@@ -16,6 +16,11 @@ class Agency extends Model
         'agency_code',
     ];
 
+    public function document()
+    {
+        return $this->hasMany('App\Document', 'agency_id');
+    }
+
     public function score_types()
     {
         return $this->belongsToMany('App\ScoringType', 'agency_scoring', 'agency_id', 'scoring_id');

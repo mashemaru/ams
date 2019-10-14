@@ -36569,7 +36569,7 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").on("click", ".removeclass"
   return false;
 });
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(function () {
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#scoring_type').select2();
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('.select2').select2();
 });
 
 /***/ }),

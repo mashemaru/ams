@@ -119,4 +119,16 @@ class AgencyController extends Controller
         }
         return response()->json($scores);
     }
+
+    public function get_agency_document(Agency $agency)
+    {
+        $documents = [];
+        foreach($agency->document as $document) {
+            $documents[] = [
+                'id'    => $document->id,
+                'name'  => $document->document_name,
+            ];
+        }
+        return response()->json($documents);
+    }
 }

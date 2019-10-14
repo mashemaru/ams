@@ -26,6 +26,7 @@
                                     <div class="form-group{{ $errors->has('agency_id') ? ' has-danger' : '' }}">
                                         <label class="form-control-label" for="input-agency_id">{{ __('Agency') }}</label>
                                         <select class="form-control form-control-alternative{{ $errors->has('agency_id') ? ' is-invalid' : '' }}" name="agency_id" required autofocus>
+                                            <option value>Select Agency</option>
                                             @foreach ($agencies as $agency)
                                             <option value="{{ $agency->id }}">{{ $agency->agency_name }}</option>
                                             @endforeach
@@ -86,9 +87,11 @@ $(function () {
     });
 });
 function addSection(){
-    var scores = $( ".agency-score-type").html();
-    var x = '<li class="dd-item" data-section> <div class="form-inline"> <div class="dd-handle"><i class="fas fa-arrows-alt"></i></div><div class="form-group mr-3"> <div class="input-group input-group-alternative"> <input class="form-control section" placeholder="Section" type="text"> </div></div><div class="form-group mr-3"> <div class="input-group input-group-alternative"> <select class="form-control score">'+scores+'</select> </div></div><button class="btn btn-icon btn-2 btn-danger removeclass" type="button">x</button> </div></li>';
-    document.getElementById('dd-list').insertAdjacentHTML('beforeend', x);
+    if($('select[name="agency_id"]').val()) {
+        var scores = $( ".agency-score-type").html();
+        var x = '<li class="dd-item" data-section> <div class="form-inline"> <div class="dd-handle"><i class="fas fa-arrows-alt"></i></div><div class="form-group mr-3"> <div class="input-group input-group-alternative"> <input class="form-control section" placeholder="Section" type="text"> </div></div><div class="form-group mr-3"> <div class="input-group input-group-alternative"> <select class="form-control score">'+scores+'</select> </div></div><button class="btn btn-icon btn-2 btn-danger removeclass" type="button">x</button> </div></li>';
+        document.getElementById('dd-list').insertAdjacentHTML('beforeend', x);
+    }
 }
 $('#dd-list').on('input', 'input.section', function () {
     $(this).closest('.dd-item').data( 'section', this.value );
@@ -98,13 +101,15 @@ $('#dd-list').on('change', 'select.score', function () {
 });
 $('#document').on('change', 'select[name="agency_id"]', function () {
     $("#dd-list").html('');
-    $.getJSON( "/getAgencyScoring/" + this.value, function( data ) {
-        var items = [];
-        $.each( data, function( key, value) {
-            items.push( "<option value='" + value.id + "'>" +  value.name + "</option>" );
+    if(this.value) {
+        $.getJSON( "/getAgencyScoring/" + this.value, function( data ) {
+            var items = [];
+            $.each( data, function( key, value) {
+                items.push( "<option value='" + value.id + "'>" +  value.name + "</option>" );
+            });
+            $( ".agency-score-type").html( items );
         });
-        $( ".agency-score-type").html( items );
-    });
+    }
 });
 </script>
 @endpush

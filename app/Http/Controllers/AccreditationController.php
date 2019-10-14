@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Accreditation;
+use App\Agency;
+use App\Program;
+use App\Document;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AccreditationController extends Controller
 {
@@ -24,7 +28,10 @@ class AccreditationController extends Controller
      */
     public function create()
     {
-        //
+        $agency = Agency::select('id','agency_name')->get();
+        $program = Program::select('id','program_name')->get();
+
+        return view('accreditation.create',compact('agency','program'));
     }
 
     /**

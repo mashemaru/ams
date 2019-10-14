@@ -13,8 +13,9 @@ class DocumentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Document $document)
+    public function index()
     {
+        $document = Document::select('id','agency_id','document_name')->with('agency:id,agency_name');
         return view('document.index', ['documents' => $document->paginate(15)]);
     }
 

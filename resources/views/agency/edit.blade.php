@@ -50,7 +50,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-control-label">{{ __('Scoring Type') }}</label>
-                                <select id="scoring_type" class="scoring_type form-control form-control-alternative" name="scoring_type[]" data-toggle="select" multiple data-placeholder="Select scoring type">
+                                <select class="scoring_type form-control form-control-alternative select2" name="scoring_type[]" data-toggle="select" multiple data-placeholder="Select scoring type">
                                     @foreach ($scoringType as $score)
                                         <option value="{{$score->id}}" @foreach($agency->score_types as $scoreType) {{ ($scoreType->id == $score->id) ? 'selected="selected"' : '' }} @endforeach>{{ $score->scoring_name }}</option>
                                     @endforeach

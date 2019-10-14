@@ -36,5 +36,5 @@ $("body").on("click",".removeclass", function(e) { //user click on remove text
 });
 
 $(document).ready(function() {
-    $('#scoring_type').select2();
+    $('.select2').select2();
 });
