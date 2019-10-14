@@ -42,7 +42,29 @@ class AccreditationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'agency_id'              => 'required|exists:agencies,id',
+            'program_id'             => 'required|exists:programs,id',
+            'document_id'            => 'required|exists:documents,id',
+            'type'                   => 'required',
+            'report_submission_date' => 'required|date_format:Y-m-d|after:now',
+            'onsite_visit_date'      => 'required|date_format:Y-m-d|after:now',
+        ]);
+
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
+    
+        $accreditation = Accreditation::create([
+            'agency_id'              => $request->agency_id,
+            'program_id'             => $request->program_id,
+            'document_id'            => $request->document_id,
+            'type'                   => $request->type,
+            'report_submission_date' => $request->report_submission_date,
+            'onsite_visit_date'      => $request->onsite_visit_date,
+        ]);
+
+        return redirect()->route('accreditation.create')->withToastSuccess(__('Accreditation successfully created.'));
     }
 
     /**

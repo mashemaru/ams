@@ -89,7 +89,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                                             </div>
-                                            <input class="form-control datepicker" name="report_submission_date" placeholder="Select date" type="text" value="{{ old('report_submission_date') }}">
+                                            <input class="form-control datepicker" name="report_submission_date" data-date-format="yyyy-mm-dd" placeholder="Select date" type="text" value="{{ old('report_submission_date') }}" required>
                                         </div>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
                                             </div>
-                                            <input class="form-control datepicker" name="onsite_visit_date" placeholder="Select date" type="text" value="{{ old('onsite_visit_date') }}">
+                                            <input class="form-control datepicker" name="onsite_visit_date" data-date-format="yyyy-mm-dd" placeholder="Select date" type="text" value="{{ old('onsite_visit_date') }}" required>
                                         </div>
                                     </div>
                                 </div>
