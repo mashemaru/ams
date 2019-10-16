@@ -38,6 +38,16 @@ class CreateTeamsTable extends Migration
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
+
+        Schema::create('document_team', function (Blueprint $table) {
+            $table->unsignedBigInteger('document_id');
+            $table->unsignedBigInteger('document_outline_id');
+            $table->unsignedBigInteger('team_id');
+
+            $table->foreign('document_id')->references('id')->on('documents')->onDelete('cascade');
+            $table->foreign('document_outline_id')->references('id')->on('document_outline')->onDelete('cascade');
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+        });
     }
 
     /**

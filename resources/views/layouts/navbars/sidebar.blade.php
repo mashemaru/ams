@@ -121,9 +121,20 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="{{ route('user.index') }}">
-                        <i class="ni ni-single-02 text-yellow"></i> Users
+                    <a class="nav-link collapsed" href="#navbar-user" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-user">
+                        <i class="ni ni-single-02 text-yellow"></i>
+                        <span class="nav-link-text">User Management</span>
                     </a>
+                    <div class="collapse" id="navbar-user" style="">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ route('user.index') }}" class="nav-link">Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('team.index') }}" class="nav-link">Teams</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " href="{{ route('document.index') }}">

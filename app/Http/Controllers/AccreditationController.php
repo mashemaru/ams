@@ -6,6 +6,7 @@ use App\Accreditation;
 use App\Agency;
 use App\Program;
 use App\Document;
+use App\DocumentTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -52,9 +53,17 @@ class AccreditationController extends Controller
         ]);
 
         if ($validate->fails()) {
-            return back()->with('error', $validate->messages())->withInput();
+            $agency = Agency::findOrFail($request->agency_id);
+            $documents = [];
+            foreach($agency->document as $document) {
+                $documents[] = [
+                    'id'    => $document->id,
+                    'name'  => $document->document_name,
+                ];
+            }
+            return back()->with('error', $validate->messages())->withInput()->with('document', json_encode($documents));
         }
-    
+
         $accreditation = Accreditation::create([
             'agency_id'              => $request->agency_id,
             'program_id'             => $request->program_id,
@@ -110,5 +119,10 @@ class AccreditationController extends Controller
     public function destroy(Accreditation $accreditation)
     {
         //
+    }
+
+    public function assign_team(Accreditation $accreditation)
+    {
+        // DocumentTeam::
     }
 }

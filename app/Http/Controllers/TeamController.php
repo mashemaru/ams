@@ -14,9 +14,9 @@ class TeamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Team $team)
     {
-        //
+        return view('team.index', ['teams' => $team->paginate(15)]);
     }
 
     /**
@@ -43,7 +43,7 @@ class TeamController extends Controller
             'team_name' => 'required|min:4',
             'team_head' => 'required',
         ]);
-    
+
         if ($validate->fails()) {
             return back()->with('error', $validate->messages())->withInput();
         }

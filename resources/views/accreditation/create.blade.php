@@ -57,6 +57,11 @@
                                         <label class="form-control-label" for="input-document_id">{{ __('Document Outline') }}</label>
                                         <select id="input-document_id" class="form-control form-control-alternative{{ $errors->has('document_id') ? ' is-invalid' : '' }}" placeholder="{{ __('Document Outline') }}" name="document_id" required>
                                             <option value>Select Document</option>
+                                            @if (session('document')) }}
+                                                @foreach (json_decode(session('document'), true) as $document)
+                                                <option value="{{ $document['id'] }}">{{ $document['name'] }}</option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                         @if ($errors->has('document_id'))
                                             <span class="invalid-feedback" role="alert">

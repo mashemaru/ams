@@ -27,7 +27,9 @@ class CreateDocumentsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('document_id');
             $table->unsignedBigInteger('parent_id')->default(0);
-            $table->text('section');
+            $table->text('section')->nullable();
+            $table->longText('body')->nullable();
+            $table->text('score')->nullable();
             $table->unsignedBigInteger('score_type')->default(0);
             $table->timestamps();
 

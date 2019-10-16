@@ -20,7 +20,7 @@ class CreateAccreditationsTable extends Migration
             $table->unsignedBigInteger('document_id');
             $table->enum('type', ['initial', 'reaccredit']);
             $table->text('result')->nullable();
-            $table->text('completed_document')-nullable();
+            $table->text('completed_document')->nullable();
             $table->mediumText('recommendations')->nullable();
             $table->dateTime('report_submission_date');
             $table->dateTime('onsite_visit_date');
