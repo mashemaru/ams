@@ -29,6 +29,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('accreditation', 'AccreditationController');
 	Route::get('getAgencyScoring/{agency}', 'AgencyController@get_agency_scoring');
 	Route::get('getAgencyDocument/{agency}', 'AgencyController@get_agency_document');
+	Route::get('roles-permission', ['as' => 'roles-permission.index', 'uses' => 'UserController@roles_index']);
+	Route::get('roles-permission/{role}/edit', ['as' => 'roles-permission.edit', 'uses' => 'UserController@roles_edit']);
+	Route::put('roles-permission/{role}', ['as' => 'roles-permission.update', 'uses' => 'UserController@roles_update']);
+	Route::delete('roles-permission/{role}', ['as' => 'roles-permission.destroy', 'uses' => 'UserController@roles_delete']);
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);

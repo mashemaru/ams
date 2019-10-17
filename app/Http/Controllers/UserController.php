@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 
@@ -82,5 +84,17 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('user.index')->withToastSuccess(__('User successfully deleted.'));
+    }
+
+    public function roles_index()
+    {
+        $roles = Role::select('id','label')->get();
+        return view('roles-permissions.index', compact('roles'));
+    }
+
+    public function roles_edit(Role $role)
+    {
+        dd($role->permissions);
+        return view('roles-permissions.edit', compact('role'));
     }
 }

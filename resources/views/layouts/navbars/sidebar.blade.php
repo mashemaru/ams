@@ -133,6 +133,9 @@
                             <li class="nav-item">
                                 <a href="{{ route('team.index') }}" class="nav-link">Teams</a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('roles-permission.index') }}" class="nav-link">Roles & Permissions</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
