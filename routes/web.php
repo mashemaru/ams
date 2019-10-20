@@ -25,8 +25,12 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
 	Route::resource('document', 'DocumentController', ['except' => ['show']]);
+	Route::resource('document-outline', 'DocumentOutlineController');
 	Route::resource('team', 'TeamController');
 	Route::resource('accreditation', 'AccreditationController');
+	Route::post('uploadImage', 'DocumentOutlineController@image_upload');
+	Route::post('outlineComment/{document_outline}', ['as' => 'outlineComment.store', 'uses' => 'DocumentOutlineController@insert_comment']);
+	Route::post('outlineResolve/{outline_comment}', ['as' => 'outlineResolve', 'uses' => 'DocumentOutlineController@resolved_comment']);
 	Route::get('getAgencyScoring/{agency}', 'AgencyController@get_agency_scoring');
 	Route::get('getAgencyDocument/{agency}', 'AgencyController@get_agency_document');
 	Route::get('roles-permission', ['as' => 'roles-permission.index', 'uses' => 'UserController@roles_index']);

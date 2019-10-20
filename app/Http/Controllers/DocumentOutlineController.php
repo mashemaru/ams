@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\DocumentOutline;
+use App\OutlineComment;
 use Illuminate\Http\Request;
 
 class DocumentOutlineController extends Controller
@@ -56,7 +58,8 @@ class DocumentOutlineController extends Controller
      */
     public function edit($id)
     {
-        //
+        $outline = DocumentOutline::with('scoring_type','comments')->findOrFail($id);
+        return view('document-outline.edit', compact('outline'));
     }
 
     /**
@@ -68,7 +71,12 @@ class DocumentOutlineController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $outline = DocumentOutline::findOrFail($id);
+        $outline->update([
+            'body' => $request->content,
+        ]);
+
+        return back()->withToastSuccess(__('Document successfully updated.'));
     }
 
     /**
@@ -80,5 +88,41 @@ class DocumentOutlineController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function image_upload(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:500',
+        ]);
+
+        $path = asset($request->file('image')->store('media', ['disk' => 'public']));
+
+        return $path;
+    }
+
+    public function insert_comment(Request $request, $id)
+    {
+        $request->validate([
+            'comment' => 'required|min:4',
+        ]);
+
+        auth()->user()->comments()->create([
+            'outline_id'    => $id,
+            'comment'       => $request->comment,
+        ]);
+
+        return back()->withToastSuccess(__('Comment submitted successfully.'));
+    }
+
+    public function resolved_comment($id)
+    {
+        $comment = OutlineComment::findOrFail($id);
+        $comment->update([
+            'resolved_by'   => auth()->user()->id,
+            'resolved'      => now(),
+        ]);
+        
+        return back()->withToastSuccess(__('Comment resolved successfully.'));
     }
 }

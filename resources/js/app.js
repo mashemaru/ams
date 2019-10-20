@@ -10,6 +10,8 @@ window.jQuery = $;
 window.$ = $;
 import 'select2';                       // globally assign select2 fn to $ element
 import 'select2/dist/css/select2.css';  // optional if you have css loader
+require('summernote/dist/summernote-bs4.css');
+require('summernote/dist/summernote-bs4');
 
 var AddButton       = $("#addfield"); //Add button ID
 $(AddButton).click(function (e) { //on add input button click

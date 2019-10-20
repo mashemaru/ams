@@ -47,4 +47,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Team', 'user_team', 'user_id', 'team_id');
     }
+
+    public function comments()
+    {
+        return $this->hasMany('App\OutlineComment', 'user_id');
+    }
 }
