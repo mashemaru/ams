@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DocumentOutline;
 use App\OutlineComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DocumentOutlineController extends Controller
 {
@@ -103,9 +104,13 @@ class DocumentOutlineController extends Controller
 
     public function insert_comment(Request $request, $id)
     {
-        $request->validate([
+        $validate = Validator::make($request->all(), [
             'comment' => 'required|min:4',
         ]);
+    
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
 
         auth()->user()->comments()->create([
             'outline_id'    => $id,
