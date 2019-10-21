@@ -1,7 +1,7 @@
 @extends('layouts.app', ['title' => __('Scoring Type Management')])
 
 @section('content')
-    @include('users.partials.header', ['title' => __('Add Scoring Type')])   
+    @include('users.partials.header')   
 
     <div class="container-fluid mt--7">
         <div class="row">

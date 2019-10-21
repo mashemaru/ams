@@ -94,7 +94,7 @@ class UserController extends Controller
 
     public function roles_edit(Role $role)
     {
-        dd($role->permissions);
+        dd($role->with('permissions')->get());
         return view('roles-permissions.edit', compact('role'));
     }
 }

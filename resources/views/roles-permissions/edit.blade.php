@@ -1,7 +1,7 @@
 @extends('layouts.app', ['title' => __('Roles & Permissions Management')])
 
 @section('content')
-    @include('users.partials.header', ['title' => __('Edit Roles & Permissions')])   
+    @include('users.partials.header')   
 
     <div class="container-fluid mt--7">
         <div class="row">

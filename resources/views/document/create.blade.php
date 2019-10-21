@@ -1,7 +1,7 @@
 @extends('layouts.app', ['title' => __('Document Outlines')])
 
 @section('content')
-    @include('users.partials.header', ['title' => __('Add Document')])   
+    @include('users.partials.header')   
 
     <div class="container-fluid mt--7">
         <div class="row">

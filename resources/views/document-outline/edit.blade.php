@@ -1,7 +1,7 @@
 @extends('layouts.app', ['title' => __('Document Outlines')])
 
 @section('content')
-@include('users.partials.header', ['title' => __('')])
+@include('users.partials.header')
 
 <div class="container-fluid mt--7">
     <!-- Table -->
@@ -49,15 +49,15 @@
                                 @if($outline->comments)
                                     @foreach ($outline->comments as $c)
                                         <div class="timeline-comment mb-3{{ ($c->user_id != auth()->user()->id) ? ' text-right' : '' }}">
-                                            <h5 class="mb-0">{{ $c->user->name }}</h5>
+                                            <h5 class="mb-0">{{ $c->user->name . ' - ' }}<small>{{ $c->created_at->diffForHumans() }}</small></h5>
                                             <p class="text-sm mt-1 mb-0">{{ $c->comment }}</p>
                                             @if($c->user_id != auth()->user()->id && is_null($c->resolved))
                                                 <form method="post" action="{{ route('outlineResolve', $c->id) }}">
                                                     @csrf
                                                     <button type="submit" class="btn btn-primary btn-sm mt-2">Resolve Comment</button>
                                                 </form>
-                                            @else
-                                                <small class="font-italic">Resolved by: {{ $c->resolved_user->name . ' - ' .  $c->resolved->diffForHumans() }}</small>
+                                            @elseif(!is_null($c->resolved))
+                                                <small class="font-italic text-xs font-weight-light">Resolved by: {{ $c->resolved_user->name . ' - ' .  $c->resolved->diffForHumans() }}</small>
                                             @endif
                                         </div>
                                     @endforeach

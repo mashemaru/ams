@@ -1,7 +1,7 @@
 @extends('layouts.app', ['title' => __('Team Management')])
 
 @section('content')
-    @include('users.partials.header', ['title' => __('Create Team')])   
+    @include('users.partials.header')   
 
     <div class="container-fluid mt--7">
         <div class="row">
