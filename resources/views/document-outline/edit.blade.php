@@ -46,7 +46,7 @@
                     <div id="comments">
                         <div class="timeline-block">
                             <div class="timeline-content">
-                                @if($outline->comments)
+                                @if($outline->comments->count())
                                     @foreach ($outline->comments as $c)
                                         <div class="timeline-comment mb-3{{ ($c->user_id != auth()->user()->id) ? ' text-right' : '' }}">
                                             <h5 class="mb-0">{{ $c->user->name . ' - ' }}<small>{{ $c->created_at->diffForHumans() }}</small></h5>

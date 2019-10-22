@@ -93,11 +93,15 @@ class DocumentOutlineController extends Controller
 
     public function image_upload(Request $request)
     {
-        $request->validate([
+        $validate = Validator::make($request->all(), [
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:500',
         ]);
 
-        $path = asset($request->file('image')->store('media', ['disk' => 'public']));
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages());
+        }
+
+        $path = '/storage/' . $request->file('image')->store('media', ['disk' => 'public']);
 
         return $path;
     }
