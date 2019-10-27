@@ -18,6 +18,10 @@ class ScoreTypeSeeder extends Seeder
                 'scoring_description'  => 'Narrative',
             ],
             [
+                'scoring_name'  => 'Narrative w/ Score',
+                'scoring_description'  => 'Narrative w/ Score',
+            ],
+            [
                 'scoring_name'  => 'Narrative w/ Table',
                 'scoring_description'  => 'Narrative w/ Table',
             ],

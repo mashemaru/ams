@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('agency', 'AgencyController', ['except' => ['show','create']]);
@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('document-outline', 'DocumentOutlineController');
 	Route::resource('team', 'TeamController');
 	Route::resource('accreditation', 'AccreditationController');
+	Route::resource('course', 'CourseController');
 	Route::post('uploadImage', 'DocumentOutlineController@image_upload');
 	Route::post('outlineComment/{document_outline}', ['as' => 'outlineComment.store', 'uses' => 'DocumentOutlineController@insert_comment']);
 	Route::post('outlineResolve/{outline_comment}', ['as' => 'outlineResolve', 'uses' => 'DocumentOutlineController@resolved_comment']);

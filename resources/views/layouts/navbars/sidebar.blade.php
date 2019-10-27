@@ -79,50 +79,55 @@
             <!-- Navigation -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}"> 
+                    <a class="nav-link{{ Route::is('home') ? ' active' : '' }}" href="{{ route('home') }}"> 
                         <i class="ni ni-tv-2 text-primary"></i> Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../screens/tasks.html">
+                    <a class="nav-link" href="#">
                         <i class="ni ni-check-bold text-blue"></i> Tasks
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../screens/notifications.html">
-                        <i class="ni ni-bell-55 text-blue"></i> Notifications
+                    <a class="nav-link" href="#">
+                        <i class="ni ni-bell-55 text-yellow"></i> Notifications
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../screens/activities.html">
+                    <a class="nav-link" href="#">
                         <i class="ni ni-calendar-grid-58 text-orange"></i> Activities
                     </a>
                 </li>
             </ul>
-        @role('super-admin')
+            @role('super-admin')
             <!-- Divider -->
             <hr class="my-3">
             <!-- Heading -->
             <h6 class="navbar-heading text-muted">Administration & Setup</h6>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('agency.index') }}">
+                    <a class="nav-link{{ Route::is('agency.*') ? ' active' : '' }}" href="{{ route('agency.index') }}">
                         <i class="ni ni-building text-blue"></i> Agencies
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="{{ route('program.index') }}">
-                        <i class="ni ni-hat-3 text-orange"></i> Programs
+                    <a class="nav-link{{ Route::is('program.*') ? ' active' : '' }}" href="{{ route('program.index') }}">
+                        <i class="ni ni-hat-3 text-blue"></i> Programs
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="{{ route('scoring.index') }}">
-                        <i class="ni ni-ruler-pencil text-teal"></i> Scoring Types
+                    <a class="nav-link" href="#">
+                        <i class="ni ni-ruler-pencil text-yellow"></i> Courses
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="ni ni-paper-diploma text-yellow"></i> Curriculums
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#navbar-user" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-user">
-                        <i class="ni ni-single-02 text-yellow"></i>
+                        <i class="ni ni-single-02 text-orange"></i>
                         <span class="nav-link-text">User Management</span>
                     </a>
                     <div class="collapse" id="navbar-user" style="">
@@ -131,23 +136,30 @@
                                 <a href="{{ route('user.index') }}" class="nav-link">Users</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('team.index') }}" class="nav-link">Teams</a>
-                            </li>
-                            <li class="nav-item">
                                 <a href="{{ route('roles-permission.index') }}" class="nav-link">Roles & Permissions</a>
                             </li>
                         </ul>
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="{{ route('document.index') }}">
-                        <i class="ni ni-single-copy-04 text-red"></i> Document Outlines
+                    <a class="nav-link" href="#">
+                        <i class="ni ni-badge text-orange"></i> FIF
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="#">
-                        <i class="ni ni-building text-blue"></i> Accreditations
+                    <a class="nav-link{{ Route::is('document.*') ? ' active' : '' }}" href="{{ route('document.index') }}">
+                        <i class="ni ni-single-copy-04 text-blue"></i> Document Outlines
                     </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{{ Route::is('accreditation.*') ? ' active' : '' }}" href="{{ route('accreditation.index') }}">
+                        <i class="ni ni-paper-diploma text-blue"></i> Accreditations
+                    </a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link{{ Route::is('team.*') ? ' active' : '' }}" href="{{ route('team.index') }}">
+                    <i class="ni ni-circle-08 text-orange"></i> Teams
+                </a>
                 </li>
             </ul>
             <!-- Divider -->
@@ -156,33 +168,38 @@
             <h6 class="navbar-heading text-muted">Configuration</h6>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="../screens/newaccreditation.html">
-                        <i class="ni ni-paper-diploma text-blue"></i> New Accreditation
-                    </a>
+                <a class="nav-link" href="{{ route('accreditation.create') }}">
+                    <i class="ni ni-paper-diploma text-blue"></i> New Accreditation
+                </a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="{{ route('team.create') }}">
+                    <i class="ni ni-circle-08 text-orange"></i> Create Team
+                </a>
                 </li>
             </ul>
+            @endrole
             <!-- Divider -->
             <hr class="my-3">
             <!-- Heading -->
             <h6 class="navbar-heading text-muted">Documents</h6>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="../screens/filerepo.html">
-                        <i class="ni ni-single-copy-04 text-blue"></i> File Repository
-                    </a>
+                <a class="nav-link" href="#">
+                    <i class="ni ni-archive-2 text-yellow"></i> File Repository
+                </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../screens/evidences.html">
-                        <i class="ni ni-single-copy-04 text-blue"></i> Evidences
-                    </a>
+                <a class="nav-link" href="#">
+                    <i class="ni ni-archive-2 text-yellow"></i> Appendices/Exhibits
+                </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="ni ni-single-copy-04 text-blue"></i> Completed Reports
-                    </a>
+                <a class="nav-link" href="#">
+                    <i class="ni ni-archive-2 text-yellow"></i> Completed Reports
+                </a>
                 </li>
             </ul>
-        @endrole
         </div>
 
     <!-- Collapse -->
