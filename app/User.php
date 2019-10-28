@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\OutlineComment', 'user_id');
     }
+
+    public function courses()
+    {
+        return $this->belongsToMany('App\Course', 'course_faculty', 'user_id', 'course_id');
+    }
 }

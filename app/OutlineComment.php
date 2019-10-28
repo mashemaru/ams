@@ -10,9 +10,7 @@ class OutlineComment extends Model
         'outline_id', 'user_id', 'comment', 'resolved_by', 'resolved',
     ];
 
-    protected $casts = [
-        'resolved' => 'datetime',
-    ];
+    protected $dates = ['resolved'];
 
     public function user()
     {

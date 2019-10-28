@@ -49,4 +49,9 @@ class Course extends Model
     {
         return $this->belongsToMany('App\Course', 'course_requisites', 'course_id', 'requisite_id');
     }
+
+    public function faculty()
+    {
+        return $this->belongsToMany('App\User', 'course_faculty', 'course_id', 'user_id');
+    }
 }

@@ -10,10 +10,10 @@ class Accreditation extends Model
         'agency_id', 'program_id', 'document_id', 'type', 'result', 'completed_document', 'recommendations', 'report_submission_date', 'onsite_visit_date',
     ];
 
+    protected $dates = ['report_submission_date', 'onsite_visit_date'];
+
     protected $casts = [
-        'recommendations'        => 'array',
-        'report_submission_date' => 'datetime',
-        'onsite_visit_date'      => 'datetime',
+        'recommendations'   => 'array',
     ];
 
     public function teams()
