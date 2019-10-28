@@ -97,6 +97,8 @@ $('#dd-list').on('input', 'input.section', function () {
     $(this).closest('.dd-item').data( 'section', this.value );
 });
 $('#dd-list').on('change', 'select.score', function () {
+    var opt = $(this).find(':selected').closest('optgroup').attr('label');
+    $(this).closest('.dd-item').data( 'doc_type', opt );
     $(this).closest('.dd-item').data( 'score', this.value );
 });
 $('#document').on('change', 'select[name="agency_id"]', function () {
@@ -104,9 +106,16 @@ $('#document').on('change', 'select[name="agency_id"]', function () {
     if(this.value) {
         $.getJSON( "/getAgencyScoring/" + this.value, function( data ) {
             var items = [];
+            var score_type = [];
             $.each( data, function( key, value) {
-                items.push( "<option value='" + value.id + "'>" +  value.name + "</option>" );
+                score_type.push( "<option value='" + value.id + "'>" +  value.name + "</option>" );
             });
+
+            items.push( "<optgroup label='Narrative'><option value='0'>Narrative</option></optgroup>" );
+            items.push( "<optgroup label='Narrative w/ Table'><option value='0'>Narrative w/ Table</option></optgroup>" );
+            items.push( "<optgroup label='Narrative w/ Score'>" + score_type.join() + "</optgroup>" );
+            items.push( "<optgroup label='Narrative w/ Table & Score'>" + score_type.join() + "</optgroup>" );
+            
             $( ".agency-score-type").html( items );
         });
     }

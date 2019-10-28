@@ -50,7 +50,8 @@ class DocumentController extends Controller
             $root = $document->outlines()->create([
                 'parent_id'     => 0,
                 'section'       => $s->section,
-                'score_type'    => isset($s->score) ? $s->score : 1,
+                'doc_type'      => isset($s->doc_type) ? $s->doc_type : 'Narrative',
+                'score_type'    => isset($s->score) ? $s->score : 0,
             ]);
             if(isset($s->children)) {
                 $document->saveChildrenRecursively($s, $root);

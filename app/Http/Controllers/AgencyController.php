@@ -40,7 +40,6 @@ class AgencyController extends Controller
             'agency_name' => $request->agency_name,
             'agency_code' => $request->agency_code,
         ]);
-        $agency->score_types()->sync([1,2,3]); // Auto Add Narrative Score type
     
         return redirect()->route('agency.index')->withToastSuccess(__('Agency successfully created.'));
     }

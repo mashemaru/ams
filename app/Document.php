@@ -31,7 +31,8 @@ class Document extends Model
                 $root = $this->outlines()->create([
                     'parent_id'     => $parent->id,
                     'section'       => $c->section,
-                    'score_type'    => isset($c->score) ? $c->score : 1,
+                    'doc_type'      => isset($c->doc_type) ? $c->doc_type : 'Narrative',
+                    'score_type'    => isset($c->score) ? $c->score : 0,
                 ]);
                 $this->saveChildrenRecursively($c, $root);
             }

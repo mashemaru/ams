@@ -60,26 +60,19 @@ class CourseController extends Controller
         $requisites = [];
         if($request->hardPrerequisite) {
             foreach($request->hardPrerequisite as $item) {
-                $requisites[$item][] = ['requisite' => 'hard'];
+                $requisites[] = ['requisite_id' => $item, 'requisite' => 'hard'];
             }
         }
         if($request->softPrerequisite) {
             foreach($request->softPrerequisite as $item) {
-                $requisites[$item][] = ['requisite' => 'soft'];
-                // $requisites[] = [
-                //     $item => ['requisite' => 'soft']
-                // ];
+                $requisites[] = ['requisite_id' => $item, 'requisite' => 'soft'];
             }
         }
         if($request->coRequisite) {
             foreach($request->coRequisite as $item) {
-                $requisites[$item][] = ['requisite' => 'co'];
-                // $requisites[] = [
-                //     $item => ['requisite' => 'co']
-                // ];
+                $requisites[] = ['requisite_id' => $item, 'requisite' => 'co'];
             }
         }
-        // dd(collect($requisites));
         $course->requisites()->sync($requisites);
         $course->faculty()->sync($request->faculty_members);
 
