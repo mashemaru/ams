@@ -35,7 +35,6 @@ class CreateDocumentsTable extends Migration
             $table->timestamps();
 
             $table->foreign('document_id')->references('id')->on('documents');
-            $table->foreign('score_type')->references('id')->on('scoring_types');
         });
     }
 

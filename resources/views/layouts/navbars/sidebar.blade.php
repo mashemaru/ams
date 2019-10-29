@@ -116,8 +116,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link{{ Route::is('course.*') ? ' active' : '' }}" href="{{ route('course.index') }}">
                         <i class="ni ni-ruler-pencil text-yellow"></i> Courses
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{{ Route::is('scoring.*') ? ' active' : '' }}" href="{{ route('scoring.index') }}">
+                        <i class="ni ni-book-bookmark text-teal"></i> Scoring Types
                     </a>
                 </li>
                 <li class="nav-item">
@@ -148,7 +153,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('document.*') ? ' active' : '' }}" href="{{ route('document.index') }}">
-                        <i class="ni ni-single-copy-04 text-blue"></i> Document Outlines
+                        <i class="ni ni-single-copy-04 text-blue"></i> Document
                     </a>
                 </li>
                 <li class="nav-item">
@@ -157,7 +162,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link{{ Route::is('team.*') ? ' active' : '' }}" href="{{ route('team.index') }}">
+                    <a class="nav-link{{ Route::is('team.*') ? ' active' : '' }}" href="{{ route('team.index') }}">
                     <i class="ni ni-circle-08 text-orange"></i> Teams
                 </a>
                 </li>

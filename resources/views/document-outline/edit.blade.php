@@ -11,20 +11,8 @@
                 <div class="card-header border-1">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h3 class="mb-0">{{ $outline->scoring_type->scoring_name }}</h3>
+                            <h3 class="mb-0">{{ $outline->doc_type }}</h3>
                         </div>
-                        <span>
-                            <div class="dropdown" style="float: right">
-                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                    <a class="dropdown-item" href="#">Generate Word File</a>
-                                    <a class="dropdown-item" href="#">Generate PDF File</a>
-                                </div>
-                            </div>
-                        </span>
                     </div>
                 </div>
                 <div class="card-body">
@@ -87,7 +75,7 @@
                     <div class="card-header border-1">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h3 class="mb-0">Chapter</h3>
+                                <h3 class="mb-0">{{ $outline->section }}</h3>
                             </div>
                             <span>
                                 <div class="dropdown" style="float: right">
@@ -105,9 +93,20 @@
                     </div>
 
                     <div class="card-body px-lg-5 py-lg-5">
+                        <h4>Score: N/A
+                            <span>
+                                    <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#scoreModal1" style="float:right">
+                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                        Score Section
+                                    </button>
+                            </span>
+                        </h4>
+                        <button type="button" class="btn btn-primary btn-sm mb-4" data-toggle="modal" data-target="#scoreModal1">
+                            <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                            Score Section
+                        </button>
                         <textarea name="content" id="content">{{ $outline->body }}</textarea>
-                        <h2>Content:</h2>
-                        {!! $outline->body !!}
                         <br><br><br>
                         <div class="table-responsive">
                             <table class="table align-items-center table-flush">
