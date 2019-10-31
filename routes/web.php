@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('team', 'TeamController');
 	Route::resource('accreditation', 'AccreditationController');
 	Route::resource('course', 'CourseController');
+	Route::put('courseSyllabus/{course}', ['as' => 'courseSyllabus.update', 'uses' => 'CourseController@updateSyllabus']);
 	Route::post('uploadImage', 'DocumentOutlineController@image_upload');
 	Route::post('outlineComment/{document_outline}', ['as' => 'outlineComment.store', 'uses' => 'DocumentOutlineController@insert_comment']);
 	Route::post('outlineResolve/{outline_comment}', ['as' => 'outlineResolve', 'uses' => 'DocumentOutlineController@resolved_comment']);

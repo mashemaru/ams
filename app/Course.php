@@ -54,4 +54,9 @@ class Course extends Model
     {
         return $this->belongsToMany('App\User', 'course_faculty', 'course_id', 'user_id');
     }
+
+    public function syllabus_history()
+    {
+        return $this->hasMany('App\SyllabusHistory', 'course_id');
+    }
 }

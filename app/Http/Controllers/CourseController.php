@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Yajra\Datatables\Datatables;
 
 class CourseController extends Controller
 {
@@ -15,10 +16,20 @@ class CourseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Course $course)
+    public function index(Request $request, Course $course)
     {
-        $course->with('courseHardPreq','courseSoftPreq','courseCoReq')->get();
-        return view('course.index', ['courses' => $course->paginate(15)]);
+        if ($request->ajax()) {
+            $data = $course->with('courseHardPreq','courseSoftPreq','courseCoReq')->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('course.index');
     }
 
     /**
@@ -78,14 +89,18 @@ class CourseController extends Controller
 
         if($request->hasFile('syllabus')) {
             $filename = $request->syllabus->getClientOriginalName();
-            $exists = Storage::disk('public')->exists('course/' . $course->course_code . '/' . $filename);
 
-            if($exists) {
+            while(Storage::exists('course/' . $course->course_code . '/' . $filename)) {
                 $filename = '(1)' . $filename;
             }
-            $request->file('syllabus')->storeAs('course/' . $course->course_code, $filename, ['disk' => 'public']);
+            $request->file('syllabus')->storeAs('course/' . $course->course_code, $filename);
             $course->syllabus = $filename;
             $course->save();
+
+            $course->syllabus_history()->create([
+                'syllabus'     => $filename,
+                'user_id'      => auth()->user()->id,
+            ]);
         }
         return redirect()->route('course.index')->withToastSuccess(__('Course successfully created.'));
     }
@@ -98,7 +113,8 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        //
+        $course->with('courseHardPreq','courseSoftPreq','courseCoReq','faculty','syllabus_history')->get();
+        return view('course.show', compact('course'));
     }
 
     /**
@@ -133,5 +149,25 @@ class CourseController extends Controller
     public function destroy(Course $course)
     {
         //
+    }
+
+    public function updateSyllabus(Request $request, Course $course)
+    {
+        if($request->hasFile('syllabus')) {
+            $filename = $request->syllabus->getClientOriginalName();
+
+            while(Storage::exists('course/' . $course->course_code . '/' . $filename)) {
+                $filename = '(1)' . $filename;
+            }
+            $request->file('syllabus')->storeAs('course/' . $course->course_code, $filename);
+            $course->syllabus = $filename;
+            $course->save();
+
+            $course->syllabus_history()->create([
+                'syllabus'     => $filename,
+                'user_id'      => auth()->user()->id,
+            ]);
+        }
+        return back()->withToastSuccess(__('Syllabus successfully updated.'));
     }
 }
