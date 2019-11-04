@@ -22,9 +22,23 @@ class CourseController extends Controller
             $data = $course->with('courseHardPreq','courseSoftPreq','courseCoReq')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->addColumn('courseHardPreq', function($data) {
+                    return $data->courseHardPreq->map(function($c) {
+                        return $c->course_code;
+                    })->implode(' ,');
+                })
+                ->addColumn('courseSoftPreq', function($data) {
+                    return $data->courseSoftPreq->map(function($c) {
+                        return $c->course_code;
+                    })->implode(' ,');
+                })
+                ->addColumn('courseCoReq', function($data) {
+                    return $data->courseCoReq->map(function($c) {
+                        return $c->course_code;
+                    })->implode(' ,');
+                })
                 ->addColumn('action', function($row){
-                    $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
-                    return $btn;
+                    return view('course.partials.indexDropdown', ['course' => $row->id]);
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -123,9 +137,12 @@ class CourseController extends Controller
      * @param  \App\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function edit(Course $course)
+    public function edit($id)
     {
-        //
+        $course = Course::findOrFail($id);
+        $courses = Course::select('id','course_name')->get();
+        $users = User::select('id','name')->role('faculty')->get();
+        return view('course.edit',compact('course','courses','users'));
     }
 
     /**

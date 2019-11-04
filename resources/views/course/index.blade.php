@@ -37,6 +37,7 @@
                         <table class="table data-table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
+                                    <th scope="col">{{ __('ID') }}</th>
                                     <th scope="col">{{ __('Course Name') }}</th>
                                     <th scope="col">{{ __('Course Code') }}</th>
                                     <th scope="col">{{ __('Hard PreRequisite') }}</th>
@@ -46,48 +47,6 @@
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
-                            {{-- <tbody>
-                                @foreach ($courses as $course)
-                                    <tr>
-                                        <td>{{ $course->course_name }}</td>
-                                        <td>{{ $course->course_code }}</td>
-                                        <td>
-                                            @foreach($course->courseHardPreq as $c)
-                                                <span class="badge badge-dot mr-4"><i class="bg-info"></i> {{ $c->course_code }}</span><br>
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            @foreach($course->courseSoftPreq as $c)
-                                                <span class="badge badge-dot mr-4"><i class="bg-info"></i> {{ $c->course_code }}</span><br>
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            @foreach($course->courseCoReq as $c)
-                                                <span class="badge badge-dot mr-4"><i class="bg-info"></i> {{ $c->course_code }}</span><br>
-                                            @endforeach
-                                        </td>
-                                        <td>{{ $course->units }}</td>
-                                        <td class="text-right">
-                                            <div class="dropdown">
-                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                    <form action="{{ route('course.destroy', $course) }}" method="post">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <a class="dropdown-item" href="{{ route('course.show', $course) }}">{{ __('View Course') }}</a>
-                                                        <a class="dropdown-item" href="{{ route('course.edit', $course) }}">{{ __('Edit') }}</a>
-                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this course?") }}') ? this.parentElement.submit() : ''">
-                                                            {{ __('Delete') }}
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody> --}}
                         </table>
                     </div>
                 </div>
@@ -110,24 +69,25 @@
 <script src="/vendor/datatables/dataTables.select.min.js"></script>
 <script type="text/javascript">
     $(function () {
-        var e = $(".data-table");
-        e.length && e.on("init.dt", function() {
-            $("div.dataTables_length select").removeClass("custom-select custom-select-sm")
-        });
+        // var e = $(".data-table");
+        // e.length && e.on("init.dt", function() {
+        //     $("div.dataTables_length select").removeClass("custom-select custom-select-sm")
+        // });
         var table = $('.data-table').DataTable({
             processing: true,
             serverSide: true,
             ajax: "{{ route('course.index') }}",
             columns: [
-                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                {data: 'name', name: 'name'},
-                {data: 'email', name: 'email'},
+                {data: 'id', name: 'id'},
+                {data: 'course_name', name: 'course_name'},
+                {data: 'course_code', name: 'course_code'},
+                {data: 'courseHardPreq', name: 'courseHardPreq.course_code', orderable: false, searchable: false},
+                {data: 'courseSoftPreq', name: 'courseSoftPreq.course_code', orderable: false, searchable: false},
+                {data: 'courseCoReq', name: 'courseCoReq.course_code', orderable: false, searchable: false},
+                {data: 'units', name: 'units'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
-            keys: !0,
-            select: {
-                style: "multi"
-            },
+            order:[0,'desc'],
             language: {
                 paginate: {
                     previous: "<i class='fas fa-angle-left'>",
