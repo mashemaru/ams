@@ -105,4 +105,26 @@ class DocumentController extends Controller
     {
         //
     }
+
+    public function mashDoc()
+    {
+        $doc = \App\DocumentOutline::find(1);
+
+        // <table class="table table-bordered">
+        // <table style="width: 100%; border: 4px #000000 single;">
+        $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$doc->body);
+        // $docx->embedHTML($html);
+        // $docx->createDocx('example_embedHTML_1');
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $section = $phpWord->addSection();
+        $section->addText($doc->section,array('name'=>'Arial','size' => 20,'bold' => true));
+        // $docx = new \DOMDocument();
+        // $docx->loadHTML($html);
+        // $docx->saveHTML();
+        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        $objWriter->save('Appdividend.docx');
+        // return response()->download(public_path('example_embedHTML_1.docx'));
+        return response()->download(public_path('Appdividend.docx'));
+    }
 }

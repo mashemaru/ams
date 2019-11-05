@@ -13,6 +13,7 @@
         "laravel-frontend-presets/argon": "^1.0",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
+        "phpoffice/phpword": "dev-develop_v1.0",
         "realrashid/sweet-alert": "^2.0",
         "spatie/laravel-permission": "^3.0",
         "yajra/laravel-datatables-oracle": "^9.0"

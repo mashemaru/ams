@@ -151,7 +151,7 @@
                         </div>
                         <br>
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal"
+                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal3"
                             style="float:right">
                             <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
                             Add Appendix/Exhibit
@@ -266,7 +266,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+    <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog"
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">

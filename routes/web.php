@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
 	Route::resource('document', 'DocumentController', ['except' => ['show']]);
+	Route::get('mash', 'DocumentController@mashDoc');
 	Route::resource('document-outline', 'DocumentOutlineController');
 	Route::resource('team', 'TeamController');
 	Route::resource('accreditation', 'AccreditationController');
