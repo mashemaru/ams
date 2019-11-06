@@ -59,14 +59,7 @@
 
 @push('js')
 <link href="/vendor/datatables/jquery.dataTables.min.css" rel="stylesheet" />
-<script src="/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-<script src="/vendor/datatables/dataTables.buttons.min.js"></script>
-<script src="/vendor/datatables/buttons.bootstrap4.min.js"></script>
-<script src="/vendor/datatables/buttons.html5.min.js"></script>
-<script src="/vendor/datatables/buttons.flash.min.js"></script>
-<script src="/vendor/datatables/buttons.print.min.js"></script>
-<script src="/vendor/datatables/dataTables.select.min.js"></script>
+<script src="{{ asset('js/dataTables.js') }}"></script>
 <script type="text/javascript">
     $(function () {
         // var e = $(".data-table");

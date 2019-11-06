@@ -109,13 +109,18 @@ class DocumentController extends Controller
 
     public function mashDoc()
     {
-        $doc = \App\DocumentOutline::find(1);
+        $document = \App\Document::with('outlines')->find(1);
+        // dd($document);
+        // $doc = \App\DocumentOutline::find(1);
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
-        $section = $phpWord->addSection();
-        $section->addText($doc->section,array('name'=>'Arial','size' => 20,'bold' => true));
 
-        $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$doc->body);
-        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
+        foreach($document->outlines as $outline) {
+            $section = $phpWord->addSection();
+            $section->addText($outline->section,array('name'=>'Arial','size' => (($outline->parent_id == 0) ? 24 : 20),'bold' => true));
+    
+            $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$outline->body);
+            \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
+        }
 
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
         $objWriter->save('Appdividend.docx');
