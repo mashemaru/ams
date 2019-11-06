@@ -48,13 +48,14 @@ class DocumentController extends Controller
 
         foreach(json_decode($request->sections) as $s) {
             $root = $document->outlines()->create([
-                'parent_id'     => 0,
-                'section'       => $s->section,
-                'doc_type'      => isset($s->doc_type) ? $s->doc_type : 'Narrative',
-                'score_type'    => isset($s->score) ? $s->score : 0,
+                'parent_id'         => 0,
+                'root_parent_id'    => 0,
+                'section'           => $s->section,
+                'doc_type'          => isset($s->doc_type) ? $s->doc_type : 'Narrative',
+                'score_type'        => isset($s->score) ? $s->score : 0,
             ]);
             if(isset($s->children)) {
-                $document->saveChildrenRecursively($s, $root);
+                $document->saveChildrenRecursively($s, $root->id, $root->id);
             }
         }
 
@@ -109,22 +110,16 @@ class DocumentController extends Controller
     public function mashDoc()
     {
         $doc = \App\DocumentOutline::find(1);
-
-        // <table class="table table-bordered">
-        // <table style="width: 100%; border: 4px #000000 single;">
-        $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$doc->body);
-        // $docx->embedHTML($html);
-        // $docx->createDocx('example_embedHTML_1');
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
         $section = $phpWord->addSection();
         $section->addText($doc->section,array('name'=>'Arial','size' => 20,'bold' => true));
-        // $docx = new \DOMDocument();
-        // $docx->loadHTML($html);
-        // $docx->saveHTML();
+
+        $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$doc->body);
         \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
+
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
         $objWriter->save('Appdividend.docx');
-        // return response()->download(public_path('example_embedHTML_1.docx'));
+
         return response()->download(public_path('Appdividend.docx'));
     }
 }

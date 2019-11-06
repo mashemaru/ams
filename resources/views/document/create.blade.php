@@ -111,8 +111,8 @@ $('#document').on('change', 'select[name="agency_id"]', function () {
                 score_type.push( "<option value='" + value.id + "'>" +  value.name + "</option>" );
             });
 
-            items.push( "<optgroup label='Narrative'><option value='0'>Narrative</option></optgroup>" );
-            items.push( "<optgroup label='Narrative w/ Table'><option value='0'>Narrative w/ Table</option></optgroup>" );
+            items.push( "<option value='0'>Narrative Only</option>" );
+            items.push( "<optgroup label='Narrative w/ Table'><option value='0'>w/ Table</option></optgroup>" );
             items.push( "<optgroup label='Narrative w/ Score'>" + score_type.join() + "</optgroup>" );
             items.push( "<optgroup label='Narrative w/ Table & Score'>" + score_type.join() + "</optgroup>" );
             

@@ -101,7 +101,7 @@ class DocumentOutlineController extends Controller
             return back()->with('error', $validate->messages());
         }
 
-        $path = '/storage/' . $request->file('image')->store('media', ['disk' => 'public']);
+        $path = asset('storage/' . $request->file('image')->store('media', ['disk' => 'public']));
 
         return $path;
     }
