@@ -87,7 +87,7 @@
                                     <div class="form-group text-center">
                                         <label class="form-control-label">{{ __('Academic') }}</label>
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" name="academic" class="custom-control-input" id="academic">
+                                            <input type="checkbox" name="academic" class="custom-control-input" id="academic" {{ old('is_academic', $course->is_academic) ? 'checked' : '' }}>
                                             <label class="custom-control-label" for="academic"></label>
                                         </div>
                                     </div>

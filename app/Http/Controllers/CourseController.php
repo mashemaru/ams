@@ -154,7 +154,58 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'course_name' => 'required|min:4',
+            'course_code' => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withErrors($validate)->withInput();
+        }
+
+        $course->update([
+            'course_name' => $request->course_name,
+            'course_code' => $request->course_code,
+            'is_academic' => ($request->academic) ? 1 : 0,
+            'units'       => $request->units,
+        ]);
+
+        $requisites = [];
+        if($request->hardPrerequisite) {
+            foreach($request->hardPrerequisite as $item) {
+                $requisites[] = ['requisite_id' => $item, 'requisite' => 'hard'];
+            }
+        }
+        if($request->softPrerequisite) {
+            foreach($request->softPrerequisite as $item) {
+                $requisites[] = ['requisite_id' => $item, 'requisite' => 'soft'];
+            }
+        }
+        if($request->coRequisite) {
+            foreach($request->coRequisite as $item) {
+                $requisites[] = ['requisite_id' => $item, 'requisite' => 'co'];
+            }
+        }
+        $course->requisites()->sync($requisites);
+        $course->faculty()->sync($request->faculty_members);
+
+        if($request->hasFile('syllabus')) {
+            $filename = $request->syllabus->getClientOriginalName();
+
+            while(Storage::exists('course/' . $course->course_code . '/' . $filename)) {
+                $filename = '(1)' . $filename;
+            }
+            $request->file('syllabus')->storeAs('course/' . $course->course_code, $filename);
+            $course->syllabus = $filename;
+            $course->save();
+
+            $course->syllabus_history()->create([
+                'syllabus'     => $filename,
+                'user_id'      => auth()->user()->id,
+            ]);
+        }
+
+        return back()->withToastSuccess(__('Course successfully updated.'));
     }
 
     /**
@@ -165,7 +216,9 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        //
+        $course->delete();
+
+        return back()->withToastSuccess(__('Course successfully deleted.'));
     }
 
     public function updateSyllabus(Request $request, Course $course)

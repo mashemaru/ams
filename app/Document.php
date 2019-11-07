@@ -19,6 +19,11 @@ class Document extends Model
         return $this->hasMany('App\DocumentOutline', 'document_id');
     }
 
+    public function outline_root()
+    {
+        return $this->outlines()->rootParent();
+    }
+
     public function agency()
     {
         return $this->hasOne('App\Agency', 'id', 'agency_id');

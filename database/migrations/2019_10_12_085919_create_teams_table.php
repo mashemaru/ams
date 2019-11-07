@@ -23,7 +23,6 @@ class CreateTeamsTable extends Migration
         });
 
         Schema::create('accreditation_team', function (Blueprint $table) {
-            $table->bigIncrements('id');
             $table->unsignedBigInteger('accreditation_id');
             $table->unsignedBigInteger('team_id');
 

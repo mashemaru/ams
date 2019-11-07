@@ -12,6 +12,11 @@ class DocumentOutline extends Model
         'document_id', 'parent_id', 'root_parent_id', 'section', 'body', 'score', 'reference', 'doc_type', 'score_type',
     ];
 
+    public function document()
+    {
+        return $this->belongsTo('App\Document', 'document_id');
+    }
+    
     public function scoring_type()
     {
         return $this->belongsTo('App\ScoringType', 'score_type');
@@ -20,5 +25,10 @@ class DocumentOutline extends Model
     public function comments()
     {
         return $this->hasMany('App\OutlineComment', 'outline_id');
+    }
+
+    public function scopeRootParent($query)
+    {
+        return $query->where('parent_id', 0);
     }
 }
