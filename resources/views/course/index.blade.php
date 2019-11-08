@@ -66,7 +66,7 @@
         // e.length && e.on("init.dt", function() {
         //     $("div.dataTables_length select").removeClass("custom-select custom-select-sm")
         // });
-        var table = $('.data-table').DataTable({
+        $('.data-table').DataTable({
             processing: true,
             serverSide: true,
             ajax: "{{ route('course.index') }}",

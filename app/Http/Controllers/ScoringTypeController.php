@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\ScoringType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ScoringTypeController extends Controller
 {
@@ -12,9 +13,9 @@ class ScoringTypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ScoringType $scoring_type)
+    public function index(ScoringType $scoring)
     {
-        return view('scoring.index', ['scoring_type' => $scoring_type->paginate(15)]);
+        return view('scoring.index', ['scoring_type' => $scoring->paginate(15)]);
     }
 
     /**
@@ -35,13 +36,20 @@ class ScoringTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $validate = $request->validate([
+        $validate = Validator::make($request->all(), [
             'scoring_name'          => 'required|min:4',
             'scoring_description'   => 'nullable',
         ]);
-        $validate['scores'] = $request->scoring;
+    
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
 
-        ScoringType::create($validate);
+        ScoringType::create([
+            'scoring_name'          => $request->scoring_name,
+            'scoring_description'   => $request->scoring_description,
+            'scores'                => $request->scoring,
+        ]);
 
         return redirect()->route('scoring.index')->withToastSuccess(__('Scoring Type successfully created.'));
     }
@@ -52,7 +60,7 @@ class ScoringTypeController extends Controller
      * @param  \App\ScoringType  $scoringType
      * @return \Illuminate\Http\Response
      */
-    public function show(ScoringType $scoringType)
+    public function show(ScoringType $scoring)
     {
         //
     }
@@ -63,9 +71,9 @@ class ScoringTypeController extends Controller
      * @param  \App\ScoringType  $scoringType
      * @return \Illuminate\Http\Response
      */
-    public function edit(ScoringType $scoringType)
+    public function edit(ScoringType $scoring)
     {
-        //
+        return view('scoring.edit', compact('scoring'));
     }
 
     /**
@@ -75,9 +83,24 @@ class ScoringTypeController extends Controller
      * @param  \App\ScoringType  $scoringType
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ScoringType $scoringType)
+    public function update(Request $request, ScoringType $scoring)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'scoring_name'          => 'required|min:4',
+            'scoring_description'   => 'nullable',
+        ]);
+    
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
+
+        $scoring->update([
+            'scoring_name'          => $request->scoring_name,
+            'scoring_description'   => $request->scoring_description,
+            'scores'                => $request->scoring,
+        ]);
+
+        return redirect()->route('scoring.index')->withToastSuccess(__('Scoring Type successfully updated.'));
     }
 
     /**
@@ -86,8 +109,10 @@ class ScoringTypeController extends Controller
      * @param  \App\ScoringType  $scoringType
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ScoringType $scoringType)
+    public function destroy(ScoringType $scoring)
     {
-        //
+        $scoring->delete();
+
+        return back()->withToastSuccess(__('Scoring Type successfully deleted.'));
     }
 }

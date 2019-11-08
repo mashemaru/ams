@@ -19,7 +19,7 @@ class CreateCoursesTable extends Migration
             $table->text('course_code');
             $table->text('syllabus')->nullable();
             $table->boolean('is_academic')->default(true);
-            $table->decimal('units', 8, 2)->default(0.00);
+            $table->decimal('units', 8, 2)->default(0);
             $table->timestamps();
         });
 

@@ -16,6 +16,7 @@ class TeamController extends Controller
      */
     public function index(Team $team)
     {
+        $team->with('users');
         return view('team.index', ['teams' => $team->paginate(15)]);
     }
 
@@ -40,8 +41,9 @@ class TeamController extends Controller
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'team_name' => 'required|min:4',
-            'team_head' => 'required',
+            'team_name'     => 'required|min:4',
+            'team_head'     => 'required',
+            'team_members'  => 'required',
         ]);
 
         if ($validate->fails()) {
@@ -84,7 +86,10 @@ class TeamController extends Controller
      */
     public function edit(Team $team)
     {
-        //
+        $team->with('users');
+        $users = User::select('id','name')->role('member')->get();
+
+        return view('team.edit',compact('users','team'));
     }
 
     /**
@@ -96,7 +101,28 @@ class TeamController extends Controller
      */
     public function update(Request $request, Team $team)
     {
-        //
+        $validate = Validator::make($request->all(), [
+            'team_name'     => 'required|min:4',
+            'team_head'     => 'required',
+            'team_members'  => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
+
+        foreach($request->team_members as $members) {
+            if($members == $request->team_head)
+                return back()->with('error', 'User cannot be both Team Head and Member')->withInput();
+        }
+
+        $team->update([
+            'team_name' => $request->team_name,
+            'team_head' => $request->team_head,
+        ]);
+        $team->users()->sync($request->team_members);
+
+        return back()->withToastSuccess(__('Team successfully updated.'));
     }
 
     /**
@@ -107,6 +133,13 @@ class TeamController extends Controller
      */
     public function destroy(Team $team)
     {
-        //
+        $team->delete();
+
+        return back()->withToastSuccess(__('Team successfully deleted.'));
+    }
+
+    public function assignTeam()
+    {
+        # code...
     }
 }

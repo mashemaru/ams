@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('mash', 'DocumentController@mashDoc');
 	Route::resource('document-outline', 'DocumentOutlineController');
 	Route::resource('team', 'TeamController');
+	Route::post('assignTeam', 'TeamController@assignTeam');
 	Route::resource('accreditation', 'AccreditationController');
 	Route::resource('course', 'CourseController');
 	Route::put('courseSyllabus/{course}', ['as' => 'courseSyllabus.update', 'uses' => 'CourseController@updateSyllabus']);

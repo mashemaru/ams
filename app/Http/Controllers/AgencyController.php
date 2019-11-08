@@ -36,7 +36,7 @@ class AgencyController extends Controller
             return back()->with('error', $validate->messages())->withInput();
         }
     
-        $agency = Agency::create([
+        Agency::create([
             'agency_name' => $request->agency_name,
             'agency_code' => $request->agency_code,
         ]);
@@ -63,6 +63,7 @@ class AgencyController extends Controller
      */
     public function edit(Agency $agency)
     {
+        $agency->with('score_types');
         $scoringType = ScoringType::all();
         return view('agency.edit', compact('agency','scoringType'));
     }

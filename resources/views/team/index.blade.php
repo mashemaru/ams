@@ -24,6 +24,7 @@
                                 <tr>
                                     <th scope="col">{{ __('Team Name') }}</th>
                                     <th scope="col">{{ __('Team Head') }}</th>
+                                    <th scope="col">{{ __('Team Members') }}</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -32,6 +33,13 @@
                                     <tr>
                                         <td>{{ $team->team_name }}</td>
                                         <td>{{ $team->head->name }}</td>
+                                        <td>
+                                            @if($team->users->isNotEmpty())
+                                                {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $team->users->implode('name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
+                                            @else
+                                                N/A
+                                            @endif
+                                        </td>
                                         <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

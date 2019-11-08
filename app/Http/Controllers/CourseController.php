@@ -137,12 +137,12 @@ class CourseController extends Controller
      * @param  \App\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Course $course)
     {
-        $course = Course::findOrFail($id);
-        $courses = Course::select('id','course_name')->get();
+        $course->with('courseHardPreq','courseSoftPreq','courseCoReq','faculty')->get();
+        $courses = Course::select('id','course_name')->get()->except($course->id);
         $users = User::select('id','name')->role('faculty')->get();
-        return view('course.edit',compact('course','courses','users'));
+        return view('course.edit', compact('course','courses','users'));
     }
 
     /**

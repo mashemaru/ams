@@ -1,6 +1,7 @@
 <?php
 
 use App\User;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,6 +14,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        $role = ['member','faculty'];
         $user = User::create([
             'name' => 'Admin Admin',
             'email' => 'admin@test.com',
@@ -23,8 +25,8 @@ class UsersTableSeeder extends Seeder
 
         $users = factory(App\User::class, 50)
             ->create()
-            ->each(function ($user) {
-                $user->assignRole('member');
+            ->each(function ($user) use($role) {
+                $user->assignRole(Arr::random($role));
             });
     }
 }

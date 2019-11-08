@@ -60,7 +60,7 @@
                                         <label class="form-control-label">{{ __('Soft Prerequisite') }}</label>
                                         <select class="form-control form-control-alternative select2" name="softPrerequisite[]" data-toggle="select" multiple data-placeholder="Select soft prerequisite">
                                             @foreach ($courses as $c)
-                                                <option value="{{$c->id}}">{{ $c->course_name }}</option>
+                                                <option value="{{$c->id}}" @foreach($course->courseSoftPreq as $chp) {{ ($chp->id == $c->id) ? 'selected="selected"' : '' }} @endforeach>{{ $c->course_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -72,7 +72,7 @@
                                         <label class="form-control-label">{{ __('Co Rerequisite') }}</label>
                                         <select class="form-control form-control-alternative select2" name="coRequisite[]" data-toggle="select" multiple data-placeholder="Select co rerequisite">
                                             @foreach ($courses as $c)
-                                                <option value="{{$c->id}}">{{ $c->course_name }}</option>
+                                                <option value="{{$c->id}}" @foreach($course->courseCoReq as $chp) {{ ($chp->id == $c->id) ? 'selected="selected"' : '' }} @endforeach>{{ $c->course_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
