@@ -15,6 +15,8 @@ class CreateTimelinesTable extends Migration
     {
         Schema::create('timelines', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('accreditation_id');
+            $table->text('task')->nullable();
             $table->timestamps();
         });
     }

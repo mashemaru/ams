@@ -160,26 +160,15 @@
                             <th scope="col">College</th>
                             <th scope="col">Department</th>
                             <th scope="col">Rank</th>
-                            <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($course->faculty as $faculty)
                             <tr>
                             <td>{{ $faculty->name }}</td>
-                            <td>CCS</td>
-                            <td>IT</td>
-                            <td>Full Time</td>
-                            <td class="text-right">
-                                <div class="dropdown">
-                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                    <a class="dropdown-item" href="#">Remove from List</a>
-                                </div>
-                                </div>
-                            </td>
+                            <td>{{ $faculty->college }}</td>
+                            <td>{{ $faculty->department }}</td>
+                            <td>{{ $faculty->rank }}</td>
                             </tr>
                             @endforeach
                         </tbody>

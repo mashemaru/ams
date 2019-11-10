@@ -27,7 +27,7 @@ class TeamController extends Controller
      */
     public function create()
     {
-        $users = User::select('id','name')->role('member')->get();
+        $users = User::select('id','firstname','mi','surname')->role('member')->get();
 
         return view('team.create',compact('users'));
     }
@@ -87,7 +87,7 @@ class TeamController extends Controller
     public function edit(Team $team)
     {
         $team->with('users');
-        $users = User::select('id','name')->role('member')->get();
+        $users = User::select('id','firstname','mi','surname')->role('member')->get();
 
         return view('team.edit',compact('users','team'));
     }

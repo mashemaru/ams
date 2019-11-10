@@ -35,8 +35,6 @@ class CreateDocumentsTable extends Migration
             $table->enum('doc_type', ['Narrative', 'Narrative w/ Table', 'Narrative w/ Score', 'Narrative w/ Table & Score'])->default('Narrative');
             $table->unsignedBigInteger('score_type')->default(0);
             $table->timestamps();
-
-            $table->foreign('document_id')->references('id')->on('documents');
         });
     }
 

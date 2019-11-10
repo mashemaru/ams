@@ -9,6 +9,7 @@ use App\Document;
 use App\DocumentTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class AccreditationController extends Controller
 {
@@ -17,9 +18,10 @@ class AccreditationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Accreditation $accreditation)
     {
-        //
+        $accreditation->with('agency','program','document')->get();
+        return view('accreditation.index', ['accreditations' => $accreditation->paginate(15)]);
     }
 
     /**
@@ -84,7 +86,8 @@ class AccreditationController extends Controller
      */
     public function show(Accreditation $accreditation)
     {
-        //
+        $accreditation->with('agency','program','document')->get();
+        return view('accreditation.show', compact('accreditation'));
     }
 
     /**
@@ -118,11 +121,35 @@ class AccreditationController extends Controller
      */
     public function destroy(Accreditation $accreditation)
     {
-        //
+        $accreditation->delete();
+
+        return redirect()->route('accreditation.index')->withToastSuccess(__('Accreditation successfully deleted.'));
     }
 
     public function assign_team(Accreditation $accreditation)
     {
         // DocumentTeam::
+    }
+
+    public function generateDocument(Accreditation $accreditation)
+    {
+        $accreditation->with('document.outlines')->get();
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+
+        foreach($accreditation->document->outlines as $outline) {
+            $section = $phpWord->addSection();
+            $section->addText($outline->section,array('name'=>'Arial','size' => (($outline->parent_id == 0) ? 24 : 20),'bold' => true));
+    
+            $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$outline->body);
+            \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
+        }
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        if(!Storage::exists('accreditation/'. $accreditation->id)) {
+            Storage::makeDirectory('accreditation/'. $accreditation->id);
+        }
+        $objWriter->save(storage_path('app/accreditation/'. $accreditation->id . '/' . $accreditation->document->document_name . '.docx'));
+
+        return response()->download(storage_path('app/accreditation/'. $accreditation->id . '/' . $accreditation->document->document_name . '.docx'));
     }
 }

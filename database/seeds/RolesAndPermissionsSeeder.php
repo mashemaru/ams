@@ -17,7 +17,7 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permissions
-        $items = ['programs', 'agencies', 'users'];
+        $items = ['program', 'agency', 'user', 'accreditation', 'course', 'document', 'document-outline', 'scoring-type', 'team', 'timeline', 'role-permission'];
         foreach($items as $item) {
             Permission::create(['name' => 'create ' . $item]);
             Permission::create(['name' => 'edit ' . $item]);

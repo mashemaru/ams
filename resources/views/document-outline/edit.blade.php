@@ -11,15 +11,12 @@
                 <div class="card-header border-1">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h3 class="mb-0">{{ $outline->doc_type }}</h3>
+                            <h3 class="mb-0">References</h3>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <h4 style="padding-top: 7px; padding-bottom: 7px"><a href="#">I. ABCD</a></h4>
-                    <h4 style="padding-top: 7px; padding-bottom: 7px"><a href="#">II. EFGH</a></h4>
-                    <h4 style="padding-top: 7px; padding-bottom: 7px"><a href="#">III. IJKL</a></h4>
-                    <h4 style="padding-top: 7px; padding-bottom: 7px"><a href="#">IV. MNOP</a></h4>
+                    <h4>{{ $outline->doc_type }}</h4>
                 </div>
             </div>
             <div class="card shadow mt-4">
@@ -77,35 +74,20 @@
                             <div class="col">
                                 <h3 class="mb-0">{{ $outline->section }}</h3>
                             </div>
-                            <span>
-                                <div class="dropdown" style="float: right">
-                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                        <a class="dropdown-item" href="#" data-toggle="modal"
-                                            data-target="#exampleModal">Score Section</a>
-                                    </div>
-                                </div>
-                            </span>
                         </div>
                     </div>
 
                     <div class="card-body px-lg-5 py-lg-5">
-                        <h4>Score: N/A
-                            <span>
-                                    <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#scoreModal1" style="float:right">
-                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                                        Score Section
-                                    </button>
-                            </span>
-                        </h4>
-                        <button type="button" class="btn btn-primary btn-sm mb-4" data-toggle="modal" data-target="#scoreModal1">
-                            <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                            Score Section
-                        </button>
+                        @if ($outline->score_type != 0)
+                        <h4>Score: <span class="score">{{ ($outline->score) ?? 'N/A' }}</span>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary btn-sm mb-4" data-toggle="modal" data-target="#scoreModal" style="float:right">
+                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                    Score Section
+                                </button>
+                            </h4>
+                            <br>
+                        @endif
                         <textarea name="content" id="content">{{ $outline->body }}</textarea>
                         <br><br><br>
                         <div class="table-responsive">
@@ -169,59 +151,46 @@
                         </div>
                     </div>
                 </div>
+                @if ($outline->score_type != 0)      
+                <!-- Modal -->     
+                    <div class="modal fade" id="scoreModal" tabindex="-1" role="dialog"
+                        aria-labelledby="scoreModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="scoreModalLabel">Score Section</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form role="form">
+                                        <div class="form-group mb-3">
+                                            <label class="form-control-label">Scoring Name: {{ $outline->scoring_type->scoring_name }}</label><br>
+                                            @foreach($outline->scoring_type->scores as $key => $s)
+                                                <div class="custom-control custom-radio mb-3">
+                                                    <input name="custom-radio-score" class="custom-control-input" id="customRadio{{ $key }}" type="radio" value="{{ $s['score'] }}"{{ ($s['score'] == $outline->score) ? ' checked' : '' }}>
+                                                    <label class="custom-control-label" for="customRadio{{ $key }}"><strong>{{ $s['score'] }}</strong> - {{ $s['description'] }}</label>
+                                                </div>
+                                                <h4></h4>
+                                            @endforeach
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary cancelScore">Cancel</button>
+                                    <button type="button" class="btn btn-primary saveScore" data-dismiss="modal">Save Score</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </form>
         </div>
     </div>
 
     @include('layouts.footers.auth')
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Score Section</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form role="form">
-                        <div class="form-group mb-3">
-                            <label class="form-control-label">Score</label><br>
-                            <div class="custom-control custom-checkbox mb-0">
-                                <input class="custom-control-input" id="customCheck1" type="checkbox">
-                                <label class="custom-control-label" for="customCheck1">E - Excellent</label>
-                            </div><br>
-                            <div class="custom-control custom-checkbox mb-0">
-                                <input class="custom-control-input" id="customCheck1" type="checkbox">
-                                <label class="custom-control-label" for="customCheck1">S -
-                                    Satisfactory</label>
-                            </div><br>
-                            <div class="custom-control custom-checkbox mb-0">
-                                <input class="custom-control-input" id="customCheck1" type="checkbox">
-                                <label class="custom-control-label" for="customCheck1">L - LSKWI</label>
-                            </div><br>
-                            <div class="custom-control custom-checkbox mb-0">
-                                <input class="custom-control-input" id="customCheck1" type="checkbox">
-                                <label class="custom-control-label" for="customCheck1">M -
-                                    Satisfactory</label>
-                            </div><br>
-                            <div class="custom-control custom-checkbox mb-0">
-                                <input class="custom-control-input" id="customCheck1" type="checkbox">
-                                <label class="custom-control-label" for="customCheck1">O -
-                                    Satisfactory</label>
-                            </div><br>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Save Score</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog"
         aria-labelledby="exampleModalLabel1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -312,17 +281,6 @@
 @push('js')
 <script>
 $(document).ready(function () {
-    // $('#content').summernote({
-    //     toolbar: [
-    //         // [groupName, [list of button]]
-    //         ['style', ['bold', 'italic', 'underline', 'clear']],
-    //         ['font', ['strikethrough', 'superscript', 'subscript']],
-    //         ['fontsize', ['fontsize']],
-    //         ['color', ['color']],
-    //         ['para', ['ul', 'ol', 'paragraph']],
-    //         ['height', ['height']]
-    //     ]
-    // });
     $('#content').summernote({
         height: ($(window).height() - 600),
         followingToolbar: true,
@@ -336,7 +294,7 @@ $(document).ready(function () {
             ['para', ['ul', 'ol', 'paragraph']],
             ['height', ['height']],
             ['table', ['table']],
-            ['insert', ['link', 'picture', 'video']],
+            ['insert', ['link', 'picture']],
             ['view', ['fullscreen', 'codeview', 'help']],
         ],
         callbacks: {

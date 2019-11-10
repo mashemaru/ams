@@ -81,7 +81,9 @@ class DocumentController extends Controller
      */
     public function edit(Document $document)
     {
-        //
+        $document->with('agency.score_types')->get();
+        $agency = Agency::with('score_types')->get();
+        return view('document.edit', ['agencies' => $agency, 'document' => $document]);
     }
 
     /**
@@ -93,7 +95,28 @@ class DocumentController extends Controller
      */
     public function update(Request $request, Document $document)
     {
-        //
+        $validate = $request->validate([
+            'agency_id'        => 'required|exists:agencies,id',
+            'document_name'    => 'required',
+            'sections'         => 'required',
+        ]);
+
+        $document = Document::create($validate);
+
+        foreach(json_decode($request->sections) as $s) {
+            $root = $document->outlines()->create([
+                'parent_id'         => 0,
+                'root_parent_id'    => 0,
+                'section'           => $s->section,
+                'doc_type'          => isset($s->doc_type) ? $s->doc_type : 'Narrative',
+                'score_type'        => isset($s->score) ? $s->score : 0,
+            ]);
+            if(isset($s->children)) {
+                $document->saveChildrenRecursively($s, $root->id, $root->id);
+            }
+        }
+
+        return redirect()->route('document.index')->withToastSuccess(__('Document successfully created.'));
     }
 
     /**
@@ -104,7 +127,9 @@ class DocumentController extends Controller
      */
     public function destroy(Document $document)
     {
-        //
+        $document->delete();
+
+        return back()->withToastSuccess(__('Document successfully deleted.'));
     }
 
     public function mashDoc()

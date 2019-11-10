@@ -44473,7 +44473,16 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").on("click", ".removeclass"
   }
 
   return false;
+}); // Document Outline
+
+jquery__WEBPACK_IMPORTED_MODULE_0___default()("body").on("click", ".cancelScore", function (e) {
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name="custom-radio-score"]:checked').prop('checked', false);
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('span.score').text('N/A');
 });
+jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name="custom-radio-score"]').change(function () {
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('span.score').text(this.value);
+}); // End Document Outline
+
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(function () {
   jquery__WEBPACK_IMPORTED_MODULE_0___default()('.select2').select2();
 });

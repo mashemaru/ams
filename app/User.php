@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'firstname', 'mi', 'surname', 'college', 'department', 'college', 'rank', 'email', 'password',
     ];
 
     /**
@@ -56,5 +56,9 @@ class User extends Authenticatable
     public function courses()
     {
         return $this->belongsToMany('App\Course', 'course_faculty', 'user_id', 'course_id');
+    }
+
+    public function getNameAttribute() {
+        return ucfirst($this->firstname) . ' ' . $this->mi . ' ' . ucfirst($this->surname);
     }
 }

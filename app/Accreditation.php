@@ -16,6 +16,21 @@ class Accreditation extends Model
         'recommendations'   => 'array',
     ];
 
+    public function agency()
+    {
+        return $this->hasOne('App\Agency', 'id', 'agency_id');
+    }
+
+    public function program()
+    {
+        return $this->hasOne('App\Program', 'id', 'program_id');
+    }
+
+    public function document()
+    {
+        return $this->hasOne('App\Document', 'id', 'document_id');
+    }
+
     public function teams()
     {
         return $this->belongsToMany('App\Accreditation', 'accreditation_team', 'accreditation_id', 'team_id');

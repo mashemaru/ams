@@ -19,6 +19,7 @@ class CreateAccreditationsTable extends Migration
             $table->unsignedBigInteger('program_id');
             $table->unsignedBigInteger('document_id');
             $table->enum('type', ['initial', 'reaccredit']);
+            $table->decimal('status', 8, 2)->default('0');
             $table->text('result')->nullable();
             $table->text('completed_document')->nullable();
             $table->mediumText('recommendations')->nullable();

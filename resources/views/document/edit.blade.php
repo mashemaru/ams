@@ -18,8 +18,9 @@
                         </div>
                     </div>
                     <div class="card-body p-lg-5">
-                        <form id="document" method="post" action="{{ route('document.store') }}" autocomplete="off">
+                        <form id="document" method="post" action="{{ route('document.update', $document) }}" autocomplete="off">
                             @csrf
+                            @method('put')
                             <input type="hidden" name="sections">
                             <div class="row">
                                 <div class="col-md-6">
@@ -28,7 +29,7 @@
                                         <select class="form-control form-control-alternative{{ $errors->has('agency_id') ? ' is-invalid' : '' }}" name="agency_id" required autofocus>
                                             <option value>Select Agency</option>
                                             @foreach ($agencies as $agency)
-                                            <option value="{{ $agency->id }}">{{ $agency->agency_name }}</option>
+                                            <option value="{{ $agency->id }}"{{ ($document->agency_id == $agency->id) ? ' selected' : '' }}>{{ $agency->agency_name }}</option>
                                             @endforeach
                                         </select>
                                         @if ($errors->has('agency_id'))
@@ -41,7 +42,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group{{ $errors->has('document_name') ? ' has-danger' : '' }}">
                                         <label class="form-control-label" for="input-document_name">{{ __('Document Name') }}</label>
-                                        <input type="text" name="document_name" id="input-document_name" class="form-control form-control-alternative{{ $errors->has('document_name') ? ' is-invalid' : '' }}" placeholder="{{ __('e.g. ABET CAC Self-Survey Report') }}" value="{{ old('document_name') }}" required>
+                                        <input type="text" name="document_name" id="input-document_name" class="form-control form-control-alternative{{ $errors->has('document_name') ? ' is-invalid' : '' }}" placeholder="{{ __('e.g. ABET CAC Self-Survey Report') }}" value="{{ old('document_name', $document->document_name) }}" required>
 
                                         @if ($errors->has('document_name'))
                                             <span class="invalid-feedback" role="alert">
@@ -54,12 +55,13 @@
                             <hr>
                             <button type="button" class="btn btn-default mb-4" onclick="addSection()">Add Section</button>
                             <div class="dd">
-                                <ol id="dd-list" class="dd-list"></ol>
+                                <ol id="dd-list" class="dd-list">
+                                    {!! renderDocumentSections(json_decode($document->sections), $document->agency->score_types ) !!}
+                                </ol>
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                             </div>
-                            
                         </form>
                     </div>
                 </div>
@@ -67,7 +69,20 @@
         </div>
 
         @include('layouts.footers.auth')
-        <div class="d-none agency-score-type"></div>
+        <div class="d-none agency-score-type">
+            <option value='0'>Narrative Only</option>
+            <optgroup label='Narrative w/ Table'><option value='0'>w/ Table</option></optgroup>
+            <optgroup label='Narrative w/ Score'>
+                @foreach($document->agency->score_types as $score)
+                    <option value='{{ $score['id'] }}'>{{ $score['scoring_name'] }}</option>
+                @endforeach
+            </optgroup>
+            <optgroup label='Narrative w/ Table & Score'>
+                @foreach($document->agency->score_types as $score)
+                    <option value='{{ $score['id'] }}'>{{ $score['scoring_name'] }}</option>
+                @endforeach
+            </optgroup>
+        </div>
     </div>
 @endsection
 

@@ -12,6 +12,9 @@
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Course Management') }}</h3>
                             </div>
+                            <div class="col-4 text-right">
+                                <a href="{{ route('course.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
+                            </div>
                         </div>
                     </div>
                     <form enctype="multipart/form-data" method="post" action="{{ route('course.update', $course) }}" autocomplete="off">
@@ -105,7 +108,7 @@
                                         <label class="form-control-label">{{ __('Faculty Members') }}</label>
                                         <select class="form-control form-control-alternative select2" name="faculty_members[]" data-toggle="select" multiple data-placeholder="Select faculty member">
                                             @foreach ($users as $user)
-                                                <option value="{{$user->id}}">{{ $user->name }}</option>
+                                                <option value="{{$user->id}}" @foreach($course->faculty as $faculty) {{ ($faculty->id == $user->id) ? 'selected="selected"' : '' }} @endforeach>{{ $user->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>

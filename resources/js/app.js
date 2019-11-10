@@ -37,6 +37,17 @@ $("body").on("click",".removeclass", function(e) { //user click on remove text
     return false;
 });
 
+// Document Outline
+$("body").on("click",".cancelScore", function(e) {
+    $('input[name="custom-radio-score"]:checked').prop('checked', false);
+    $('span.score').text('N/A');
+});
+
+$('input[name="custom-radio-score"]').change(function() {
+    $('span.score').text(this.value);
+});
+// End Document Outline
+
 $(document).ready(function() {
     $('.select2').select2();
 });

@@ -57,10 +57,10 @@ class DocumentOutlineController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(DocumentOutline $document_outline)
     {
-        $outline = DocumentOutline::with('scoring_type','comments')->findOrFail($id);
-        return view('document-outline.edit', compact('outline'));
+        $document_outline->with('scoring_type','comments')->get();
+        return view('document-outline.edit', ['outline' => $document_outline]);
     }
 
     /**
@@ -70,11 +70,11 @@ class DocumentOutlineController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, DocumentOutline $document_outline)
     {
-        $outline = DocumentOutline::findOrFail($id);
-        $outline->update([
-            'body' => $request->content,
+        $document_outline->update([
+            'body'  => $request->content,
+            'score' => $request->get('custom-radio-score'),
         ]);
 
         return back()->withToastSuccess(__('Document successfully updated.'));

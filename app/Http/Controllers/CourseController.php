@@ -54,7 +54,7 @@ class CourseController extends Controller
     public function create()
     {
         $courses = Course::select('id','course_name')->get();
-        $users = User::select('id','name')->role('faculty')->get();
+        $users = User::select('id','firstname','mi','surname')->role('faculty')->get();
         return view('course.create',compact('courses','users'));
     }
 
@@ -79,7 +79,7 @@ class CourseController extends Controller
             'course_name' => $request->course_name,
             'course_code' => $request->course_code,
             'is_academic' => ($request->academic) ? 1 : 0,
-            'units'       => $request->units,
+            'units'       => ($request->units) ?: 0,
         ]);
 
         $requisites = [];
@@ -141,7 +141,7 @@ class CourseController extends Controller
     {
         $course->with('courseHardPreq','courseSoftPreq','courseCoReq','faculty')->get();
         $courses = Course::select('id','course_name')->get()->except($course->id);
-        $users = User::select('id','name')->role('faculty')->get();
+        $users = User::select('id','firstname','mi','surname')->role('faculty')->get();
         return view('course.edit', compact('course','courses','users'));
     }
 

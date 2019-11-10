@@ -25,11 +25,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
 	Route::resource('document', 'DocumentController', ['except' => ['show']]);
-	Route::get('mash', 'DocumentController@mashDoc');
 	Route::resource('document-outline', 'DocumentOutlineController');
 	Route::resource('team', 'TeamController');
 	Route::post('assignTeam', 'TeamController@assignTeam');
 	Route::resource('accreditation', 'AccreditationController');
+	Route::post('generateDocument/{accreditation}', ['as' => 'accreditation.generate', 'uses' => 'AccreditationController@generateDocument']);
+	Route::resource('curriculum', 'CurriculumController');
+	Route::get('getCurriculumCourses/{count}', 'CurriculumController@getCurriculumCourses');
 	Route::resource('course', 'CourseController');
 	Route::put('courseSyllabus/{course}', ['as' => 'courseSyllabus.update', 'uses' => 'CourseController@updateSyllabus']);
 	Route::post('uploadImage', 'DocumentOutlineController@image_upload');

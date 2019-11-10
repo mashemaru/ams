@@ -26,9 +26,18 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
-                'required', 'min:3'
+            'firstname' => [
+                'required', 'min:3', 'max:255'
             ],
+            'mi' => [
+                'nullable', 'string', 'max:255'
+            ],
+            'surname' => [
+                'required', 'string', 'max:255'
+            ],
+            'college' => ['string', 'nullable', 'max:255'],
+            'department' => ['string', 'nullable', 'max:255'],
+            'rank' => ['string', 'nullable', 'max:255'],
             'email' => [
                 'required', 'email', Rule::unique((new User)->getTable())->ignore($this->route()->user->id ?? null)
             ],

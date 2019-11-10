@@ -19,11 +19,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
                                     </div>
-                                    <select name="user_type" class="form-control">
-                                        <option>Select User Type</option>
-                                        <option>Faculty</option> 
-                                        <option>Staff</option>                   
-                                    </select>
+                                    <input class="form-control" name="college" placeholder="College" type="text" value="{{ old('college') }}">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -31,21 +27,21 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-badge"></i></span>
                                     </div>
-                                    <input class="form-control" name="department" placeholder="Department" type="text">
+                                    <input class="form-control" name="department" placeholder="Department" type="text" value="{{ old('department') }}">
                                 </div>
                             </div>
-                            <div class="form-group{{ ($errors->has('name') || $errors->has('mi') || $errors->has('surname')) ? ' has-danger' : '' }}">
+                            <div class="form-group{{ ($errors->has('firstname') || $errors->has('mi') || $errors->has('surname')) ? ' has-danger' : '' }}">
                                 <div class="input-group input-group-alternative mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="ni ni-single-02"></i></span>
                                     </div>
-                                    <input class="form-control col-5{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="Given Name" type="text" name="name" value="{{ old('name') }}">
+                                    <input class="form-control col-5{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="Given Name" type="text" name="firstname" value="{{ old('firstname') }}">
                                     <input class="form-control col-2{{ $errors->has('mi') ? ' is-invalid' : '' }}" placeholder="M.I." type="text" name="mi" value="{{ old('mi') }}">
                                     <input class="form-control col-5{{ $errors->has('surname') ? ' is-invalid' : '' }}" placeholder="Surname" type="text" name="surname" value="{{ old('surname') }}">
                                 </div>
-                                @if ($errors->has('name'))
+                                @if ($errors->has('firstname'))
                                     <span class="invalid-feedback" style="display: block;" role="alert">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong>{{ $errors->first('firstname') }}</strong>
                                     </span>
                                 @endif
                                 @if ($errors->has('mi'))

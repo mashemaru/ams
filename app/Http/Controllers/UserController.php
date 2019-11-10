@@ -6,6 +6,7 @@ use App\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Http\Requests\UserRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -53,7 +54,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        $user->with('roles');
+        $roles = Role::select('id','name','label')->get();
+        $permissions = getPermissions();
+        return view('users.edit', compact('user','roles','permissions'));
     }
 
     /**
@@ -69,7 +73,8 @@ class UserController extends Controller
             $request->merge(['password' => Hash::make($request->get('password'))])
                 ->except([$request->get('password') ? '' : 'password']
         ));
-
+        $user->syncPermissions($request->permission);
+        $user->syncRoles($request->roles);
         return redirect()->route('user.index')->withToastSuccess(__('User successfully updated.'));
     }
 
@@ -94,7 +99,14 @@ class UserController extends Controller
 
     public function roles_edit(Role $role)
     {
-        dd($role->with('permissions')->get());
-        return view('roles-permissions.edit', compact('role'));
+        $role->with('permissions')->get();
+        $permissions = getPermissions();
+        return view('roles-permissions.edit', compact('role','permissions'));
+    }
+
+    public function roles_update(Request $request, Role $role)
+    {
+        $role->syncPermissions($request->permission);
+        return redirect()->route('roles-permission.index')->withToastSuccess(__('Role permissions successfully updated.'));
     }
 }
