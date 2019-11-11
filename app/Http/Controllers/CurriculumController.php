@@ -15,9 +15,10 @@ class CurriculumController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Curriculum $curriculum)
     {
-        //
+        $curriculum->with('courses')->get();
+        return view('curriculum.index', ['curriculums' => $curriculum->paginate(15)]);
     }
 
     /**
@@ -59,10 +60,12 @@ class CurriculumController extends Controller
         
         $c = [];
         if($request->courses) {
-            foreach($request->courses as $key => $courses) {
+            $key = 1;
+            foreach($request->courses as $courses) {
                 foreach($courses as $course) {
                     $c[] = ['course_id' => $course, 'term' => $key];
                 }
+                $key++;
             }
         }
         
@@ -79,7 +82,9 @@ class CurriculumController extends Controller
      */
     public function show(Curriculum $curriculum)
     {
-        //
+        $curriculum->with('courses','courses.courseHardPreq','courses.courseSoftPreq','courses.courseCoReq','program','curriculum_courses')->get();
+        $terms = $curriculum->courses->groupBy('pivot.term');
+        return view('curriculum.show', compact('curriculum','terms'));
     }
 
     /**
@@ -113,7 +118,9 @@ class CurriculumController extends Controller
      */
     public function destroy(Curriculum $curriculum)
     {
-        //
+        $curriculum->delete();
+
+        return back()->withToastSuccess(__('Curriculum successfully deleted.'));
     }
 
     public function getCurriculumCourses(Request $request, $count)

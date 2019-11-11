@@ -126,7 +126,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link{{ Route::is('curriculum.*') ? ' active' : '' }}" href="{{ route('curriculum.index') }}">
                         <i class="ni ni-paper-diploma text-yellow"></i> Curriculums
                     </a>
                 </li>

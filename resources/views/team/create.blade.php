@@ -59,7 +59,7 @@
                         <div class="card-footer py-4">
                             <div class="text-right">
                                 <button type="submit" name="save_create" class="btn btn-default">Save &amp; Create New Team</button>
-                                <button type="submit" name="save_next" class="btn btn-primary">Next</button>
+                                <button type="submit" name="save_next" class="btn btn-primary">Save</button>
                             </div>
                         </div>
                     </form>

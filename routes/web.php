@@ -27,8 +27,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('document', 'DocumentController', ['except' => ['show']]);
 	Route::resource('document-outline', 'DocumentOutlineController');
 	Route::resource('team', 'TeamController');
-	Route::post('assignTeam', 'TeamController@assignTeam');
+	Route::post('assignTeam/{accreditation}', ['as' => 'team.assign', 'uses' => 'TeamController@assignTeam']);
 	Route::resource('accreditation', 'AccreditationController');
+	Route::get('assignTeam/{accreditation}', ['as' => 'accreditation.assignTeam', 'uses' => 'AccreditationController@assign_team']);
 	Route::post('generateDocument/{accreditation}', ['as' => 'accreditation.generate', 'uses' => 'AccreditationController@generateDocument']);
 	Route::resource('curriculum', 'CurriculumController');
 	Route::get('getCurriculumCourses/{count}', 'CurriculumController@getCurriculumCourses');

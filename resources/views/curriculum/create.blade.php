@@ -109,10 +109,16 @@ $(".datepicker").datepicker({
 });
 
 $('#addCurriculumfield').click(function (e) { //on add input button click
+    $('#addCurriculumfield').attr("disabled", true);
     var CoursesWrapper = ++$("#CoursesWrapper .row").length;
-    $.getJSON( "/getCurriculumCourses/" + CoursesWrapper, function( data ) {
+    $.ajax({
+        dataType: 'json',
+        url: "/getCurriculumCourses/" + CoursesWrapper,
+    }).done(function(data) {
         $("#CoursesWrapper").append(data);
         $('.select2').select2();
+    }).always(function() {
+        $('#addCurriculumfield').attr("disabled", false);
     });
 });
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Team;
 use App\User;
+use App\Accreditation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -64,7 +65,7 @@ class TeamController extends Controller
         if($request->has('save_create'))
             return back()->withToastSuccess(__('Team successfully created.'));
         elseif($request->has('save_next'))
-            dd(2);
+            return redirect()->route('team.index')->withToastSuccess(__('Team successfully created.'));
     }
 
     /**
@@ -138,8 +139,31 @@ class TeamController extends Controller
         return back()->withToastSuccess(__('Team successfully deleted.'));
     }
 
-    public function assignTeam()
+    public function assignTeam(Request $request, Accreditation $accreditation)
     {
-        # code...
+        $validator = Validator::make($request->all(), [
+            'document.*.team' => 'required:min:1',
+        ],[
+            'document.*.team.required' => 'Team is required'
+        ]);
+
+        if ($validator->fails()) {
+            return back()->with('error', $validator->messages()->first())->withInput();
+        }
+
+        $teams = [];
+        $documents = [];
+        if($request->document) {
+            foreach($request->document as $key => $document_team) {
+                foreach($document_team as $team) {
+                    $teams[] = $team;
+                    $documents[] = ['document_outline_id' => $key, 'team_id' => $team];
+                }
+            }
+        }
+
+        $accreditation->teams()->sync($teams);
+        $accreditation->document_teams()->sync($documents);
+        return back()->withToastSuccess(__('Team successfully assigned.'));
     }
 }

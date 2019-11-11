@@ -131,25 +131,4 @@ class DocumentController extends Controller
 
         return back()->withToastSuccess(__('Document successfully deleted.'));
     }
-
-    public function mashDoc()
-    {
-        $document = \App\Document::with('outlines')->find(1);
-        // dd($document);
-        // $doc = \App\DocumentOutline::find(1);
-        $phpWord = new \PhpOffice\PhpWord\PhpWord();
-
-        foreach($document->outlines as $outline) {
-            $section = $phpWord->addSection();
-            $section->addText($outline->section,array('name'=>'Arial','size' => (($outline->parent_id == 0) ? 24 : 20),'bold' => true));
-    
-            $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$outline->body);
-            \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
-        }
-
-        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-        $objWriter->save('Appdividend.docx');
-
-        return response()->download(public_path('Appdividend.docx'));
-    }
 }

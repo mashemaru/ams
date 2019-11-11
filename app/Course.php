@@ -15,34 +15,19 @@ class Course extends Model
         'units'       => 'decimal:2',
     ];
 
-    public function scopeHardPrerequisite($query)
-    {
-        return $query->where('requisite', 'hard');
-    }
-
-    public function scopeSoftPrerequisite($query)
-    {
-        return $query->where('requisite', 'soft');
-    }
-
-    public function scopeCoRequisite($query)
-    {
-        return $query->where('requisite', 'co');
-    }
-
     public function courseHardPreq()
     {
-        return $this->requisites()->hardPrerequisite();
+        return $this->requisites()->wherePivot('requisite', 'hard');
     }
 
     public function courseSoftPreq()
     {
-        return $this->requisites()->softPrerequisite();
+        return $this->requisites()->wherePivot('requisite', 'soft');
     }
 
     public function courseCoReq()
     {
-        return $this->requisites()->coRequisite();
+        return $this->requisites()->wherePivot('requisite', 'co');
     }
 
     public function requisites()

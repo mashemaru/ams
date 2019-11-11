@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Accreditation;
 use App\Agency;
 use App\Program;
+use App\Team;
 use App\Document;
 use App\DocumentTeam;
 use Illuminate\Http\Request;
@@ -75,7 +76,7 @@ class AccreditationController extends Controller
             'onsite_visit_date'      => $request->onsite_visit_date,
         ]);
 
-        return redirect()->route('accreditation.create')->withToastSuccess(__('Accreditation successfully created.'));
+        return redirect()->route('accreditation.index')->withToastSuccess(__('Accreditation successfully created.'));
     }
 
     /**
@@ -128,7 +129,9 @@ class AccreditationController extends Controller
 
     public function assign_team(Accreditation $accreditation)
     {
-        // DocumentTeam::
+        $allTeams = Team::all();
+        $accreditation->with('agency','teams','program','document','document.outline_root')->get();
+        return view('team.assign',compact('accreditation','allTeams'));
     }
 
     public function generateDocument(Accreditation $accreditation)
