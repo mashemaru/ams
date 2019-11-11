@@ -14,9 +14,10 @@ class DocumentOutlineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(DocumentOutline $document_outline)
     {
-        //
+        $document_outline->with('document');
+        return view('document.outline.index', ['documents' => $document_outline->paginate(15)]);
     }
 
     /**

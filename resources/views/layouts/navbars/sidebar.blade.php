@@ -157,6 +157,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link{{ Route::is('document-outline.*') ? ' active' : '' }}" href="{{ route('document-outline.index') }}">
+                        <i class="ni ni-single-copy-04 text-blue"></i> Document Outline
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link{{ Route::is('accreditation.*') ? ' active' : '' }}" href="{{ route('accreditation.index') }}">
                         <i class="ni ni-paper-diploma text-blue"></i> Accreditations
                     </a>
