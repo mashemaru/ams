@@ -22,9 +22,9 @@ class CreateOutlineCommentsTable extends Migration
             $table->dateTime('resolved')->nullable();
             $table->timestamps();
 
-            $table->foreign('outline_id')->references('id')->on('document_outline');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('resolved_by')->references('id')->on('users');
+            $table->foreign('outline_id')->references('id')->on('document_outline')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('resolved_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

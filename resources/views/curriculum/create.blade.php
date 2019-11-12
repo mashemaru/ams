@@ -135,9 +135,6 @@ $("body").on("click",".removeCurriculumfield", function(e) { //user click on rem
             x++;
         });
     }
-    if( $("#dd-list").length ) {
-        $(this).closest('.dd-item').remove();
-    }
     return false;
 });
 </script>

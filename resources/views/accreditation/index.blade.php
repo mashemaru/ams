@@ -17,7 +17,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive pb-4">
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
@@ -28,6 +28,7 @@
                                     <th scope="col">{{ __('Status') }}</th>
                                     <th scope="col">{{ __('Result') }}</th>
                                     <th scope="col">{{ __('End Date') }}</th>
+                                    <th scope="col"></th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -41,6 +42,7 @@
                                         <td></td>
                                         <td>{{ ($a->result) ?: 'N/A' }}</td>
                                         <td>{{ ($a->report_submission_date->format('M d Y')) ?: 'N/A' }}</td>
+                                        <td><a class="btn btn-primary btn-sm" href="#"><i class="ni ni-bullet-list-67"></i> Timeline</a></td>
                                         <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -95,6 +95,14 @@
                                     </span>
                                 @endif
                             </div>
+                            <div class="form-group">
+                                <label class="form-control-label">{{ __('Scoring Type') }}</label>
+                                <select class="scoring_type form-control form-control-alternative select2" name="scoring_type[]" data-toggle="select" multiple data-placeholder="Select scoring type">
+                                    @foreach ($scoringType as $score)
+                                        <option value="{{$score->id}}">{{ $score->scoring_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

@@ -26,10 +26,6 @@ class CreateAccreditationsTable extends Migration
             $table->dateTime('report_submission_date');
             $table->dateTime('onsite_visit_date');
             $table->timestamps();
-
-            $table->foreign('agency_id')->references('id')->on('agencies');
-            $table->foreign('program_id')->references('id')->on('programs');
-            $table->foreign('document_id')->references('id')->on('documents');
         });
     }
 

@@ -80,7 +80,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label">{{ __('Syllabus') }}</label>
                                         <input type="file" class="form-control form-control-alternative" name="syllabus">
@@ -95,7 +95,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="form-control-label">{{ __('Units') }}</label>
                                         <input class="form-control" name="units" type="number" placeholder="0.00" step="0.01" value="{{ old('units', $course->units) }}">

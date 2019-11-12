@@ -32,7 +32,7 @@ class Course extends Model
 
     public function requisites()
     {
-        return $this->belongsToMany('App\Course', 'course_requisites', 'course_id', 'requisite_id');
+        return $this->belongsToMany('App\Course', 'course_requisites', 'course_id', 'requisite_id')->withPivot('requisite');
     }
 
     public function faculty()

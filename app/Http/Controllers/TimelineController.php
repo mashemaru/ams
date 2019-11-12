@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Timeline;
+use App\Accreditation;
 use Illuminate\Http\Request;
 
 class TimelineController extends Controller
@@ -33,9 +34,13 @@ class TimelineController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Accreditation $accreditation)
     {
-        //
+        Timeline::updateOrCreate(
+            ['accreditation_id' => $accreditation->id],
+            ['task' => $request->task]
+        );
+        return redirect()->route('team.create')->withToastSuccess(__('Timeline successfully created.'));
     }
 
     /**
@@ -44,9 +49,9 @@ class TimelineController extends Controller
      * @param  \App\Timeline  $timeline
      * @return \Illuminate\Http\Response
      */
-    public function show(Timeline $timeline)
+    public function show(Timeline $timeline, Accreditation $accreditation)
     {
-        //
+        return view('timeline.create',compact('accreditation'));
     }
 
     /**

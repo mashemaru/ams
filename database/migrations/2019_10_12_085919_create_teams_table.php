@@ -18,8 +18,6 @@ class CreateTeamsTable extends Migration
             $table->text('team_name');
             $table->unsignedBigInteger('team_head');
             $table->timestamps();
-
-            $table->foreign('team_head')->references('id')->on('users');
         });
 
         Schema::create('accreditation_team', function (Blueprint $table) {
@@ -59,5 +57,6 @@ class CreateTeamsTable extends Migration
         Schema::dropIfExists('teams');
         Schema::dropIfExists('accreditation_team');
         Schema::dropIfExists('user_team');
+        Schema::dropIfExists('document_team');
     }
 }

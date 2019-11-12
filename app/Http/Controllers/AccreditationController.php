@@ -21,7 +21,7 @@ class AccreditationController extends Controller
      */
     public function index(Accreditation $accreditation)
     {
-        $accreditation->with('agency','program','document')->get();
+        $accreditation->with('agency','program','document','timeline')->get();
         return view('accreditation.index', ['accreditations' => $accreditation->paginate(15)]);
     }
 
@@ -76,7 +76,7 @@ class AccreditationController extends Controller
             'onsite_visit_date'      => $request->onsite_visit_date,
         ]);
 
-        return redirect()->route('accreditation.index')->withToastSuccess(__('Accreditation successfully created.'));
+        return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Accreditation successfully created.'));
     }
 
     /**

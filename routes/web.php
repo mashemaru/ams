@@ -26,6 +26,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
 	Route::resource('document', 'DocumentController', ['except' => ['show']]);
 	Route::resource('document-outline', 'DocumentOutlineController');
+	Route::get('timeline/{accreditation}', ['as' => 'timeline.view', 'uses' => 'TimelineController@show']);
+	Route::post('timeline/{accreditation}', ['as' => 'timeline.store', 'uses' => 'TimelineController@store']);
 	Route::resource('team', 'TeamController');
 	Route::post('assignTeam/{accreditation}', ['as' => 'team.assign', 'uses' => 'TeamController@assignTeam']);
 	Route::resource('accreditation', 'AccreditationController');

@@ -31,6 +31,11 @@ class Accreditation extends Model
         return $this->hasOne('App\Document', 'id', 'document_id');
     }
 
+    public function timeline()
+    {
+        return $this->hasOne('App\Timeline');
+    }
+
     public function accreditation_teams()
     {
         return $this->belongsToMany('App\Accreditation', 'accreditation_team', 'accreditation_id', 'team_id');

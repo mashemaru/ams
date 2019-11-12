@@ -19,8 +19,6 @@ class CreateDocumentsTable extends Migration
             $table->text('document_name');
             $table->longText('sections');
             $table->timestamps();
-
-            $table->foreign('agency_id')->references('id')->on('agencies');
         });
 
         Schema::create('document_outline', function (Blueprint $table) {

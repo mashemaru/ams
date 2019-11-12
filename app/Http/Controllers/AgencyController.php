@@ -16,7 +16,8 @@ class AgencyController extends Controller
      */
     public function index(Agency $agency)
     {
-        return view('agency.index', ['agencies' => $agency->paginate(15)]);
+        $scoringType = ScoringType::all();
+        return view('agency.index', ['agencies' => $agency->paginate(15), 'scoringType' => $scoringType]);
     }
 
     /**
@@ -36,10 +37,11 @@ class AgencyController extends Controller
             return back()->with('error', $validate->messages())->withInput();
         }
     
-        Agency::create([
+        $agency = Agency::create([
             'agency_name' => $request->agency_name,
             'agency_code' => $request->agency_code,
         ]);
+        $agency->score_types()->sync($request->scoring_type);
     
         return redirect()->route('agency.index')->withToastSuccess(__('Agency successfully created.'));
     }

@@ -67,9 +67,10 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'course_name' => 'required|min:4',
-            'course_code' => 'required',
-        ]);
+            'course_name'   => 'required|min:4',
+            'course_code'   => 'required',
+            'units'         => 'numeric|min:0',
+        ], ['units.min'     => 'Units must be a positive number.']);
 
         if ($validate->fails()) {
             return back()->with('error', $validate->messages())->withErrors($validate)->withInput();
@@ -82,7 +83,7 @@ class CourseController extends Controller
             'units'       => ($request->units) ?: 0,
         ]);
 
-        $requisites = [];
+        $requisites = array();
         if($request->hardPrerequisite) {
             foreach($request->hardPrerequisite as $item) {
                 $requisites[] = ['requisite_id' => $item, 'requisite' => 'hard'];
@@ -98,7 +99,8 @@ class CourseController extends Controller
                 $requisites[] = ['requisite_id' => $item, 'requisite' => 'co'];
             }
         }
-        $course->requisites()->sync($requisites);
+        $course->requisites()->detach();
+        $course->requisites()->attach($requisites);
         $course->faculty()->sync($request->faculty_members);
 
         if($request->hasFile('syllabus')) {
@@ -155,9 +157,10 @@ class CourseController extends Controller
     public function update(Request $request, Course $course)
     {
         $validate = Validator::make($request->all(), [
-            'course_name' => 'required|min:4',
-            'course_code' => 'required',
-        ]);
+            'course_name'   => 'required|min:4',
+            'course_code'   => 'required',
+            'units'         => 'numeric|min:0',
+        ], ['units.min'     => 'Units must be a positive number.']);
 
         if ($validate->fails()) {
             return back()->with('error', $validate->messages())->withErrors($validate)->withInput();
@@ -170,7 +173,7 @@ class CourseController extends Controller
             'units'       => $request->units,
         ]);
 
-        $requisites = [];
+        $requisites = array();
         if($request->hardPrerequisite) {
             foreach($request->hardPrerequisite as $item) {
                 $requisites[] = ['requisite_id' => $item, 'requisite' => 'hard'];
@@ -186,7 +189,8 @@ class CourseController extends Controller
                 $requisites[] = ['requisite_id' => $item, 'requisite' => 'co'];
             }
         }
-        $course->requisites()->sync($requisites);
+        $course->requisites()->detach();
+        $course->requisites()->attach($requisites);
         $course->faculty()->sync($request->faculty_members);
 
         if($request->hasFile('syllabus')) {
@@ -205,7 +209,7 @@ class CourseController extends Controller
             ]);
         }
 
-        return back()->withToastSuccess(__('Course successfully updated.'));
+        return redirect()->route('course.index')->withToastSuccess(__('Course successfully updated.'));
     }
 
     /**
