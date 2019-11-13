@@ -17,6 +17,7 @@ class AgencyController extends Controller
     public function index(Agency $agency)
     {
         $scoringType = ScoringType::all();
+        $agency->with('score_types')->get();
         return view('agency.index', ['agencies' => $agency->paginate(15), 'scoringType' => $scoringType]);
     }
 
@@ -105,8 +106,10 @@ class AgencyController extends Controller
      */
     public function destroy(Agency $agency)
     {
-        $agency->delete();
-
+        if($agency->accreditation->count())
+            return back()->withToastError(__('Agency has active accreditation.'));
+        else
+            $agency->delete();
         return redirect()->route('agency.index')->withToastSuccess(__('Agency successfully deleted.'));
     }
 

@@ -26,6 +26,7 @@
                                 <tr>
                                     <th scope="col">{{ __('Agency Name') }}</th>
                                     <th scope="col">{{ __('Agency Code') }}</th>
+                                    <th scope="col">{{ __('Scoring Type') }}</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -34,6 +35,13 @@
                                     <tr>
                                         <td>{{ $agency->agency_name }}</td>
                                         <td>{{ $agency->agency_code }}</td>
+                                        <td>
+                                            @if($agency->score_types->isNotEmpty())
+                                                {{ $agency->score_types->implode('scoring_name', ', ') }}
+                                            @else
+                                                N/A
+                                            @endif
+                                        </td>
                                         <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

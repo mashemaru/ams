@@ -14,6 +14,7 @@ class ProgramController extends Controller
      */
     public function index(Program $program)
     {
+        $program->with('accreditation','accreditation.agency','accreditation.program')->get();
         return view('program.index', ['programs' => $program->paginate(15)]);
     }
 
@@ -84,7 +85,10 @@ class ProgramController extends Controller
      */
     public function destroy(Program $program)
     {
-        $program->delete();
+        if($program->accreditation->count())
+            return back()->withToastError(__('Program has active accreditation.'));
+        else
+            $program->delete();
 
         return redirect()->route('program.index')->withToastSuccess(__('Program successfully deleted.'));
     }

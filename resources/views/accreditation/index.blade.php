@@ -36,13 +36,22 @@
                                 @foreach ($accreditations as $a)
                                     <tr>
                                         <td>{{ $a->program->program_name }}</td>
-                                        <td>{{ $a->agency->agency_name }}</td>
+                                        <td>{{ $a->agency->agency_code }}</td>
                                         <td>{{ $a->document->document_name }}</td>
                                         <td>{{ ($a->type == 'initial') ? 'Initial Accreditation' : 'Reaccreditation' }}</td>
-                                        <td></td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <span class="mr-2">{{ number_format($a->timeline->status) }}%</span>
+                                                <div>
+                                                    <div class="progress">
+                                                    <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="{{ $a->timeline->status }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $a->timeline->status }}%;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td>{{ ($a->result) ?: 'N/A' }}</td>
                                         <td>{{ ($a->report_submission_date->format('M d Y')) ?: 'N/A' }}</td>
-                                        <td><a class="btn btn-primary btn-sm" href="#"><i class="ni ni-bullet-list-67"></i> Timeline</a></td>
+                                        <td><button class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#timelineModal-{{ $a->id }}"><span class="btn-inner--icon"><i class="ni ni-calendar-grid-58 mr-1"></i></span> Timeline</button></td>
                                         <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -62,6 +71,62 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="timelineModal-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="timelineModalLabel-{{ $a->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content bg-secondary">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="timelineModalLabel-{{ $a->id }}">Accreditation Timeline</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                </div>
+                                                <form method="post" action="{{ route('timeline.is_complete_update', $a->timeline ) }}" autocomplete="off">
+                                                    @csrf
+                                                    @method('put')
+                                                    <div class="modal-body">
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-control-label d-flex">{{ $a->program->program_name }} {{ $a->agency->agency_name }} Timeline <a href="{{ route('accreditation.create') }}" class="btn btn-primary btn-sm ml-auto">Edit Timeline</a></label><br>
+                                                            @foreach($a->timeline->task as $key => $t)
+                                                                <div class="custom-control custom-checkbox mb-3">
+                                                                    <input class="custom-control-input" name="task[{{ $key }}]" id="customCheck{{ $key }}" type="checkbox"{{ ($t['is_complete']) ? ' checked' : '' }}>
+                                                                    <label class="custom-control-label" for="customCheck{{ $key }}">{{ $t['task'] }}</label><span><h6 class="text-muted">{{ $t['date'] }}</h6></span>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                        @if($a->timeline->status == 100)
+                                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-notification-{{ $a->id }}">Complete Accreditation</button>
+                                                        @endif
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modal-notification-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+                                        <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+                                            <div class="modal-content bg-gradient-warning">
+                                                <div class="modal-header">
+                                                    <h6 class="modal-title" id="modal-title-notification-{{ $a->id }}">Your attention is required</h6>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="py-3 text-center">
+                                                        <i class="ni ni-bell-55 ni-3x"></i>
+                                                        <h4 class="heading mt-4">You should read this!</h4>
+                                                        <p>Completing the accreditation would indicate that the On-Site visit has been completed and your results have been released. Are you sure the everything is complete?</p>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a href="completeaccreditation.html"><button type="button" class="btn btn-white">Yes, it's complete</button></a>
+                                                    <button type="button" class="btn btn-link text-white ml-auto" data-dismiss="modal">No, it's not</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach
                             </tbody>
                         </table>

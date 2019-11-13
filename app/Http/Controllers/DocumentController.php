@@ -15,7 +15,7 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        $document = Document::select('id','agency_id','document_name')->with('agency:id,agency_name');
+        $document = Document::select('id','agency_id','document_name')->with('agency:id,agency_code');
         return view('document.index', ['documents' => $document->paginate(15)]);
     }
 
@@ -127,7 +127,10 @@ class DocumentController extends Controller
      */
     public function destroy(Document $document)
     {
-        $document->delete();
+        if($document->accreditation->count())
+            return back()->withToastError(__('Document has active accreditation.'));
+        else
+            $document->delete();
 
         return back()->withToastSuccess(__('Document successfully deleted.'));
     }

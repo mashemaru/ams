@@ -153,7 +153,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('document.*') ? ' active' : '' }}" href="{{ route('document.index') }}">
-                        <i class="ni ni-single-copy-04 text-blue"></i> Document
+                        <i class="ni ni-single-copy-04 text-blue"></i> Document Template
                     </a>
                 </li>
                 <li class="nav-item">

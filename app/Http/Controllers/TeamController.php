@@ -65,7 +65,7 @@ class TeamController extends Controller
         if($request->has('save_create'))
             return back()->withToastSuccess(__('Team successfully created.'));
         elseif($request->has('save_next'))
-            return redirect()->route('team.index')->withToastSuccess(__('Team successfully created.'));
+            return redirect()->route('accreditation.index')->withToastSuccess(__('Team successfully created.'));
     }
 
     /**

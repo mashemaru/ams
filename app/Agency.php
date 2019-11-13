@@ -25,4 +25,9 @@ class Agency extends Model
     {
         return $this->belongsToMany('App\ScoringType', 'agency_scoring', 'agency_id', 'scoring_id');
     }
+
+    public function accreditation()
+    {
+        return $this->hasMany('App\Accreditation', 'agency_id');
+    }
 }

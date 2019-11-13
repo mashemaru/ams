@@ -52,7 +52,7 @@ class AccreditationController extends Controller
             'document_id'            => 'required|exists:documents,id',
             'type'                   => 'required',
             'report_submission_date' => 'required|date_format:Y-m-d|after:now',
-            'onsite_visit_date'      => 'required|date_format:Y-m-d|after:now',
+            'onsite_visit_date'      => 'required|date_format:Y-m-d|after:report_submission_date',
         ]);
 
         if ($validate->fails()) {

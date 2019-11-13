@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => __('Document Outlines Management')])
+@extends('layouts.app', ['title' => __('Document Template Management')])
 
 @section('content')
     @include('layouts.headers.cards')
@@ -10,7 +10,7 @@
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Document Outlines') }}</h3>
+                                <h3 class="mb-0">{{ __('Document Template') }}</h3>
                             </div>
                             <div class="col-4 text-right">
                                 <a href="{{ route('document.create') }}" class="btn btn-primary btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Document Outline</a>
@@ -47,7 +47,7 @@
                                 @foreach ($documents as $doc)
                                     <tr>
                                         <td>{{ $doc->document_name }}</td>
-                                        <td>{{ $doc->agency->agency_name }}</td>
+                                        <td>{{ $doc->agency->agency_code }}</td>
                                         <td></td>
                                         <td class="text-right">
                                             <div class="dropdown">
