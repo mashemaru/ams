@@ -22,6 +22,9 @@ class CourseController extends Controller
             $data = $course->with('courseHardPreq','courseSoftPreq','courseCoReq')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->editColumn('is_academic', function($data){
+                    return ($data->is_academic) ? '<span class="badge badge-lg badge-success">Academic</span>' : '<span class="badge badge-lg badge-light">Non-academic</span>';
+                })
                 ->addColumn('courseHardPreq', function($data) {
                     return $data->courseHardPreq->map(function($c) {
                         return $c->course_code;
@@ -40,7 +43,7 @@ class CourseController extends Controller
                 ->addColumn('action', function($row){
                     return view('course.partials.indexDropdown', ['course' => $row->id]);
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','is_academic'])
                 ->make(true);
         }
         return view('course.index');

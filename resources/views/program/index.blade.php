@@ -41,7 +41,6 @@
                                 <tr>
                                     <th scope="col">{{ __('Program Name') }}</th>
                                     <th scope="col">{{ __('Program Code') }}</th>
-                                    <th scope="col">{{ __('ACCREDITATIONS') }}</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -50,13 +49,6 @@
                                     <tr>
                                         <td>{{ $program->program_name }}</td>
                                         <td>{{ $program->program_code }}</td>
-                                        <td>
-                                            {{-- @if($program->accreditation->isNotEmpty())
-                                                {{ $program->accreditation->implode('scoring_name', ', ') }}
-                                            @else
-                                                N/A
-                                            @endif --}}
-                                        </td>
                                         <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

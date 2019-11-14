@@ -43,6 +43,7 @@
                                     <th scope="col">{{ __('Hard PreRequisite') }}</th>
                                     <th scope="col">{{ __('Soft PreRequisite') }}</th>
                                     <th scope="col">{{ __('Co Requisite') }}</th>
+                                    <th scope="col">{{ __('Academic') }}</th>
                                     <th scope="col">{{ __('Units') }}</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -77,6 +78,7 @@
                 {data: 'courseHardPreq', name: 'courseHardPreq.course_code', orderable: false, searchable: false},
                 {data: 'courseSoftPreq', name: 'courseSoftPreq.course_code', orderable: false, searchable: false},
                 {data: 'courseCoReq', name: 'courseCoReq.course_code', orderable: false, searchable: false},
+                {data: 'is_academic', name: 'is_academic'},
                 {data: 'units', name: 'units'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],

@@ -12,10 +12,10 @@ class ProgramController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Program $program)
+    public function index()
     {
-        $program->with('accreditation','accreditation.agency','accreditation.program')->get();
-        return view('program.index', ['programs' => $program->paginate(15)]);
+        $program = Program::with('accreditation','accreditation.agency','accreditation.program')->paginate(15);
+        return view('program.index', ['programs' => $program]);
     }
 
     /**
