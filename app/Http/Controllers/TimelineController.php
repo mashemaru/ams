@@ -68,7 +68,7 @@ class TimelineController extends Controller
      */
     public function edit(Timeline $timeline)
     {
-        //
+        return view('timeline.edit',compact('timeline'));
     }
 
     /**
@@ -80,7 +80,30 @@ class TimelineController extends Controller
      */
     public function update(Request $request, Timeline $timeline)
     {
-        //
+        $timelineTask = array();
+        $status = 0;
+        if($request->task) {
+            foreach ($request->task as $k => $task) {
+                $timelineTask[$k] = $task;
+                if (isset($task['is_complete'])) {
+                    $timelineTask[$k]['is_complete'] = 1;
+                    $status++;
+                } else {
+                    $timelineTask[$k]['is_complete'] = 0;
+                }
+            }
+        }
+
+        $status = ($request->task) ? ($status * 100) / count($request->task) : 0;
+        $timeline->update([
+            'task'      => $timelineTask,
+            'status'    => $status,
+        ]);
+        $timeline->accreditation()->update([
+            'status'    => $status,
+        ]);
+
+        return redirect()->route('accreditation.index')->withToastSuccess(__('Timeline successfully updated.'));
     }
 
     /**
@@ -109,12 +132,13 @@ class TimelineController extends Controller
             }
         }
 
+        $status = ($request->task) ? (count($request->task) * 100) / count($timeline->task) : 0;
         $timeline->update([
             'task'      => $timelineTask,
-            'status'    => ($request->task) ? (count($request->task) * 100) / count($timeline->task) : 0,
+            'status'    => $status,
         ]);
         $timeline->accreditation()->update([
-            'status'    => ($request->task) ? (count($request->task) * 100) / count($timeline->task) : 0,
+            'status'    => $status,
         ]);
         return back()->withToastSuccess(__('Timeline successfully updated.'));
     }

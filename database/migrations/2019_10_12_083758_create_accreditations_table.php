@@ -21,8 +21,10 @@ class CreateAccreditationsTable extends Migration
             $table->enum('type', ['initial', 'reaccredit']);
             $table->decimal('status', 8, 2)->default('0');
             $table->text('result')->nullable();
+            $table->text('progress')->nullable();
             $table->text('completed_document')->nullable();
             $table->mediumText('recommendations')->nullable();
+            $table->dateTime('end_date')->nullable();
             $table->dateTime('report_submission_date');
             $table->dateTime('onsite_visit_date');
             $table->timestamps();

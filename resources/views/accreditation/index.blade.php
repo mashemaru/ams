@@ -84,7 +84,7 @@
                                                     @method('put')
                                                     <div class="modal-body">
                                                         <div class="form-group mb-3">
-                                                            <label class="form-control-label d-flex">{{ $a->program->program_name }} {{ $a->agency->agency_name }} Timeline <a href="{{ route('accreditation.create') }}" class="btn btn-primary btn-sm ml-auto">Edit Timeline</a></label><br>
+                                                            <label class="form-control-label d-flex">{{ $a->program->program_name }} {{ $a->agency->agency_name }} Timeline <a href="{{ route('timeline.edit', $a) }}" class="btn btn-primary btn-sm ml-auto">Edit Timeline</a></label><br>
                                                             @foreach($a->timeline->task as $key => $t)
                                                                 <div class="custom-control custom-checkbox mb-3">
                                                                     <input class="custom-control-input" name="task[{{ $key }}]" id="customCheck{{ $key }}" type="checkbox"{{ ($t['is_complete']) ? ' checked' : '' }}>

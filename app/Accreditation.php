@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Accreditation extends Model
 {
     protected $fillable = [
-        'agency_id', 'program_id', 'document_id', 'type', 'status', 'result', 'completed_document', 'recommendations', 'report_submission_date', 'onsite_visit_date',
+        'agency_id', 'program_id', 'document_id', 'type', 'status', 'result', 'progress', 'completed_document', 'recommendations', 'end_date', 'report_submission_date', 'onsite_visit_date',
     ];
 
-    protected $dates = ['report_submission_date', 'onsite_visit_date'];
+    protected $dates = ['end_date', 'report_submission_date', 'onsite_visit_date'];
 
     protected $casts = [
         'recommendations'   => 'array',

@@ -87,7 +87,7 @@ class AccreditationController extends Controller
      */
     public function show(Accreditation $accreditation)
     {
-        $accreditation->with('agency','program','document')->get();
+        $accreditation->with('agency','program','document','teams','teams.head','teams.users')->get();
         return view('accreditation.show', compact('accreditation'));
     }
 

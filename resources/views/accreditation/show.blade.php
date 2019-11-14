@@ -25,7 +25,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card-body pt-0">
                     <div class="row">
                         <div class="col-5">
@@ -35,12 +34,12 @@
                                         <span>Accreditation Timeline</span>
                                     </div>
                                     <div class="progress-percentage">
-                                        <span>60%</span>
+                                        <span>{{ number_format($accreditation->status) }}%</span>
                                     </div>
                                 </div>
                                 <div class="progress">
-                                    <div class="progress-bar bg-default" role="progressbar" aria-valuenow="60"
-                                        aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                                    <div class="progress-bar bg-default" role="progressbar" aria-valuenow="{{ number_format($accreditation->status) }}"
+                                        aria-valuemin="0" aria-valuemax="100" style="width: {{ number_format($accreditation->status) }}%;"></div>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +128,7 @@
                                     <p class="mb-3 text-sm text-muted">Number of Teams</p>
                                 </div>
                                 <div class="col-7">
-                                    <p class="mb-0 text-sm"><b class="font-weight-bold">5 Teams</b></p>
+                                    <p class="mb-0 text-sm"><b class="font-weight-bold">{{ ($accreditation->teams->count()) ? $accreditation->teams->count() : 'N/A' }}</b></p>
                                 </div>
                             </div>
                         </div>
@@ -163,14 +162,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($accreditation->teams as $team)
                                 <tr>
-                                    <td>ABCD</td>
-                                    <td>Juan Dela Cruz</td>
-                                    <td>
-                                        Maria<br>
-                                        Pedro<br>
-                                        Paolo<br>
-                                    </td>
+                                    <td>{{ $team->team_name }}</td>
+                                    <td>{{ $team->head->name }}</td>
+                                    <td>{!! $team->users->implode('name', '<br>') !!}</td>
                                     <td>
                                         Chapter 1<br>
                                         Chapter 5<br>
@@ -200,6 +196,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
