@@ -23,7 +23,7 @@ class CourseController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('is_academic', function($data){
-                    return ($data->is_academic) ? '<span class="badge badge-lg badge-success">Academic</span>' : '<span class="badge badge-lg badge-light">Non-academic</span>';
+                    return ($data->is_academic) ? '<span class="badge badge-lg badge-success">Academic</span>' : '<span class="badge badge-lg badge-dark">Non-academic</span>';
                 })
                 ->addColumn('courseHardPreq', function($data) {
                     return $data->courseHardPreq->map(function($c) {
@@ -107,7 +107,7 @@ class CourseController extends Controller
         $course->faculty()->sync($request->faculty_members);
 
         if($request->hasFile('syllabus')) {
-            $filename = $request->syllabus->getClientOriginalName();
+            $filename = $course->course_code . '_syllabus_' .now()->format("m-d-Y-his") . $request->syllabus->getClientOriginalExtension();
 
             while(Storage::exists('course/' . $course->course_code . '/' . $filename)) {
                 $filename = '(1)' . $filename;
@@ -197,7 +197,7 @@ class CourseController extends Controller
         $course->faculty()->sync($request->faculty_members);
 
         if($request->hasFile('syllabus')) {
-            $filename = $request->syllabus->getClientOriginalName();
+            $filename = $course->course_code . '_syllabus_' .now()->format("m-d-Y-his") . $request->syllabus->getClientOriginalExtension();
 
             while(Storage::exists('course/' . $course->course_code . '/' . $filename)) {
                 $filename = '(1)' . $filename;
@@ -231,7 +231,7 @@ class CourseController extends Controller
     public function updateSyllabus(Request $request, Course $course)
     {
         if($request->hasFile('syllabus')) {
-            $filename = $request->syllabus->getClientOriginalName();
+            $filename = $course->course_code . '_syllabus_' .now()->format("m-d-Y-his") .'.'. $request->syllabus->getClientOriginalExtension();
 
             while(Storage::exists('course/' . $course->course_code . '/' . $filename)) {
                 $filename = '(1)' . $filename;
@@ -246,5 +246,10 @@ class CourseController extends Controller
             ]);
         }
         return back()->withToastSuccess(__('Syllabus successfully updated.'));
+    }
+
+    public function downloadSyllabus(Request $request, Course $course)
+    {
+        return response()->download(storage_path('app/course/' . $course->course_code . '/' . $course->syllabus));
     }
 }

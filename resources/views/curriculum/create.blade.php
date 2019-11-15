@@ -44,9 +44,9 @@
                                         <label class="form-control-label">Academic Term</label>
                                         <div class="input-group input-group-alternative">
                                             <select class="form-control form-control-alternative{{ $errors->has('term') ? ' is-invalid' : '' }}" name="term" required>
-                                                <option value="semester">Semester</option> 
-                                                <option value="trimester">Trimester</option>
-                                                <option value="quarter">Quarter</option>            
+                                                <option value="semester" data-count="2">Semester</option> 
+                                                <option value="trimester" data-count="3">Trimester</option>
+                                                <option value="quarter" data-count="4">Quarter</option>            
                                             </select>
                                             @if ($errors->has('term'))
                                                 <span class="invalid-feedback" role="alert">
@@ -107,21 +107,20 @@ $(".datepicker").datepicker({
     viewMode: "years", 
     minViewMode: "years"
 });
-
 $('#addCurriculumfield').click(function (e) { //on add input button click
     $('#addCurriculumfield').attr("disabled", true);
     var CoursesWrapper = ++$("#CoursesWrapper .row").length;
-    $.ajax({
-        dataType: 'json',
-        url: "/getCurriculumCourses/" + CoursesWrapper,
-    }).done(function(data) {
-        $("#CoursesWrapper").append(data);
+    window.axios.post('/getCurriculumCourses', {
+        count: CoursesWrapper
+    }).then((response)=>{
+        $("#CoursesWrapper").append(response.data);
         $('.select2').select2();
-    }).always(function() {
+    }).catch((error)=>{
+        console.log(error.response.data)
+    }).finally(()=>{
         $('#addCurriculumfield').attr("disabled", false);
     });
 });
-
 $("body").on("click",".removeCurriculumfield", function(e) { //user click on remove text
     if( $("#CoursesWrapper .row").length >= 1 ) {
         $(this).parent().closest('.row').remove(); //remove text box
@@ -136,6 +135,69 @@ $("body").on("click",".removeCurriculumfield", function(e) { //user click on rem
         });
     }
     return false;
+});
+$(document).on('change', 'select[name="term"]', function () {
+    if(
+        ($('input[name="start_year"]').val() != "") &&
+        ($('input[name="end_year"]').val() != "") &&
+        $('input[name="start_year"]').val() <= $('input[name="end_year"]').val()
+    ) {
+        var count = $(this).find(':selected').data('count');
+        var term = ( ($('input[name="end_year"]').val() - $('input[name="start_year"]').val()) + 1 ) * count;
+
+        window.axios.post('/getCurriculumCourses', {
+        term: term
+        }).then((response)=>{
+            $("#CoursesWrapper").html(response.data);
+            $('.select2').select2();
+        }).catch((error)=>{
+            console.log(error.response.data)
+        }).finally(()=>{
+            $('#addCurriculumfield').attr("disabled", false);
+        });
+    }
+});
+$(document).on('change', 'input[name="end_year"]', function () {
+    if(
+        ($('input[name="start_year"]').val() != "") &&
+        ($('input[name="end_year"]').val() != "") &&
+        $('input[name="start_year"]').val() <= $('input[name="end_year"]').val()
+    ) {
+        var count = $('select[name="term"]').find(':selected').data('count');
+        var term = ( ($('input[name="end_year"]').val() - $('input[name="start_year"]').val()) + 1 ) * count;
+
+        window.axios.post('/getCurriculumCourses', {
+        term: term
+        }).then((response)=>{
+            $("#CoursesWrapper").html(response.data);
+            $('.select2').select2();
+        }).catch((error)=>{
+            console.log(error.response.data)
+        }).finally(()=>{
+            $('#addCurriculumfield').attr("disabled", false);
+        });
+    }
+});
+$(document).on('change', 'input[name="start_year"]', function () {
+    if(
+        ($('input[name="start_year"]').val() != "") &&
+        ($('input[name="end_year"]').val() != "") &&
+        $('input[name="start_year"]').val() <= $('input[name="end_year"]').val()
+    ) {
+        var count = $('select[name="term"]').find(':selected').data('count');
+        var term = ( ($('input[name="end_year"]').val() - $('input[name="start_year"]').val()) + 1 ) * count;
+
+        window.axios.post('/getCurriculumCourses', {
+        term: term
+        }).then((response)=>{
+            $("#CoursesWrapper").html(response.data);
+            $('.select2').select2();
+        }).catch((error)=>{
+            console.log(error.response.data)
+        }).finally(()=>{
+            $('#addCurriculumfield').attr("disabled", false);
+        });
+    }
 });
 </script>
 @endpush

@@ -13,6 +13,7 @@
                         <h3 class="mb-0">{{ $course->course_name }}</h3>
                         </div>
                         <div class="col text-right">
+                        <a href="{{ route('course.index') }}" class="btn btn-sm btn-primary">Back to list</a>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal" style="float:right">
                             <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
@@ -82,6 +83,14 @@
                         <p class="mb-0 text-sm font-weight-bold">{{ $course->units }}</p>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-5">
+                        <p class="mb-0 text-sm text-muted">Academic</p>
+                        </div>
+                        <div class="col-7">
+                        <p class="mb-0 text-sm font-weight-bold">{!! ($course->is_academic) ? '<span class="badge badge-lg badge-success">Academic</span>' : '<span class="badge badge-lg badge-dark">Non-academic</span>' !!}</p>
+                        </div>
+                    </div>
                     </div>
                     <div class="col-6">
                     <div class="row">
@@ -128,10 +137,13 @@
                     </div>
                     <div class="row">
                         <div class="col-5">
-                        <p class="mb-3 text-sm text-muted">Syllabus</p>
+                        <p class="mb-0 text-sm text-muted">Syllabus</p>
                         </div>
                         <div class="col-7">
-                            <p class="mb-0 text-sm"><b><a href="">{{ $course->syllabus }}</a></b></p>
+                            <form method="post" action="{{ route('course.syllabus', $course) }}" autocomplete="off">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-primary btn-sm border-0">{{ $course->syllabus }}</button>
+                            </form>
                         </div>
                     </div>
                     </div>

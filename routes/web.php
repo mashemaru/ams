@@ -37,8 +37,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('assignTeam/{accreditation}', ['as' => 'accreditation.assignTeam', 'uses' => 'AccreditationController@assign_team']);
 	Route::post('generateDocument/{accreditation}', ['as' => 'accreditation.generate', 'uses' => 'AccreditationController@generateDocument']);
 	Route::resource('curriculum', 'CurriculumController');
-	Route::get('getCurriculumCourses/{count}', 'CurriculumController@getCurriculumCourses');
+	Route::post('getCurriculumCourses', 'CurriculumController@getCurriculumCourses');
 	Route::resource('course', 'CourseController');
+	Route::post('course-syllabus/{course}', ['as' => 'course.syllabus', 'uses' => 'CourseController@downloadSyllabus']);
 	Route::put('courseSyllabus/{course}', ['as' => 'courseSyllabus.update', 'uses' => 'CourseController@updateSyllabus']);
 	Route::post('uploadImage', 'DocumentOutlineController@image_upload');
 	Route::post('outlineComment/{document_outline}', ['as' => 'outlineComment.store', 'uses' => 'DocumentOutlineController@insert_comment']);

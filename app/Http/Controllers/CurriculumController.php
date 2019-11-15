@@ -123,11 +123,18 @@ class CurriculumController extends Controller
         return back()->withToastSuccess(__('Curriculum successfully deleted.'));
     }
 
-    public function getCurriculumCourses(Request $request, $count)
+    public function getCurriculumCourses(Request $request)
     {
         if ($request->ajax()) {
             $courses = Course::all();
-            $view = view('curriculum.partials.courses', ['courses' => $courses, 'count' => $count])->render();
+            if ($request->has('term')) {
+                $view = '';
+                for($count = 1; $count <= $request->term; $count++) {
+                    $view .= view('curriculum.partials.courses', ['courses' => $courses, 'count' => $count ])->render();
+                }
+            } else {
+                $view = view('curriculum.partials.courses', ['courses' => $courses, 'count' => $request->count])->render();
+            }
             return json_encode($view);
         }
     }
