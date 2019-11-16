@@ -23,21 +23,21 @@
                             @method('put')
                             <div class="row">
                                 @foreach ($permissions as $permission)
-                                    <div class="mt-5 col-md-6">
+                                    <div class="mt-5 col-md-3">
                                         <label class="form-control-label d-block" for="input-name">{{ ucfirst($permission) }}</label>
-                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline">
+                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline d-block">
                                             <input class="custom-control-input" name="permission[]" id="create-{{ $permission }}" type="checkbox" value="create {{ $permission }}"{{ ($role->hasPermissionTo('create ' . $permission)) ? ' checked' : '' }}>
                                             <label class="custom-control-label" for="create-{{ $permission }}">create {{ $permission }}</label>
                                         </div>
-                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline">
+                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline d-block">
                                             <input class="custom-control-input" name="permission[]" id="edit-{{ $permission }}" type="checkbox" value="edit {{ $permission }}"{{ ($role->hasPermissionTo('edit ' . $permission)) ? ' checked' : '' }}>
                                             <label class="custom-control-label" for="edit-{{ $permission }}">edit {{ $permission }}</label>
                                         </div>
-                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline">
+                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline d-block">
                                             <input class="custom-control-input" name="permission[]" id="view-{{ $permission }}" type="checkbox" value="view {{ $permission }}"{{ ($role->hasPermissionTo('view ' . $permission)) ? ' checked' : '' }}>
                                             <label class="custom-control-label" for="view-{{ $permission }}">view {{ $permission }}</label>
                                         </div>
-                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline">
+                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline d-block">
                                             <input class="custom-control-input" name="permission[]" id="delete-{{ $permission }}" type="checkbox" value="delete {{ $permission }}"{{ ($role->hasPermissionTo('delete ' . $permission)) ? ' checked' : '' }}>
                                             <label class="custom-control-label" for="delete-{{ $permission }}">delete {{ $permission }}</label>
                                         </div> 

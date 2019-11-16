@@ -282,7 +282,7 @@
 <script>
 $(document).ready(function () {
     $('#content').summernote({
-        height: ($(window).height() - 600),
+        height: 450,
         followingToolbar: true,
         maximumImageFileSize: 500*1024, // 500 KB
         toolbar: [
@@ -313,6 +313,7 @@ const Toast = Swal.mixin({
 function uploadImage(image) {
     var data = new FormData();
     data.append("image", image);
+    data.append("outlineId", {{ $outline->id }});
     window.axios.post('/uploadImage', data)
     .then(function (response) {
         var image = $('<img>').attr('src', response.data);

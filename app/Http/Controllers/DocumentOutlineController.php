@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DocumentOutline;
 use App\OutlineComment;
+use App\FileRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -102,9 +103,24 @@ class DocumentOutlineController extends Controller
             return back()->with('error', $validate->messages());
         }
 
-        $path = asset('storage/' . $request->file('image')->store('media', ['disk' => 'public']));
+        if($request->hasFile('image')) {
+            $filename = $request->image->getClientOriginalName();
 
-        return $path;
+            $upload = $request->file('image')->store('media', ['disk' => 'public']);
+
+            FileRepository::create([
+                'user_id'       => auth()->user()->id,
+                'file_name'     => $filename,
+                'file_type'     => 'wysiwyg-uploaded',
+                'file'          => trim($upload, 'media/'),
+                'directory'     => 'public/media/' . $upload,
+                'reference'     => 'DocumentOutline',
+                'reference_id'  => $request->outlineId,
+            ]);
+            $path = asset('storage/' . $upload);
+
+            return $path;
+        }
     }
 
     public function insert_comment(Request $request, $id)

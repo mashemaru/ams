@@ -195,7 +195,7 @@
             <h6 class="navbar-heading text-muted">Documents</h6>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link{{ Route::is('file-repository.*') ? ' active' : '' }}" href="{{ route('file-repository.index') }}">
                     <i class="ni ni-archive-2 text-yellow"></i> File Repository
                 </a>
                 </li>

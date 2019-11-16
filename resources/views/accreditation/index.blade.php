@@ -51,15 +51,20 @@
                                         </td>
                                         <td>{{ ($a->result) ?: 'N/A' }}</td>
                                         <td>{{ ($a->report_submission_date->format('M d Y')) ?: 'N/A' }}</td>
-                                        <td><button class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#timelineModal-{{ $a->id }}"><span class="btn-inner--icon"><i class="ni ni-calendar-grid-58 mr-1"></i></span> Timeline</button></td>
+                                        <td>
+                                            @if ($a->progress != 'completed')
+                                            <button class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#timelineModal-{{ $a->id }}"><span class="btn-inner--icon"><i class="ni ni-calendar-grid-58 mr-1"></i></span> Timeline</button>
+                                            @endif
+                                        </td>
                                         <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                    <a href="{{ route('accreditation.assignTeam', $a) }}" class="dropdown-item">{{ __('Assign Team') }}</a>
+                                                    @if ($a->progress != 'completed') <a href="{{ route('accreditation.assignTeam', $a) }}" class="dropdown-item">{{ __('Assign Team') }}</a> @endif
                                                     <a href="{{ route('accreditation.show', $a) }}" class="dropdown-item">{{ __('View Summary') }}</a>
+                                                    @if ($a->progress != 'completed')
                                                     <form action="{{ route('accreditation.destroy', $a) }}" method="post">
                                                         @csrf
                                                         @method('delete')
@@ -67,6 +72,7 @@
                                                             {{ __('Delete') }}
                                                         </button>
                                                     </form>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </td>
@@ -121,7 +127,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <a href="completeaccreditation.html"><button type="button" class="btn btn-white">Yes, it's complete</button></a>
+                                                    <a href="{{ route('accreditation.show.complete', $a->timeline) }}"><button type="button" class="btn btn-white">Yes, it's complete</button></a>
                                                     <button type="button" class="btn btn-link text-white ml-auto" data-dismiss="modal">No, it's not</button>
                                                 </div>
                                             </div>

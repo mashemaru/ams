@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Course;
 use App\User;
+use App\FileRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -82,8 +83,8 @@ class CourseController extends Controller
         $course = Course::create([
             'course_name' => $request->course_name,
             'course_code' => $request->course_code,
-            'is_academic' => ($request->academic) ? 1 : 0,
-            'units'       => ($request->units) ?: 0,
+            'is_academic' => ($request->academic) ? true : false,
+            'units'       => ($request->units) ? $request->units : 0,
         ]);
 
         $requisites = array();
@@ -107,7 +108,7 @@ class CourseController extends Controller
         $course->faculty()->sync($request->faculty_members);
 
         if($request->hasFile('syllabus')) {
-            $filename = $course->course_code . '_syllabus_' .now()->format("m-d-Y-his") . $request->syllabus->getClientOriginalExtension();
+            $filename = $course->course_code . '_syllabus_' .now()->format("m-d-Y-his") .'.'. $request->syllabus->getClientOriginalExtension();
 
             while(Storage::exists('course/' . $course->course_code . '/' . $filename)) {
                 $filename = '(1)' . $filename;
@@ -119,6 +120,16 @@ class CourseController extends Controller
             $course->syllabus_history()->create([
                 'syllabus'     => $filename,
                 'user_id'      => auth()->user()->id,
+            ]);
+
+            FileRepository::create([
+                'user_id'       => auth()->user()->id,
+                'file_name'     => $request->syllabus->getClientOriginalName(),
+                'file_type'     => 'syllabus',
+                'file'          => $filename,
+                'directory'     => 'course/' . $course->course_code . '/' . $filename,
+                'reference'     => 'Course',
+                'reference_id'  => $course->id,
             ]);
         }
         return redirect()->route('course.index')->withToastSuccess(__('Course successfully created.'));
@@ -172,7 +183,7 @@ class CourseController extends Controller
         $course->update([
             'course_name' => $request->course_name,
             'course_code' => $request->course_code,
-            'is_academic' => ($request->academic) ? 1 : 0,
+            'is_academic' => ($request->academic) ? true : false,
             'units'       => $request->units,
         ]);
 
@@ -197,7 +208,7 @@ class CourseController extends Controller
         $course->faculty()->sync($request->faculty_members);
 
         if($request->hasFile('syllabus')) {
-            $filename = $course->course_code . '_syllabus_' .now()->format("m-d-Y-his") . $request->syllabus->getClientOriginalExtension();
+            $filename = $course->course_code . '_syllabus_' .now()->format("m-d-Y-his") .'.'. $request->syllabus->getClientOriginalExtension();
 
             while(Storage::exists('course/' . $course->course_code . '/' . $filename)) {
                 $filename = '(1)' . $filename;
@@ -209,6 +220,16 @@ class CourseController extends Controller
             $course->syllabus_history()->create([
                 'syllabus'     => $filename,
                 'user_id'      => auth()->user()->id,
+            ]);
+
+            FileRepository::create([
+                'user_id'       => auth()->user()->id,
+                'file_name'     => $request->syllabus->getClientOriginalName(),
+                'file_type'     => 'syllabus',
+                'file'          => $filename,
+                'directory'     => 'course/' . $course->course_code . '/' . $filename,
+                'reference'     => 'Course',
+                'reference_id'  => $course->id,
             ]);
         }
 
@@ -243,6 +264,16 @@ class CourseController extends Controller
             $course->syllabus_history()->create([
                 'syllabus'     => $filename,
                 'user_id'      => auth()->user()->id,
+            ]);
+
+            FileRepository::create([
+                'user_id'       => auth()->user()->id,
+                'file_name'     => $request->syllabus->getClientOriginalName(),
+                'file_type'     => 'syllabus',
+                'file'          => $filename,
+                'directory'     => 'course/' . $course->course_code . '/' . $filename,
+                'reference'     => 'Course',
+                'reference_id'  => $course->id,
             ]);
         }
         return back()->withToastSuccess(__('Syllabus successfully updated.'));

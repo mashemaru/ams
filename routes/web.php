@@ -26,6 +26,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
 	Route::resource('document', 'DocumentController', ['except' => ['show']]);
 	Route::resource('document-outline', 'DocumentOutlineController');
+	Route::resource('file-repository', 'FileRepositoryController', ['except' => ['show']]);
+	Route::get('file/{file_repository}', ['as' => 'file-repository.download', 'uses' => 'FileRepositoryController@download']);
+	Route::post('fileUpload/', ['as' => 'file-repository.upload', 'uses' => 'FileRepositoryController@upload']);
 	Route::get('timeline/{accreditation}', ['as' => 'timeline.view', 'uses' => 'TimelineController@show']);
 	Route::get('timeline/{timeline}/edit', ['as' => 'timeline.edit', 'uses' => 'TimelineController@edit']);
 	Route::post('timeline/{accreditation}', ['as' => 'timeline.store', 'uses' => 'TimelineController@store']);
@@ -36,6 +39,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('accreditation', 'AccreditationController');
 	Route::get('assignTeam/{accreditation}', ['as' => 'accreditation.assignTeam', 'uses' => 'AccreditationController@assign_team']);
 	Route::post('generateDocument/{accreditation}', ['as' => 'accreditation.generate', 'uses' => 'AccreditationController@generateDocument']);
+	Route::get('accreditationComplete/{timeline}', ['as' => 'accreditation.show.complete', 'uses' => 'AccreditationController@showCompleteAccreditation']);
+	Route::post('accreditationComplete/{timeline}', ['as' => 'accreditation.complete', 'uses' => 'AccreditationController@completeAccreditation']);
 	Route::resource('curriculum', 'CurriculumController');
 	Route::post('getCurriculumCourses', 'CurriculumController@getCurriculumCourses');
 	Route::resource('course', 'CourseController');

@@ -6,6 +6,8 @@ use App\Accreditation;
 use App\Agency;
 use App\Program;
 use App\Team;
+use App\Timeline;
+use App\FileRepository;
 use App\Document;
 use App\DocumentTeam;
 use Illuminate\Http\Request;
@@ -136,7 +138,7 @@ class AccreditationController extends Controller
 
     public function generateDocument(Accreditation $accreditation)
     {
-        $accreditation->with('document.outlines')->get();
+        $accreditation->with('agency','program','document','document.outlines')->get();
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
         foreach($accreditation->document->outlines as $outline) {
@@ -151,8 +153,69 @@ class AccreditationController extends Controller
         if(!Storage::exists('accreditation/'. $accreditation->id)) {
             Storage::makeDirectory('accreditation/'. $accreditation->id);
         }
-        $objWriter->save(storage_path('app/accreditation/'. $accreditation->id . '/' . $accreditation->document->document_name . '.docx'));
+        $objWriter->save(storage_path('app/accreditation/'. $accreditation->id . '/' . $accreditation->agency->agency_code . '-' . $accreditation->program->program_code . '-' . $accreditation->created_at->format('Y') . '.docx'));
 
-        return response()->download(storage_path('app/accreditation/'. $accreditation->id . '/' . $accreditation->document->document_name . '.docx'));
+        FileRepository::create([
+            'user_id'       => auth()->user()->id,
+            'file_name'     => $accreditation->agency->agency_code . '-' . $accreditation->program->program_code . '-' . $accreditation->created_at->format('Y') . '.docx',
+            'file_type'     => 'generated-document',
+            'file'          => $accreditation->agency->agency_code . '-' . $accreditation->program->program_code . '-' . $accreditation->created_at->format('Y') . '.docx',
+            'directory'     => 'accreditation/'. $accreditation->id . '/' . $accreditation->agency->agency_code . '-' . $accreditation->program->program_code . '-' . $accreditation->created_at->format('Y') . '.docx',
+            'reference'     => 'Accreditation',
+            'reference_id'  => $accreditation->id,
+        ]);
+        return response()->download(storage_path('app/accreditation/'. $accreditation->id . '/' . $accreditation->agency->agency_code . '-' . $accreditation->program->program_code . '-' . $accreditation->created_at->format('Y') . '.docx'));
+    }
+
+    public function showCompleteAccreditation(Timeline $timeline)
+    {
+        return view('accreditation.complete',compact('timeline'));
+    }
+
+    public function completeAccreditation(Request $request, Timeline $timeline)
+    {
+        $timeline->with('accreditation')->get();
+
+        $validate = Validator::make($request->all(), [
+            'accreditation_result' => 'required|min:2',
+        ]);
+    
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
+
+        $timeline->update([
+            'is_complete' => true
+        ]);
+
+        $filename = '';
+        if($request->hasFile('complete_document')) {
+            $filename = $request->complete_document->getClientOriginalName();
+
+            while(Storage::exists('accreditation/' . $timeline->accreditation->id . '/' . $filename)) {
+                $filename = '(1)' . $filename;
+            }
+            $request->file('complete_document')->storeAs('accreditation/' . $timeline->accreditation->id, $filename);
+
+            FileRepository::create([
+                'user_id'       => auth()->user()->id,
+                'file_name'     => $filename,
+                'file_type'     => 'completed-document',
+                'file'          => $filename,
+                'directory'     => 'accreditation/' . $timeline->accreditation->id . '/' . $filename,
+                'reference'     => 'Timeline',
+                'reference_id'  => $timeline->id,
+            ]);
+        }
+
+        $timeline->accreditation->update([
+            'result'                => $request->accreditation_result,
+            'recommendations'       => $request->recommendation,
+            'completed_document'    => $filename,
+            'progress'              => 'completed',
+            'end_date'              => now(),
+        ]);
+
+        return redirect()->route('accreditation.index')->withToastSuccess(__('Accreditation successfully completed.'));
     }
 }
