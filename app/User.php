@@ -61,4 +61,9 @@ class User extends Authenticatable
     public function getNameAttribute() {
         return ucfirst($this->firstname) . ' ' . $this->mi . ' ' . ucfirst($this->surname);
     }
+
+    public function faculty_academic_background()
+    {
+        return $this->hasMany('App\FacultyAcademicBackground', 'user_id');
+    }
 }

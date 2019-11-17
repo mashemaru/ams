@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => __('Course Management')])
+@extends('layouts.app', ['title' => __('Faculty Information Management')])
 
 @section('content')
     @include('layouts.headers.cards')
@@ -10,10 +10,10 @@
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Course Overview') }}</h3>
+                                <h3 class="mb-0">{{ __('Faculty Information Management') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                <a href="{{ route('course.create') }}" class="btn btn-success btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Course</a>
+                                
                             </div>
                         </div>
                     </div>
@@ -37,14 +37,11 @@
                         <table class="table data-table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('ID') }}</th>
-                                    <th scope="col">{{ __('Course Name') }}</th>
-                                    <th scope="col">{{ __('Course Code') }}</th>
-                                    <th scope="col">{{ __('Hard PreRequisite') }}</th>
-                                    <th scope="col">{{ __('Soft PreRequisite') }}</th>
-                                    <th scope="col">{{ __('Co Requisite') }}</th>
-                                    <th scope="col">{{ __('Units') }}</th>
                                     <th scope="col"></th>
+                                    <th scope="col">{{ __('Name') }}</th>
+                                    <th scope="col">{{ __('Department') }}</th>
+                                    <th scope="col">{{ __('Rank') }}</th>
+                                    <th scope="col">{{ __('Email') }}</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -53,7 +50,7 @@
                 </div>
             </div>
         </div>
-            
+        
         @include('layouts.footers.auth')
     </div>
 @endsection
@@ -63,23 +60,16 @@
 <script src="{{ asset('js/dataTables.js') }}"></script>
 <script type="text/javascript">
     $(function () {
-        // var e = $(".data-table");
-        // e.length && e.on("init.dt", function() {
-        //     $("div.dataTables_length select").removeClass("custom-select custom-select-sm")
-        // });
         $('.data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('course.index') }}",
+            ajax: "{{ route('faculty.index') }}",
             columns: [
-                {data: 'id', name: 'id'},
-                {data: 'course_name', name: 'course_name'},
-                {data: 'course_code', name: 'course_code'},
-                {data: 'courseHardPreq', name: 'courseHardPreq.course_code', orderable: false, searchable: false},
-                {data: 'courseSoftPreq', name: 'courseSoftPreq.course_code', orderable: false, searchable: false},
-                {data: 'courseCoReq', name: 'courseCoReq.course_code', orderable: false, searchable: false},
-                {data: 'units', name: 'units'},
-                {data: 'is_academic', name: 'is_academic'},
+                {data: 'id', name: 'id', visible: false},
+                {data: 'name', name: 'name'},
+                {data: 'department', name: 'department'},
+                {data: 'rank', name: 'rank'},
+                {data: 'email', name: 'email'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
             order:[0,'desc'],

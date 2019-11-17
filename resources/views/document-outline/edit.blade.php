@@ -68,7 +68,7 @@
             <form method="post" action="{{ route('document-outline.update', $outline) }}" autocomplete="off">
             @csrf
             @method('put')
-                <div class="card shadow">
+                <div class="card shadow mb-3">
                     <div class="card-header border-1">
                         <div class="row align-items-center">
                             <div class="col">
@@ -89,61 +89,6 @@
                             <br>
                         @endif
                         <textarea name="content" id="content">{{ $outline->body }}</textarea>
-                        <br><br><br>
-                        <div class="table-responsive">
-                            <table class="table align-items-center table-flush">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th scope="col">Code</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Type</th>
-                                        <th scope="col">File</th>
-                                        <th scope="col" width="3%"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">
-                                            Appendix A
-                                        </th>
-                                        <th scope="row">
-                                            Name
-                                        </th>
-                                        <td scope="row">
-                                            Appendix
-                                        </td>
-                                        <td scope="row">
-                                            <a href="#">File</a>
-                                        </td>
-                                        <td class="text-right">
-                                            <div class="dropdown">
-                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
-                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                    <a class="dropdown-item" href="#">View</a>
-                                                    <a class="dropdown-item" href="#">Remove</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <br>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal3"
-                            style="float:right">
-                            <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                            Add Appendix/Exhibit
-                        </button>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                            data-target="#exampleModal1" style="float:right">
-                            <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                            Select Appendix/Exhibit
-                        </button>
                     </div>
                     <div class="card-footer py-4">
                         <div class="text-right">
@@ -153,39 +98,173 @@
                 </div>
                 @if ($outline->score_type != 0)      
                 <!-- Modal -->     
-                    <div class="modal fade" id="scoreModal" tabindex="-1" role="dialog"
-                        aria-labelledby="scoreModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="scoreModalLabel">Score Section</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form role="form">
-                                        <div class="form-group mb-3">
-                                            <label class="form-control-label">Scoring Name: {{ $outline->scoring_type->scoring_name }}</label><br>
-                                            @foreach($outline->scoring_type->scores as $key => $s)
-                                                <div class="custom-control custom-radio mb-3">
-                                                    <input name="custom-radio-score" class="custom-control-input" id="customRadio{{ $key }}" type="radio" value="{{ $s['score'] }}"{{ ($s['score'] == $outline->score) ? ' checked' : '' }}>
-                                                    <label class="custom-control-label" for="customRadio{{ $key }}"><strong>{{ $s['score'] }}</strong> - {{ $s['description'] }}</label>
-                                                </div>
-                                                <h4></h4>
-                                            @endforeach
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary cancelScore">Cancel</button>
-                                    <button type="button" class="btn btn-primary saveScore" data-dismiss="modal">Save Score</button>
-                                </div>
+                <div class="modal fade" id="scoreModal" tabindex="-1" role="dialog"
+                    aria-labelledby="scoreModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="scoreModalLabel">Score Section</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form role="form">
+                                    <div class="form-group mb-3">
+                                        <label class="form-control-label">Scoring Name: {{ $outline->scoring_type->scoring_name }}</label><br>
+                                        @foreach($outline->scoring_type->scores as $key => $s)
+                                            <div class="custom-control custom-radio mb-3">
+                                                <input name="custom-radio-score" class="custom-control-input" id="customRadio{{ $key }}" type="radio" value="{{ $s['score'] }}"{{ ($s['score'] == $outline->score) ? ' checked' : '' }}>
+                                                <label class="custom-control-label" for="customRadio{{ $key }}"><strong>{{ $s['score'] }}</strong> - {{ $s['description'] }}</label>
+                                            </div>
+                                            <h4></h4>
+                                        @endforeach
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary cancelScore">Cancel</button>
+                                <button type="button" class="btn btn-primary saveScore" data-dismiss="modal">Save Score</button>
                             </div>
                         </div>
                     </div>
+                </div>
                 @endif
             </form>
+            <div class="card shadow">
+                <div class="card-header border-1">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Appendices/Exhibits</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body px-lg-4 py-lg-4">
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Last Update</th>
+                                    <th scope="col" width="2%"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $index = 'A'; @endphp
+                                @foreach($outline->appendix_exhibit as $data)
+                                <tr>
+                                    <th scope="row">Exhibit {{ $index++ }}</th>
+                                    <th scope="row">{{ $data->file_name }}</th>
+                                    <td scope="row">{{ ucfirst($data->file_type) }}</td>
+                                    <td scope="row">{{ $data->updated_at->diffForHumans() }}</td>
+                                    <td class="text-right">
+                                        <div class="dropdown">
+                                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                                    data-target="#evidenceModal">Add Evidences</a>
+                                                <a class="dropdown-item" href="#">Remove</a>
+                                            </div>
+                                        </div>
+            
+                                        <div class="modal fade" id="evidenceModal" tabindex="-1" role="dialog"
+                                            aria-labelledby="evidenceModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="evidenceModalLabel">Add Evidence</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form role="form">
+                                                            <div class="form-group mb-3">
+                                                                <label class="form-control-label" style="float: left">Select
+                                                                    File</label>
+                                                                <input type="file" class="form-control" multiple>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Cancel</button>
+                                                        <button type="button" class="btn btn-success">Add</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModal"
+                        style="float:right">
+                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                        Add Appendix/Exhibit
+                    </button>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#selectModal1"
+                        style="float:right; margin-right: 2%">
+                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                        Select Existing Appendix/Exhibit
+                    </button>
+                </div>
+            
+                <div class="modal fade" id="selectModal1" tabindex="-1" role="dialog" aria-labelledby="selectModalLabel1"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="selectModalLabel">Select Appendix/Exhibit</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form role="form">
+                                    <h6 class="heading-small text-muted mb-2">Appendices</h6>
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                        <label class="custom-control-label" for="customCheck1">Appendix 1</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                        <label class="custom-control-label" for="customCheck1">Appendix 2</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                        <label class="custom-control-label" for="customCheck1">Appendix 3</label>
+                                    </div>
+                                    <br>
+                                    <h6 class="heading-small text-muted mb-2">Exhibits</h6>
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                        <label class="custom-control-label" for="customCheck1">Exhibit 1</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                        <label class="custom-control-label" for="customCheck1">Exhibit 2</label>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-success">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -235,43 +314,43 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
+            <div class="modal-content bg-secondary">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Appendix/Exhibit</h5>
+                    <h5 class="modal-title" id="addModalLabel">Add Appendix/Exhibit</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form role="form">
+                <form enctype="multipart/form-data" method="post" action="{{ route('outline.upload', $outline) }}" autocomplete="off">
+                @csrf
+                    <div class="modal-body">
                         <div class="form-group mb-3">
                             <label class="form-control-label">Name</label>
                             <div class="input-group input-group-alternative">
-                                <input class="form-control" placeholder="" type="text">
+                                <input class="form-control" name="name" type="text">
                             </div>
                         </div>
                         <div class="form-group mb-3">
                             <label class="form-control-label">Type</label>
                             <div class="input-group input-group-alternative">
-                                <select class="form-control">
-                                    <option>Appendix</option>
-                                    <option>Exhibit</option>
+                                <select class="form-control" name="type">
+                                    <option value="appendix">Appendix</option>
+                                    <option value="exhibit">Exhibit</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group mb-3">
-                            <label class="form-control-label">Files</label>
-                            <input type="file" class="form-control" multiple>
+                            <label class="form-control-label">File</label>
+                            <input type="file" class="form-control" name="file">
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success">Add</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Add</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

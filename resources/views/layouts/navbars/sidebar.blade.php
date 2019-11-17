@@ -147,7 +147,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link{{ Route::is('faculty.*') ? ' active' : '' }}" href="{{ route('faculty.index') }}">
                         <i class="ni ni-badge text-orange"></i> FIF
                     </a>
                 </li>

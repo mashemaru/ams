@@ -7,6 +7,7 @@ use App\OutlineComment;
 use App\FileRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentOutlineController extends Controller
 {
@@ -17,7 +18,7 @@ class DocumentOutlineController extends Controller
      */
     public function index(DocumentOutline $document_outline)
     {
-        $document_outline->with('document');
+        $document_outline->with('document','appendix_exhibit');
         return view('document.outline.index', ['documents' => $document_outline->paginate(15)]);
     }
 
@@ -150,5 +151,33 @@ class DocumentOutlineController extends Controller
         ]);
         
         return back()->withToastSuccess(__('Comment resolved successfully.'));
+    }
+
+    public function outlineUpload(Request $request, DocumentOutline $document_outline)
+    {
+        $document_outline->with('document','document.accreditation')->get();
+
+        if($request->hasFile('file')) {
+            $filename = $request->file->getClientOriginalName();
+            
+            while(Storage::exists('accreditation/' . $document_outline->document->accreditation->id . '/' . $request->type . '/' . $filename)) {
+                $filename = '(1)' . $filename;
+            }
+
+            $request->file('file')->storeAs('accreditation/' . $document_outline->document->accreditation->id . '/' . $request->type, $filename);
+
+            $uploaded = FileRepository::create([
+                'user_id'       => auth()->user()->id,
+                'file_name'     => $request->name,
+                'file_type'     => $request->type,
+                'file'          => $filename,
+                'directory'     => 'accreditation/' . $document_outline->document->accreditation->id . '/' . $request->type . '/' . $filename,
+                'reference'     => 'DocumentOutline',
+                'reference_id'  => $document_outline->id,
+            ]);
+
+            $document_outline->appendix_exhibit()->attach($uploaded);
+            return back()->withToastSuccess(__('File uploaded successfully.'));
+        }
     }
 }

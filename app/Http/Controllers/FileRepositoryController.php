@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Yajra\DataTables\Facades\DataTables;
 use App\FileRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Yajra\Datatables\Datatables;
 
 class FileRepositoryController extends Controller
 {

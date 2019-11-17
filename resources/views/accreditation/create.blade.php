@@ -12,6 +12,9 @@
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Accreditation Management') }}</h3>
                             </div>
+                            <div class="col-4 text-right">
+                                <a href="{{ route('accreditation.index') }}" class="btn btn-sm btn-primary mr-3">{{ __('Back to list') }}</a>
+                            </div>
                         </div>
                     </div>
                     <form id="document" method="post" action="{{ route('accreditation.store') }}" autocomplete="off">

@@ -27,6 +27,11 @@ class DocumentOutline extends Model
         return $this->hasMany('App\OutlineComment', 'outline_id');
     }
 
+    public function appendix_exhibit()
+    {
+        return $this->belongsToMany('App\FileRepository', 'appendix_exhibit', 'document_outline_id', 'file_id');
+    }
+
     public function scopeRootParent($query)
     {
         return $query->where('parent_id', 0);

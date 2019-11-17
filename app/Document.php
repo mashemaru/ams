@@ -47,6 +47,6 @@ class Document extends Model
 
     public function accreditation()
     {
-        return $this->hasMany('App\Accreditation', 'document_id');
+        return $this->hasOne('App\Accreditation', 'document_id');
     }
 }

@@ -103,7 +103,7 @@
             serverSide: true,
             ajax: "{{ route('file-repository.index') }}",
             columns: [
-                {data: 'id', name: 'id'},
+                {data: 'id', name: 'id', visible: false},
                 {data: 'file_name', name: 'file_name'},
                 {data: 'file_type', name: 'file_type'},
                 {data: 'file', name: 'file'},

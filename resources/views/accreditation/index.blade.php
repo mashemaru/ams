@@ -50,7 +50,7 @@
                                             </div>
                                         </td>
                                         <td>{{ ($a->result) ?: 'N/A' }}</td>
-                                        <td>{{ ($a->report_submission_date->format('M d Y')) ?: 'N/A' }}</td>
+                                        <td>{{ ($a->end_date) ? $a->end_date->format('M d Y') : 'N/A' }}</td>
                                         <td>
                                             @if ($a->progress != 'completed')
                                             <button class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#timelineModal-{{ $a->id }}"><span class="btn-inner--icon"><i class="ni ni-calendar-grid-58 mr-1"></i></span> Timeline</button>
@@ -62,16 +62,17 @@
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                    @if ($a->progress != 'completed') <a href="{{ route('accreditation.assignTeam', $a) }}" class="dropdown-item">{{ __('Assign Team') }}</a> @endif
                                                     <a href="{{ route('accreditation.show', $a) }}" class="dropdown-item">{{ __('View Summary') }}</a>
                                                     @if ($a->progress != 'completed')
-                                                    <form action="{{ route('accreditation.destroy', $a) }}" method="post">
-                                                        @csrf
-                                                        @method('delete')
-                                                        <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this accreditation?") }}') ? this.parentElement.submit() : ''">
-                                                            {{ __('Delete') }}
-                                                        </button>
-                                                    </form>
+                                                        <a href="{{ route('accreditation.assignTeam', $a) }}" class="dropdown-item">{{ __('Assign Team') }}</a>
+                                                        @if (!$a->evidence_can_upload) <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-evidence-{{ $a->id }}">Complete Evidence</a> @endif
+                                                        <form action="{{ route('accreditation.destroy', $a) }}" method="post">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this accreditation?") }}') ? this.parentElement.submit() : ''">
+                                                                {{ __('Delete') }}
+                                                            </button>
+                                                        </form>
                                                     @endif
                                                 </div>
                                             </div>
@@ -92,9 +93,9 @@
                                                         <div class="form-group mb-3">
                                                             <label class="form-control-label d-flex">{{ $a->program->program_name }} {{ $a->agency->agency_name }} Timeline <a href="{{ route('timeline.edit', $a) }}" class="btn btn-primary btn-sm ml-auto">Edit Timeline</a></label><br>
                                                             @foreach($a->timeline->task as $key => $t)
-                                                                <div class="custom-control custom-checkbox mb-3">
-                                                                    <input class="custom-control-input" name="task[{{ $key }}]" id="customCheck{{ $key }}" type="checkbox"{{ ($t['is_complete']) ? ' checked' : '' }}>
-                                                                    <label class="custom-control-label" for="customCheck{{ $key }}">{{ $t['task'] }}</label><span><h6 class="text-muted">{{ $t['date'] }}</h6></span>
+                                                                <div class="custom-control custom-control-alternative custom-checkbox mb-3">
+                                                                    <input class="custom-control-input" name="task[{{ $key }}]" id="customCheck{{ $a->id }}-{{ $key }}" type="checkbox"{{ ($t['is_complete']) ? ' checked' : '' }}>
+                                                                    <label class="custom-control-label" for="customCheck{{ $a->id }}-{{ $key }}">{{ $t['task'] }}<span><h6 class="text-muted">{{ $t['date'] }}</h6></span></label>
                                                                 </div>
                                                             @endforeach
                                                         </div>
@@ -110,11 +111,11 @@
                                         </div>
                                     </div>
                                     <!-- Modal -->
-                                    <div class="modal fade" id="modal-notification-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-notification" aria-hidden="true">
+                                    <div class="modal fade" id="modal-notification-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-notification-{{ $a->id }}" aria-hidden="true">
                                         <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
-                                            <div class="modal-content bg-gradient-warning">
+                                            <div class="modal-content bg-gradient-danger">
                                                 <div class="modal-header">
-                                                    <h6 class="modal-title" id="modal-title-notification-{{ $a->id }}">Your attention is required</h6>
+                                                    <h6 class="modal-title">Your attention is required</h6>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">×</span>
                                                     </button>
@@ -130,6 +131,38 @@
                                                     <a href="{{ route('accreditation.show.complete', $a->timeline) }}"><button type="button" class="btn btn-white">Yes, it's complete</button></a>
                                                     <button type="button" class="btn btn-link text-white ml-auto" data-dismiss="modal">No, it's not</button>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modal-evidence-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-evidence-{{ $a->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+                                            <div class="modal-content bg-gradient-danger">
+                                            
+                                                <div class="modal-header">
+                                                    <h6 class="modal-title">Your attention is required</h6>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>
+                                                <form method="post" action="{{ route('accreditation.evidence.complete', $a ) }}" autocomplete="off">
+                                                @csrf
+                                                @method('put')
+                                                <div class="modal-body">
+                                                
+                                                    <div class="py-3 text-center">
+                                                        <i class="ni ni-bell-55 ni-3x"></i>
+                                                        <h4 class="heading mt-4">You should read this!</h4>
+                                                        <p>Completing the evidence would indicate the Appendix/Exhibit is closed and would render the Appendix/Exhibit uneditable. Are you sure the evidence is complete?</p>
+                                                    </div>
+                                                    
+                                                </div>
+                                                
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-white">Yes, it's complete</button>
+                                                    <button type="button" class="btn btn-link text-white ml-auto" data-dismiss="modal">No, it's not</button>
+                                                </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

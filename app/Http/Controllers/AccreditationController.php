@@ -51,11 +51,11 @@ class AccreditationController extends Controller
         $validate = Validator::make($request->all(), [
             'agency_id'              => 'required|exists:agencies,id',
             'program_id'             => 'required|exists:programs,id',
-            'document_id'            => 'required|exists:documents,id',
+            'document_id'            => 'required|exists:documents,id|unique:accreditations',
             'type'                   => 'required',
             'report_submission_date' => 'required|date_format:Y-m-d|after:now',
             'onsite_visit_date'      => 'required|date_format:Y-m-d|after:report_submission_date',
-        ]);
+        ], ['document_id.unique'     => 'Document already attached to an existing Accreditation.']);
 
         if ($validate->fails()) {
             $agency = Agency::findOrFail($request->agency_id);
@@ -217,5 +217,14 @@ class AccreditationController extends Controller
         ]);
 
         return redirect()->route('accreditation.index')->withToastSuccess(__('Accreditation successfully completed.'));
+    }
+
+    public function evidenceComplete(Accreditation $accreditation)
+    {
+        $accreditation->update([
+            'evidence_complete' => true,
+        ]);
+
+        return redirect()->route('accreditation.index')->withToastSuccess(__('Evidence successfully completed.'));
     }
 }

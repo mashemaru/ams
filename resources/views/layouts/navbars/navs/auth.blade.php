@@ -25,7 +25,7 @@
                         <i class="ni ni-single-02"></i>
                         <span>My Profile</span>
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <a href="{{ route('faculty.profile' )}}" class="dropdown-item">
                         <i class="ni ni-single-02"></i>
                         <span>Faculty Information Form</span>
                     </a>
