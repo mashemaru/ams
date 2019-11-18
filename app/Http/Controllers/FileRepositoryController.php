@@ -140,4 +140,35 @@ class FileRepositoryController extends Controller
             return back()->withToastSuccess(__('File successfully uploaded.'));
         }
     }
+
+    public function appendicesExhibits(Request $request, FileRepository $FileRepository)
+    {
+        if ($request->ajax()) {
+            
+            $data = $FileRepository->with('user')->whereIn('file_type', ['appendix','exhibit'])->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->editColumn('file_type', function($data){
+                    return ($data->file_type) ? ucfirst($data->file_type) : 'N\A';
+                })
+                ->editColumn('file_name', function($data){
+                    return ($data->file_name) ? '<strong>'.$data->file_name.'</strong>' : 'N\A';
+                })
+                ->editColumn('file', function($data){
+                    return ($data->file) ? '<div class="file-icon mr-2" data-file="'.pathinfo($data->file, PATHINFO_EXTENSION).'"></div> ' . $data->file : 'N\A';
+                })
+                ->editColumn('user_id', function($data) {
+                    return $data->user->name;
+                })
+                ->editColumn('created_at', function($data) {
+                    return $data->created_at->diffForHumans();
+                })
+                ->addColumn('action', function($row){
+                    return '<a href="'.route('file-repository.download', $row->id).'" class="btn btn-dark btn-sm"><i class="fas fa-download"></i> Download</a>';
+                })
+                ->rawColumns(['file_name','file','action'])
+                ->make(true);
+        }
+        return view('file-repo.appendix-exhibits');
+    }
 }

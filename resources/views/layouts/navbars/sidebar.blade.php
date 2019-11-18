@@ -200,13 +200,8 @@
                 </a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link{{ Route::is('appendices-exhibits.*') ? ' active' : '' }}" href="{{ route('appendices-exhibits.index') }}">
                     <i class="ni ni-archive-2 text-yellow"></i> Appendices/Exhibits
-                </a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="ni ni-archive-2 text-yellow"></i> Completed Reports
                 </a>
                 </li>
             </ul>

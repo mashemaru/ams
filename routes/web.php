@@ -27,6 +27,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('document', 'DocumentController', ['except' => ['show']]);
 	Route::resource('document-outline', 'DocumentOutlineController');
 	Route::post('document-outlineUpload/{document_outline}', ['as' => 'outline.upload', 'uses' => 'DocumentOutlineController@outlineUpload']);
+	Route::post('document-outlineSelect/{document_outline}', ['as' => 'outline.select', 'uses' => 'DocumentOutlineController@outlineSelect']);
+	Route::get('appendices-exhibits', ['as' => 'appendices-exhibits.index', 'uses' => 'FileRepositoryController@appendicesExhibits']);
 	Route::resource('file-repository', 'FileRepositoryController', ['except' => ['show']]);
 	Route::get('file/{file_repository}', ['as' => 'file-repository.download', 'uses' => 'FileRepositoryController@download']);
 	Route::post('fileUpload/', ['as' => 'file-repository.upload', 'uses' => 'FileRepositoryController@upload']);

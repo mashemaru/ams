@@ -239,47 +239,26 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+            <form method="post" action="{{ route('outline.select', $outline) }}" autocomplete="off">
+                @csrf
                 <div class="modal-body">
-                    <form role="form">
-                        @foreach($document_files as $key => $files)
-                        <h6 class="heading-small text-muted mb-2">{{ $key }}</h6>
-                            @foreach($files as $file)
-                            <div class="custom-control custom-checkbox mb-3">
-                                <input type="checkbox" class="custom-control-input" id="customCheck{{ $file->id }}">
-                                <label class="custom-control-label" for="customCheck{{ $file->id }}">{{ $file->file_name }}</label>
-                            </div>
-                            @endforeach
+                    @foreach($document_files as $key => $files)
+                    <h6 class="heading-small text-muted mb-2">{{ $key }}</h6>
+                        @foreach($files as $file)
+                        <div class="custom-control custom-checkbox mb-3">
+                            <input type="checkbox" class="custom-control-input" name="checkFiles[]" id="customCheck{{ $file->id }}" value="{{ $file->id }}">
+                            <label class="custom-control-label" for="customCheck{{ $file->id }}">{{ $file->file_name }}</label>
+                        </div>
                         @endforeach
-
-                        {{-- <h6 class="heading-small text-muted mb-2">Appendices</h6>
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Appendix 1</label>
-                        </div>
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Appendix 2</label>
-                        </div>
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Appendix 3</label>
-                        </div>
-                        <br>
-                        <h6 class="heading-small text-muted mb-2">Exhibits</h6>
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Exhibit 1</label>
-                        </div>
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Exhibit 2</label>
-                        </div> --}}
-                    </form>
+                    @endforeach
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                @if(!$document_files->isEmpty())
                     <button type="submit" class="btn btn-success">Save</button>
+                @endif
                 </div>
+            </form>
             </div>
         </div>
     </div>

@@ -63,14 +63,7 @@ class DocumentOutlineController extends Controller
     public function edit(DocumentOutline $document_outline)
     {
         $document_outline->with('scoring_type','comments','document','appendix_exhibit','document.accreditation','document.appendix_exhibit')->get();
-        $document_files = collect();
-        foreach($document_outline->appendix_exhibit as $outline) {
-            foreach($document_outline->document->appendix_exhibit as $file) {
-                if($outline->id != $file->id) {
-                    $document_files->push($file);
-                }
-            }
-        }
+        $document_files = $document_outline->document->appendix_exhibit->unique()->diff($document_outline->appendix_exhibit);
 
         return view('document-outline.edit', ['outline' => $document_outline, 'document_files' => $document_files->groupBy('file_type')]);
     }
@@ -187,6 +180,19 @@ class DocumentOutlineController extends Controller
 
             $document_outline->appendix_exhibit()->attach($uploaded->id, ['document_id' => $document_outline->document->id]);
             return back()->withToastSuccess(__('File uploaded successfully.'));
+        }
+    }
+
+    public function outlineSelect(Request $request, DocumentOutline $document_outline)
+    {
+        if($request->has('checkFiles')) {
+            $document_outline->with('document')->get();
+            $files = collect();
+            foreach($request->checkFiles as $file) {
+                $files->push(['file_id' => $file, 'document_id' => $document_outline->document->id]);
+            }
+            $document_outline->appendix_exhibit()->attach($files);
+            return back()->withToastSuccess(__('Action completed successfully'));
         }
     }
 }
