@@ -24,6 +24,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('program', 'ProgramController', ['except' => ['show','create']]);
 	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
+	Route::resource('task', 'TaskController', ['except' => ['show']]);
+	Route::get('notification', ['as' => 'notification.index', 'uses' => 'NotificationController@index']);
+	Route::post('taskInProgress/{task}', ['as' => 'task.in-progress', 'uses' => 'TaskController@taskInProgress']);
+	Route::post('taskComplete/{task}', ['as' => 'task.complete', 'uses' => 'TaskController@taskComplete']);
 	Route::resource('document', 'DocumentController', ['except' => ['show']]);
 	Route::resource('document-outline', 'DocumentOutlineController');
 	Route::post('document-outlineUpload/{document_outline}', ['as' => 'outline.upload', 'uses' => 'DocumentOutlineController@outlineUpload']);

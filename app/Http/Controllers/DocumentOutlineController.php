@@ -192,7 +192,7 @@ class DocumentOutlineController extends Controller
                 $files->push(['file_id' => $file, 'document_id' => $document_outline->document->id]);
             }
             $document_outline->appendix_exhibit()->attach($files);
-            return back()->withToastSuccess(__('Action completed successfully'));
+            return back()->withToastSuccess(__('Action completed successfully.'));
         }
     }
 }

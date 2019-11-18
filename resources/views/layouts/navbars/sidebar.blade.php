@@ -84,12 +84,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link{{ Route::is('task.*') ? ' active' : '' }}" href="{{ route('task.index') }}">
                         <i class="ni ni-check-bold text-blue"></i> Tasks
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link{{ Route::is('notification.*') ? ' active' : '' }}" href="{{ route('notification.index') }}">
                         <i class="ni ni-bell-55 text-yellow"></i> Notifications
                     </a>
                 </li>
