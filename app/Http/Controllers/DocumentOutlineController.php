@@ -18,7 +18,7 @@ class DocumentOutlineController extends Controller
      */
     public function index(DocumentOutline $document_outline)
     {
-        $document_outline->with('document','appendix_exhibit');
+        $document_outline->with('document');
         return view('document.outline.index', ['documents' => $document_outline->paginate(15)]);
     }
 
@@ -62,8 +62,17 @@ class DocumentOutlineController extends Controller
      */
     public function edit(DocumentOutline $document_outline)
     {
-        $document_outline->with('scoring_type','comments')->get();
-        return view('document-outline.edit', ['outline' => $document_outline]);
+        $document_outline->with('scoring_type','comments','document','appendix_exhibit','document.accreditation','document.appendix_exhibit')->get();
+        $document_files = collect();
+        foreach($document_outline->appendix_exhibit as $outline) {
+            foreach($document_outline->document->appendix_exhibit as $file) {
+                if($outline->id != $file->id) {
+                    $document_files->push($file);
+                }
+            }
+        }
+
+        return view('document-outline.edit', ['outline' => $document_outline, 'document_files' => $document_files->groupBy('file_type')]);
     }
 
     /**
@@ -176,7 +185,7 @@ class DocumentOutlineController extends Controller
                 'reference_id'  => $document_outline->id,
             ]);
 
-            $document_outline->appendix_exhibit()->attach($uploaded);
+            $document_outline->appendix_exhibit()->attach($uploaded->id, ['document_id' => $document_outline->document->id]);
             return back()->withToastSuccess(__('File uploaded successfully.'));
         }
     }

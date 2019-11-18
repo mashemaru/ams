@@ -1,3 +1,4 @@
+<h2>Academic Background</h2>
 <table class="table">
     <thead>
         <tr>

@@ -29,7 +29,7 @@ class FacultyAcademicBackgroundExport implements FromView, ShouldAutoSize, WithE
         return [
             AfterSheet::class    => function(AfterSheet $event) {
                 $event->sheet->styleCells(
-                    'A1:G1',
+                    'A2:G2',
                     [
                         'font' => [
                             'bold' => true,
@@ -37,7 +37,7 @@ class FacultyAcademicBackgroundExport implements FromView, ShouldAutoSize, WithE
                     ]
                 );
                 $event->sheet->styleCells(
-                    'A2:G999',
+                    'A3:G999',
                     [
                         'alignment' => array(
                             'horizontal' => Alignment::HORIZONTAL_LEFT,

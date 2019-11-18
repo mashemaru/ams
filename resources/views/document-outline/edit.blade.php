@@ -159,6 +159,7 @@
                                     <th scope="row">{{ $data->file_name }}</th>
                                     <td scope="row">{{ ucfirst($data->file_type) }}</td>
                                     <td scope="row">{{ $data->updated_at->diffForHumans() }}</td>
+                                    @if (!$outline->document->accreditation->evidence_can_upload)
                                     <td class="text-right">
                                         <div class="dropdown">
                                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
@@ -200,11 +201,13 @@
                                             </div>
                                         </div>
                                     </td>
+                                    @endif
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
+                    @if (!$outline->document->accreditation->evidence_can_upload)
                     <br>
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModal"
@@ -218,71 +221,37 @@
                         <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
                         Select Existing Appendix/Exhibit
                     </button>
-                </div>
-            
-                <div class="modal fade" id="selectModal1" tabindex="-1" role="dialog" aria-labelledby="selectModalLabel1"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="selectModalLabel">Select Appendix/Exhibit</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form role="form">
-                                    <h6 class="heading-small text-muted mb-2">Appendices</h6>
-                                    <div class="custom-control custom-checkbox mb-3">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                        <label class="custom-control-label" for="customCheck1">Appendix 1</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox mb-3">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                        <label class="custom-control-label" for="customCheck1">Appendix 2</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox mb-3">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                        <label class="custom-control-label" for="customCheck1">Appendix 3</label>
-                                    </div>
-                                    <br>
-                                    <h6 class="heading-small text-muted mb-2">Exhibits</h6>
-                                    <div class="custom-control custom-checkbox mb-3">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                        <label class="custom-control-label" for="customCheck1">Exhibit 1</label>
-                                    </div>
-                                    <div class="custom-control custom-checkbox mb-3">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                        <label class="custom-control-label" for="customCheck1">Exhibit 2</label>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-success">Save</button>
-                            </div>
-                        </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 
     @include('layouts.footers.auth')
+    @if (!$outline->document->accreditation->evidence_can_upload)
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal fade" id="selectModal1" tabindex="-1" role="dialog" aria-labelledby="selectModalLabel1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Select Appendix/Exhibit</h5>
+                    <h5 class="modal-title" id="selectModalLabel">Select Appendix/Exhibit</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form role="form">
-                        <h6 class="heading-small text-muted mb-2">Appendices</h6>
+                        @foreach($document_files as $key => $files)
+                        <h6 class="heading-small text-muted mb-2">{{ $key }}</h6>
+                            @foreach($files as $file)
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input" id="customCheck{{ $file->id }}">
+                                <label class="custom-control-label" for="customCheck{{ $file->id }}">{{ $file->file_name }}</label>
+                            </div>
+                            @endforeach
+                        @endforeach
+
+                        {{-- <h6 class="heading-small text-muted mb-2">Appendices</h6>
                         <div class="custom-control custom-checkbox mb-3">
                             <input type="checkbox" class="custom-control-input" id="customCheck1">
                             <label class="custom-control-label" for="customCheck1">Appendix 1</label>
@@ -304,12 +273,12 @@
                         <div class="custom-control custom-checkbox mb-3">
                             <input type="checkbox" class="custom-control-input" id="customCheck1">
                             <label class="custom-control-label" for="customCheck1">Exhibit 2</label>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success">Save</button>
+                    <button type="submit" class="btn btn-success">Save</button>
                 </div>
             </div>
         </div>
@@ -354,6 +323,7 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 @endsection
 

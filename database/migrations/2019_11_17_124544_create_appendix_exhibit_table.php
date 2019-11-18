@@ -14,6 +14,7 @@ class CreateAppendixExhibitTable extends Migration
     public function up()
     {
         Schema::create('appendix_exhibit', function (Blueprint $table) {
+            $table->unsignedBigInteger('document_id');
             $table->unsignedBigInteger('document_outline_id');
             $table->unsignedBigInteger('file_id');
         });

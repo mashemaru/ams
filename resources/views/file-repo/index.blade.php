@@ -119,7 +119,7 @@
                 }
             },
             createdRow: function( row, data, dataIndex ) {
-                $( row ).find('td:eq(3)').attr('class', 'text-primary d-flex align-items-center');
+                $( row ).find('td:eq(2)').attr('class', 'text-primary d-flex align-items-center');
             }
         });
     });
