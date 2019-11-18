@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Task;
+
 class HomeController extends Controller
 {
     /**
@@ -22,5 +24,12 @@ class HomeController extends Controller
     public function index()
     {
         return view('dashboard');
+    }
+
+    public function activities()
+    {
+        $events = Task::select('task_name','due_date')->get();
+
+        return view('activities.index', compact('events'));
     }
 }

@@ -94,7 +94,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link{{ Route::is('activities.*') ? ' active' : '' }}" href="{{ route('activities.index') }}">
                         <i class="ni ni-calendar-grid-58 text-orange"></i> Activities
                     </a>
                 </li>

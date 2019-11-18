@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
 	Route::resource('task', 'TaskController', ['except' => ['show']]);
 	Route::get('notification', ['as' => 'notification.index', 'uses' => 'NotificationController@index']);
+	Route::get('activities', ['as' => 'activities.index', 'uses' => 'HomeController@activities']);
 	Route::post('taskInProgress/{task}', ['as' => 'task.in-progress', 'uses' => 'TaskController@taskInProgress']);
 	Route::post('taskComplete/{task}', ['as' => 'task.complete', 'uses' => 'TaskController@taskComplete']);
 	Route::resource('document', 'DocumentController', ['except' => ['show']]);
