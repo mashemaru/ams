@@ -8,7 +8,9 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-class FacultyAcademicBackgroundExport implements FromView, ShouldAutoSize, WithEvents
+use Maatwebsite\Excel\Concerns\WithTitle;
+
+class FacultyAcademicBackgroundExport implements FromView, ShouldAutoSize, WithEvents, WithTitle
 {
     private $data;
 
@@ -28,16 +30,16 @@ class FacultyAcademicBackgroundExport implements FromView, ShouldAutoSize, WithE
     {
         return [
             AfterSheet::class    => function(AfterSheet $event) {
+                // $event->sheet->styleCells(
+                //     'A2:G2',
+                //     [
+                //         'font' => [
+                //             'bold' => true,
+                //         ]
+                //     ]
+                // );
                 $event->sheet->styleCells(
-                    'A2:G2',
-                    [
-                        'font' => [
-                            'bold' => true,
-                        ]
-                    ]
-                );
-                $event->sheet->styleCells(
-                    'A3:G999',
+                    'A1:Z999',
                     [
                         'alignment' => array(
                             'horizontal' => Alignment::HORIZONTAL_LEFT,
@@ -46,5 +48,10 @@ class FacultyAcademicBackgroundExport implements FromView, ShouldAutoSize, WithE
                 );
             },
         ];
+    }
+
+    public function title(): string
+    {
+        return 'Academic Background';
     }
 }

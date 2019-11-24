@@ -81,8 +81,8 @@ class AgencyController extends Controller
     public function update(Request $request, Agency $agency)
     {
         $validate = Validator::make($request->all(), [
-            'agency_name' => 'required|unique:agencies|min:2',
-            'agency_code' => 'required|unique:agencies|min:2',
+            'agency_name' => 'required|min:2|unique:agencies,agency_name,' . $agency->id,
+            'agency_code' => 'required|min:2|unique:agencies,agency_code,' . $agency->id,
         ]);
     
         if ($validate->fails()) {

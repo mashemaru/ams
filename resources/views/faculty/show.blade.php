@@ -22,6 +22,13 @@
                             <a href="{{ route('profile.edit') }}" class="btn btn-sm btn-default float-right">Edit Profile</a>
                         @endif
                     </div>
+                    <form method="post" action="{{ route('faculty.exportFaculty', $user) }}" autocomplete="off">
+                    @csrf
+                        <button type="submit" class="btn btn-primary btn-sm mr-4 float-right">
+                            <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                            Download
+                        </button>
+                    </form>
                 </div>
                 <div class="card-body pt-4">
                     <div class="text-center mb-5">
@@ -139,69 +146,89 @@
         <div class="card-body p-0">
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab">
+                    <div class="col text-right pt-4 mb-4">
+                        <!-- Button trigger modal -->
+                        <form method="post" action="{{ route('faculty.exportFacultyAcademicBackground', $user) }}" autocomplete="off">
+                        @csrf
+                            <button type="submit" class="btn btn-primary btn-sm" style="float:right">
+                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                Download
+                            </button>
+                        </form>
+                    </div>
                     <div class="accordion" id="accordionExample">
-                        <div class="card-header" id="headingAcademic" data-toggle="collapse" data-target="#collapseAcademic" aria-expanded="false" aria-controls="collapseAcademic">
-                            <div class="row">
-                                <div class="col">
-                                    <h5 class="mb-0">ACADEMIC BACKGROUND</h5>
-                                </div>
-                                <div class="col text-right mb-0">
-                                    <span class="btn-inner--icon"><i class="ni ni-bold-down"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="collapseAcademic" class="collapse" aria-labelledby="headingAcademic" data-parent="#accordionExample">
-                            <div class="col text-right pt-4 mb-4">
-                                <!-- Button trigger modal -->
-                                <form method="post" action="{{ route('faculty.exportFacultyAcademicBackground', $user) }}" autocomplete="off">
-                                @csrf
-                                    <button type="submit" class="btn btn-primary btn-sm" style="float:right">
-                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                                        Download
-                                    </button>
-                                </form>
-                            </div>
-                            <div class="card-body px-0">
-                                <div class="table-responsive">
-                                    <table class="table align-items-center table-flush">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col">Degrees Earned</th>
-                                                <th scope="col">Title of Degree</th>
-                                                <th scope="col">Area of Specialization</th>
-                                                <th scope="col">Year Obtained</th>
-                                                <th scope="col">Educational Institution</th>
-                                                <th scope="col">Location (City, Country)</th>
-                                                <th scope="col">S.O. Number</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($user->faculty_academic_background as $data)
-                                            <tr>
-                                                <td>{{ $data->degrees_earned }}</td>
-                                                <td>{{ $data->title_of_degree }}</td>
-                                                <td>{{ $data->area_of_specialization }}</td>
-                                                <td>{{ $data->year_obtained }}</td>
-                                                <td>{{ $data->educational_institution }}</td>
-                                                <td>{{ $data->location }}</td>
-                                                <td>{{ $data->so_number }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                        @include('faculty.tab.faculty_academic_background', ['faculty' => $user])
+                        @include('faculty.tab.faculty_graduate_studies', ['faculty' => $user])
+                        @include('faculty.tab.faculty_special_training', ['faculty' => $user])
                     </div>
                 </div>
                 <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                    <p class="description">Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+                    <div class="col text-right pt-4 mb-4">
+                        <!-- Button trigger modal -->
+                        <form method="post" action="{{ route('faculty.exportFacultyEducationalBackgroundExport', $user) }}" autocomplete="off">
+                        @csrf
+                            <button type="submit" class="btn btn-primary btn-sm" style="float:right">
+                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                Download
+                            </button>
+                        </form>
+                    </div>
+                    <div class="accordion" id="accordionExample2">
+                        @include('faculty.tab.faculty_teaching_experience_dlsu', ['faculty' => $user])
+                        @include('faculty.tab.faculty_teaching_experience_other', ['faculty' => $user])
+                        @include('faculty.tab.faculty_professional_experience', ['faculty' => $user])
+                        @include('faculty.tab.faculty_professional_practice_dlsu', ['faculty' => $user])
+                        @include('faculty.tab.faculty_professional_practice', ['faculty' => $user])
+                    </div>
                 </div>
                 <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
-                    <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+                    <div class="col text-right pt-4 mb-4">
+                        <!-- Button trigger modal -->
+                        <form method="post" action="{{ route('faculty.exportFacultyProfessionalActivitiesExport', $user) }}" autocomplete="off">
+                        @csrf
+                            <button type="submit" class="btn btn-primary btn-sm" style="float:right">
+                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                Download
+                            </button>
+                        </form>
+                    </div>
+                    <div class="accordion" id="accordionExample3">
+                        @include('faculty.tab.faculty_leadership', ['faculty' => $user])
+                        @include('faculty.tab.faculty_membership', ['faculty' => $user])
+                        @include('faculty.tab.faculty_achievements', ['faculty' => $user])
+                        @include('faculty.tab.faculty_internally_funded_research', ['faculty' => $user])
+                        @include('faculty.tab.faculty_externally_funded_research', ['faculty' => $user])
+                        @include('faculty.tab.faculty_research_grants', ['faculty' => $user])
+                        @include('faculty.tab.faculty_journal_publication', ['faculty' => $user])
+                        @include('faculty.tab.faculty_prototypes', ['faculty' => $user])
+                        @include('faculty.tab.faculty_patents', ['faculty' => $user])
+                        @include('faculty.tab.faculty_books_and_textbooks', ['faculty' => $user])
+                        @include('faculty.tab.faculty_chapter_in_edited_book', ['faculty' => $user])
+                        @include('faculty.tab.faculty_conference_proceedings_papers', ['faculty' => $user])
+                        @include('faculty.tab.faculty_published_creative_work', ['faculty' => $user])
+                        @include('faculty.tab.faculty_creative_work_performed', ['faculty' => $user])
+                        @include('faculty.tab.faculty_programs_developeds', ['faculty' => $user])
+                        @include('faculty.tab.faculty_other_research_outputs', ['faculty' => $user])
+                        @include('faculty.tab.faculty_conferences_attended', ['faculty' => $user])
+                    </div>
                 </div>
                 <div class="tab-pane fade" id="tabs-icons-text-4" role="tabpanel" aria-labelledby="tabs-icons-text-4-tab">
-                    <p class="description">Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+                    <div class="col text-right pt-4 mb-4">
+                        <!-- Button trigger modal -->
+                        <form method="post" action="{{ route('faculty.exportFacultyCommunityServiceExport', $user) }}" autocomplete="off">
+                        @csrf
+                            <button type="submit" class="btn btn-primary btn-sm" style="float:right">
+                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                Download
+                            </button>
+                        </form>
+                    </div>
+                    <div class="accordion" id="accordionExample4">
+                        @include('faculty.tab.faculty_community_service_dlsu', ['faculty' => $user])
+                        @include('faculty.tab.faculty_community_service_professional', ['faculty' => $user])
+                        @include('faculty.tab.faculty_community_service_government', ['faculty' => $user])
+                        @include('faculty.tab.faculty_community_service_others', ['faculty' => $user])
+                    </div>
                 </div>
             </div>
         </div>

@@ -143,7 +143,7 @@ $(document).on('change', 'select[name="term"]', function () {
         $('input[name="start_year"]').val() <= $('input[name="end_year"]').val()
     ) {
         var count = $(this).find(':selected').data('count');
-        var term = ( ($('input[name="end_year"]').val() - $('input[name="start_year"]').val()) + 1 ) * count;
+        var term = ( ($('input[name="end_year"]').val() - $('input[name="start_year"]').val()) ) * count;
 
         window.axios.post('/getCurriculumCourses', {
         term: term
@@ -164,7 +164,7 @@ $(document).on('change', 'input[name="end_year"]', function () {
         $('input[name="start_year"]').val() <= $('input[name="end_year"]').val()
     ) {
         var count = $('select[name="term"]').find(':selected').data('count');
-        var term = ( ($('input[name="end_year"]').val() - $('input[name="start_year"]').val()) + 1 ) * count;
+        var term = ( ($('input[name="end_year"]').val() - $('input[name="start_year"]').val()) ) * count;
 
         window.axios.post('/getCurriculumCourses', {
         term: term
@@ -185,7 +185,7 @@ $(document).on('change', 'input[name="start_year"]', function () {
         $('input[name="start_year"]').val() <= $('input[name="end_year"]').val()
     ) {
         var count = $('select[name="term"]').find(':selected').data('count');
-        var term = ( ($('input[name="end_year"]').val() - $('input[name="start_year"]').val()) + 1 ) * count;
+        var term = ( ($('input[name="end_year"]').val() - $('input[name="start_year"]').val()) ) * count;
 
         window.axios.post('/getCurriculumCourses', {
         term: term

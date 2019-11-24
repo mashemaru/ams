@@ -56,8 +56,13 @@
                                     <input class="form-control form-control-alternative" id="input-department" name="department" placeholder="Department" type="text" value="{{ old('department', auth()->user()->department) }}">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-control-label" for="input-rank">{{ __('Rank') }}</label>
-                                    <input class="form-control form-control-alternative" id="input-rank" name="rank" placeholder="Rank" type="text" value="{{ old('rank', auth()->user()->rank) }}">
+                                    <label class="form-control-label" for="input-rank">{{ __('Faculty Classification') }}</label>
+                                    <select class="form-control form-control-alternative{{ $errors->has('rank') ? ' is-invalid' : '' }}" name="rank">
+                                        <option value>Select Rank</option>
+                                        <option value="FT"{{ (auth()->user()->rank == 'FT') ? ' selected' : '' }}>FT</option>
+                                        <option value="PT"{{ (auth()->user()->rank == 'PT') ? ' selected' : '' }}>PT</option>
+                                        <option value="ASF"{{ (auth()->user()->rank == 'ASF') ? ' selected' : '' }}>ASF</option>
+                                    </select>
                                 </div>
                                 <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-email">{{ __('Email') }}</label>

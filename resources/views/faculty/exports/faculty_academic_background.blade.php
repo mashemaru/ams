@@ -1,4 +1,4 @@
-<h2>Academic Background</h2>
+<h2>ACADEMIC BACKGROUND</h2>
 <table class="table">
     <thead>
         <tr>
@@ -25,3 +25,7 @@
         @endforeach
     </tbody>
 </table>
+<br>
+@include('faculty.exports.faculty_graduate_studies')
+<br>
+@include('faculty.exports.faculty_special_training')

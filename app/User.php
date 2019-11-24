@@ -66,4 +66,145 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\FacultyAcademicBackground', 'user_id');
     }
+
+    public function faculty_graduate_studies()
+    {
+        return $this->hasMany('App\FacultyGraduateStudies', 'user_id');
+    }
+
+    public function faculty_special_training()
+    {
+        return $this->hasMany('App\FacultySpecialTraining', 'user_id');
+    }
+    
+    public function faculty_teaching_experience_dlsu()
+    {
+        return $this->hasMany('App\FacultyTeachingExperienceDlsu', 'user_id');
+    }
+
+    public function faculty_teaching_experience_other()
+    {
+        return $this->hasMany('App\FacultyTeachingExperienceOther', 'user_id');
+    }
+    
+    public function faculty_professional_experience()
+    {
+        return $this->hasMany('App\FacultyProfessionalExperience', 'user_id');
+    }
+
+    public function faculty_professional_practice_dlsu()
+    {
+        return $this->hasMany('App\FacultyProfessionalPracticeDlsu', 'user_id');
+    }
+    
+    public function faculty_professional_practice()
+    {
+        return $this->hasMany('App\FacultyProfessionalPractice', 'user_id');
+    }
+    
+    public function faculty_leadership()
+    {
+        return $this->hasMany('App\FacultyLeadership', 'user_id');
+    }
+    
+    public function faculty_membership()
+    {
+        return $this->hasMany('App\FacultyMembership', 'user_id');
+    }
+    
+    public function faculty_achievements()
+    {
+        return $this->hasMany('App\FacultyAchievements', 'user_id');
+    }
+    
+    public function faculty_internally_funded_research()
+    {
+        return $this->hasMany('App\FacultyInternallyFundedResearch', 'user_id');
+    }
+    
+    public function faculty_externally_funded_research()
+    {
+        return $this->hasMany('App\FacultyExternallyFundedResearch', 'user_id');
+    }
+    
+    public function faculty_research_grants()
+    {
+        return $this->hasMany('App\FacultyResearchGrants', 'user_id');
+    }
+    
+    public function faculty_journal_publication()
+    {
+        return $this->hasMany('App\FacultyJournalPublication', 'user_id');
+    }
+    
+    public function faculty_prototypes()
+    {
+        return $this->hasMany('App\FacultyPrototypes', 'user_id');
+    }
+    
+    public function faculty_patents()
+    {
+        return $this->hasMany('App\FacultyPatents', 'user_id');
+    }
+
+    public function faculty_books_and_textbooks()
+    {
+        return $this->hasMany('App\FacultyBooksAndTextbooks', 'user_id');
+    }
+    
+    public function faculty_chapter_in_edited_book()
+    {
+        return $this->hasMany('App\FacultyChapterInEditedBook', 'user_id');
+    }
+    
+    public function faculty_conference_proceedings_papers()
+    {
+        return $this->hasMany('App\FacultyConferenceProceedingsPapers', 'user_id');
+    }
+    
+    public function faculty_published_creative_work()
+    {
+        return $this->hasMany('App\FacultyPublishedCreativeWork', 'user_id');
+    }
+    
+    public function faculty_creative_work_performed()
+    {
+        return $this->hasMany('App\FacultyCreativeWorkPerformed', 'user_id');
+    }
+    
+    public function faculty_programs_developeds()
+    {
+        return $this->hasMany('App\FacultyProgramsDeveloped', 'user_id');
+    }
+
+    public function faculty_other_research_outputs()
+    {
+        return $this->hasMany('App\FacultyOtherResearchOutputs', 'user_id');
+    }
+    
+    public function faculty_conferences_attended()
+    {
+        return $this->hasMany('App\FacultyConferencesAttended', 'user_id');
+    }
+    
+    public function faculty_community_service_dlsu()
+    {
+        return $this->hasMany('App\FacultyCommunityServiceDlsu', 'user_id');
+    }
+    
+    public function faculty_community_service_professional()
+    {
+        return $this->hasMany('App\FacultyCommunityServiceProfessional', 'user_id');
+    }
+    
+    public function faculty_community_service_government()
+    {
+        return $this->hasMany('App\FacultyCommunityServiceGovernment', 'user_id');
+    }
+    
+    public function faculty_community_service_others()
+    {
+        return $this->hasMany('App\FacultyCommunityServiceOthers', 'user_id');
+    }
+    
 }

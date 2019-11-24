@@ -71,5 +71,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('faculty/{user}', ['as' => 'faculty.show', 'uses' => 'FacultyController@facultyShow']);
 	Route::get('faculty-profile', ['as' => 'faculty.profile', 'uses' => 'FacultyController@facultyProfile']);
 	Route::post('faculty-profile/{user}', ['as' => 'faculty.store', 'uses' => 'FacultyController@facultyStore']);
+	Route::post('exportFaculty/{user}', ['as' => 'faculty.exportFaculty', 'uses' => 'FacultyController@exportFaculty']);
 	Route::post('exportFacultyAcademicBackground/{user}', ['as' => 'faculty.exportFacultyAcademicBackground', 'uses' => 'FacultyController@exportFacultyAcademicBackground']);
+	Route::post('exportFacultyEducationalBackgroundExport/{user}', ['as' => 'faculty.exportFacultyEducationalBackgroundExport', 'uses' => 'FacultyController@exportFacultyEducationalBackgroundExport']);
+	Route::post('exportFacultyProfessionalActivitiesExport/{user}', ['as' => 'faculty.exportFacultyProfessionalActivitiesExport', 'uses' => 'FacultyController@exportFacultyProfessionalActivitiesExport']);
+	Route::post('exportFacultyCommunityServiceExport/{user}', ['as' => 'faculty.exportFacultyCommunityServiceExport', 'uses' => 'FacultyController@exportFacultyCommunityServiceExport']);
 });
