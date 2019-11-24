@@ -145,7 +145,7 @@ class FacultyController extends Controller
     
     function exportFacultyCommunityServiceExport(User $user)
     {
-        $user->with('faculty_community_service_dlsu')->get();
+        $user->with('faculty_community_service_dlsu','faculty_community_service_professional','faculty_community_service_government','faculty_community_service_others')->get();
         return Excel::download(new FacultyCommunityServiceExport($user), str_slug($user->name).'-CommunityService-' . time() . '.xlsx');
     }
     
@@ -156,4 +156,9 @@ class FacultyController extends Controller
         // return Excel::download(new FacultyCommunityServiceExport($user), str_slug($user->name).'-CommunityService-' . time() . '.xlsx');
     }
     
+    function facultySearchIndex()
+    {
+        $users = User::role('faculty')->paginate(15);
+        return view('faculty.search', compact('users'));
+    }
 }

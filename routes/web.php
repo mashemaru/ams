@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 	Route::get('faculty', ['as' => 'faculty.index', 'uses' => 'FacultyController@facultyIndex']);
+	Route::get('faculty/search', ['as' => 'faculty.search', 'uses' => 'FacultyController@facultySearchIndex']);
 	Route::get('faculty/{user}', ['as' => 'faculty.show', 'uses' => 'FacultyController@facultyShow']);
 	Route::get('faculty-profile', ['as' => 'faculty.profile', 'uses' => 'FacultyController@facultyProfile']);
 	Route::post('faculty-profile/{user}', ['as' => 'faculty.store', 'uses' => 'FacultyController@facultyStore']);

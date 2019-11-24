@@ -83,18 +83,10 @@
                             </div>
                             <div class="row">
                                 <div class="col-5">
-                                    <p class="mb-3 text-sm text-muted">User Type</p>
+                                    <p class="mb-3 text-sm text-muted">Faculty Classification</p>
                                 </div>
                                 <div class="col-7">
-                                    <p class="mb-0 text-sm"><b>{{ ucfirst(auth()->user()->user_type) }}</b></p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-5">
-                                    <p class="mb-3 text-sm text-muted">User Role</p>
-                                </div>
-                                <div class="col-7">
-                                    <p class="mb-0 text-sm"><b>{{ ucwords($roles->implode(', ')) }}</b></p>
+                                    <p class="mb-0 text-sm"><b>{{ ucfirst(auth()->user()->rank) }}</b></p>
                                 </div>
                             </div>
                         </div>
