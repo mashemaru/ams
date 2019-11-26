@@ -156,9 +156,24 @@ class FacultyController extends Controller
         // return Excel::download(new FacultyCommunityServiceExport($user), str_slug($user->name).'-CommunityService-' . time() . '.xlsx');
     }
     
-    function facultySearchIndex()
+    function facultySearch(Request $request)
     {
-        $users = User::role('faculty')->paginate(15);
-        return view('faculty.search', compact('users'));
+        $users = User::role('faculty');
+        $teaching_experience = array();
+
+        if ($request->has('query')) {
+            if($request->get('query') == 'teaching_experience') {
+                $teaching_experience = $users->select("users.rank",
+                \DB::raw('(SELECT SUM(years) FROM faculty_teaching_experience_dlsu WHERE faculty_teaching_experience_dlsu.user_id = users.id) as faculty_experience_dlsu'),
+                \DB::raw('(SELECT SUM(years) FROM faculty_teaching_experience_other WHERE faculty_teaching_experience_other.user_id = users.id) as faculty_experience_other'))
+                ->get()
+                ->groupBy('rank')
+                ->toArray();
+            }
+            // dd($teaching_experience);
+        }
+
+        // $users = User::role('faculty')->paginate(15);
+        return view('faculty.search', compact('teaching_experience'));
     }
 }

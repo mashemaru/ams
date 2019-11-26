@@ -764,3 +764,23 @@
   padding: 0.75rem 0.5rem;
 }
 
+.search-accordion .card-header {
+  position: relative;
+  cursor: pointer;
+}
+
+.search-accordion .card-header:after {
+  font: normal normal normal 14px/1 NucleoIcons;
+  line-height: 0;
+  position: absolute;
+  top: 50%;
+  right: 1.5rem;
+  content: "\EA0F";
+  transition: all 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform: translateY(-50%);
+}
+
+.search-accordion .card-header[aria-expanded=true]:after {
+  transform: rotate(180deg);
+}
+
