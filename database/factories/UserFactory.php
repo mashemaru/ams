@@ -21,6 +21,7 @@ $factory->define(User::class, function (Faker $faker) {
         'firstname' => $faker->firstName,
         'mi' => ucfirst($faker->randomLetter) . '.',
         'surname' => $faker->lastName,
+        'gender' => $faker->randomElement(array('male','female')),
         'college' => $faker->randomElement(array('CCS','CBA','CHRM')),
         'department' => $faker->randomElement(array('IT','INSYS','BA')),
         'email' => $faker->unique()->safeEmail,

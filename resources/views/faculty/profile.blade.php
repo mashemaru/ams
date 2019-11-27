@@ -67,6 +67,14 @@
                             <h6 class="heading-small text-muted mb-4">&nbsp</h6>
                             <div class="row">
                                 <div class="col-5">
+                                    <p class="mb-3 text-sm text-muted">Gender</p>
+                                </div>
+                                <div class="col-7">
+                                    <p class="mb-0 text-sm"><b>{{ ucfirst(auth()->user()->gender) }}</b></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-5">
                                     <p class="mb-3 text-sm text-muted">College/Unit</p>
                                 </div>
                                 <div class="col-7">

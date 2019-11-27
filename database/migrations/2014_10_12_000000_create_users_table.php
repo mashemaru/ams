@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('firstname');
             $table->string('mi')->nullable();
             $table->string('surname');
+            $table->string('gender')->default('male');
             $table->string('college')->nullable();
             $table->string('department')->nullable();
             $table->string('rank')->nullable();

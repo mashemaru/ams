@@ -64,6 +64,14 @@
                                             @endif
                                         </div>
                                         <div class="form-group">
+                                            <label class="form-control-label" for="input-gender">{{ __('Gender') }}</label>
+                                            <select id="input-gender" class="form-control form-control-alternative{{ $errors->has('gender') ? ' is-invalid' : '' }}" placeholder="{{ __('Gender') }}" name="gender" required>
+                                                <option value>Select Gender</option>
+                                                <option value="male"{{ ($user->gender == 'male') ? ' selected' : '' }}>Male</option>
+                                                <option value="female"{{ ($user->gender == 'female') ? ' selected' : '' }}>Female</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="form-control-label" for="input-college">{{ __('College') }}</label>
                                             <input class="form-control form-control-alternative" id="input-college" name="college" placeholder="College" type="text" value="{{ old('college', $user->college) }}">
                                         </div>
