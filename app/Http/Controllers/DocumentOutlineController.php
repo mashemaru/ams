@@ -62,9 +62,9 @@ class DocumentOutlineController extends Controller
      */
     public function edit(DocumentOutline $document_outline)
     {
-        $document_outline->with('scoring_type','comments','document','appendix_exhibit','document.accreditation','document.appendix_exhibit')->get();
+        $document_outline->with('scoring_type','comments','appendix_exhibit','document.agency','document.accreditation','document.appendix_exhibit')->get();
         $document_files = $document_outline->document->appendix_exhibit->unique()->diff($document_outline->appendix_exhibit);
-
+        
         return view('document-outline.edit', ['outline' => $document_outline, 'document_files' => $document_files->groupBy('file_type')]);
     }
 

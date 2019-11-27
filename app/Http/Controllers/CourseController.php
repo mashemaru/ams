@@ -83,6 +83,8 @@ class CourseController extends Controller
         $course = Course::create([
             'course_name' => $request->course_name,
             'course_code' => $request->course_code,
+            'college'     => $request->college,
+            'course_type' => $request->course_type,
             'is_academic' => ($request->academic) ? true : false,
             'units'       => ($request->units) ? $request->units : 0,
         ]);
@@ -144,6 +146,19 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $course->with('courseHardPreq','courseSoftPreq','courseCoReq','faculty','syllabus_history')->get();
+
+        if($course->course_type == 'general') {
+            $course->course_type = 'General';
+        } else if($course->course_type == 'major') {
+            $course->course_type = 'Major';
+        } else if($course->course_type == 'professional') {
+            $course->course_type = 'Professional elective';
+        } else if($course->course_type == 'free') {
+            $course->course_type = 'Free elective';
+        } else if($course->course_type == 'core') {
+            $course->course_type = 'Core subject';
+        }
+
         return view('course.show', compact('course'));
     }
 
@@ -183,6 +198,8 @@ class CourseController extends Controller
         $course->update([
             'course_name' => $request->course_name,
             'course_code' => $request->course_code,
+            'college'     => $request->college,
+            'course_type' => $request->course_type,
             'is_academic' => ($request->academic) ? true : false,
             'units'       => $request->units,
         ]);
@@ -282,5 +299,37 @@ class CourseController extends Controller
     public function downloadSyllabus(Request $request, Course $course)
     {
         return response()->download(storage_path('app/course/' . $course->course_code . '/' . $course->syllabus));
+    }
+
+    function courseSearch(Request $request)
+    {
+        $courses = Course::query();
+
+        $college = Course::select('college')->distinct()->get();
+
+        if ($request->filled('course_type')) {
+            $courses->where('course_type', $request->get('course_type'));
+        }
+    
+        if ($request->filled('college')) {
+            $courses->where('college', $request->get('college'));
+        }
+
+        return view('course.search', ['college' => $college, 'courses' => $courses->paginate(10) ]);
+    }
+
+    public function courseSearchDownload(Request $request)
+    {
+        $courses = Course::query();
+
+        if ($request->filled('course_type')) {
+            $courses->where('course_type', $request->course_type);
+        }
+    
+        if ($request->filled('college')) {
+            $courses->where('college', $request->college);
+        }
+        $pdf = \PDF::loadView('course.partials.download', ['courses' => $courses->get()]);
+        return $pdf->download('course-search-result.pdf');
     }
 }

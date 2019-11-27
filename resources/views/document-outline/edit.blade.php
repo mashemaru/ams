@@ -65,6 +65,17 @@
             </div>
         </div>
         <div class="col-xl-9 mb-5 mb-xl-0">
+            @if ($outline->document->accreditation->progress == 'initial')
+            <div class="card shadow mb-3">
+                <div class="card-body px-lg-5 py-lg-5">
+                    <div class="dd">
+                        <ol id="dd-list" class="dd-list">
+                            {!! renderDocumentSections(json_decode($outline->document->sections), $outline->document->agency->score_types ) !!}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            @else
             <form method="post" action="{{ route('document-outline.update', $outline) }}" autocomplete="off">
             @csrf
             @method('put')
@@ -131,6 +142,7 @@
                 </div>
                 @endif
             </form>
+            @endif
             <div class="card shadow">
                 <div class="card-header border-1">
                     <div class="row align-items-center">
@@ -307,8 +319,13 @@
 @endsection
 
 @push('js')
+<script src="/vendor/nestable/jquery.nestable.min.js"></script>
 <script>
 $(document).ready(function () {
+    $('.dd-list .removeclass').remove();
+    $('.dd-list input').attr('disabled', true);
+    $('.dd-list select').attr('disabled', true);
+    $('.dd').nestable({handleClass:'123'});
     $('#content').summernote({
         height: 450,
         followingToolbar: true,

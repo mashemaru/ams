@@ -176,4 +176,24 @@ class FacultyController extends Controller
         // $users = User::role('faculty')->paginate(15);
         return view('faculty.search', compact('teaching_experience'));
     }
+
+    public function facultySearchDownload(Request $request)
+    {
+        $users = User::role('faculty');
+        $teaching_experience = array();
+
+        if ($request->has('query')) {
+            if($request->get('query') == 'teaching_experience') {
+                $teaching_experience = $users->select("users.rank",
+                \DB::raw('(SELECT SUM(years) FROM faculty_teaching_experience_dlsu WHERE faculty_teaching_experience_dlsu.user_id = users.id) as faculty_experience_dlsu'),
+                \DB::raw('(SELECT SUM(years) FROM faculty_teaching_experience_other WHERE faculty_teaching_experience_other.user_id = users.id) as faculty_experience_other'))
+                ->get()
+                ->groupBy('rank')
+                ->toArray();
+            }
+        }
+
+        $pdf = \PDF::loadView('faculty.search.teaching_experience', compact('teaching_experience'));
+        return $pdf->download('faculty-search-result.pdf');
+    }
 }

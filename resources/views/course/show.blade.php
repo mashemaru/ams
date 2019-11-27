@@ -85,6 +85,22 @@
                     </div>
                     <div class="row">
                         <div class="col-5">
+                        <p class="mb-3 text-sm text-muted">Course Type</p>
+                        </div>
+                        <div class="col-7">
+                        <p class="mb-0 text-sm font-weight-bold">{{ $course->course_type }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                        <p class="mb-3 text-sm text-muted">College</p>
+                        </div>
+                        <div class="col-7">
+                        <p class="mb-0 text-sm font-weight-bold">{{ $course->college }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
                         <p class="mb-0 text-sm text-muted">Academic</p>
                         </div>
                         <div class="col-7">

@@ -17,17 +17,18 @@
                             </div>
                         </div>
                     </div>
-                    <form id="document" method="post" action="{{ route('accreditation.store') }}" autocomplete="off">
+                    <form id="document" method="post" action="{{ route('accreditation.update', $accreditation) }}" autocomplete="off">
                     @csrf
+                    @method('put')
                         <div class="card-body p-lg-5">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group{{ $errors->has('agency_id') ? ' has-danger' : '' }}">
                                         <label class="form-control-label" for="input-agency_id">{{ __('Agency') }}</label>
-                                        <select id="input-agency_id" class="form-control form-control-alternative{{ $errors->has('agency_id') ? ' is-invalid' : '' }}" placeholder="{{ __('Agency') }}" name="agency_id" required>
+                                        <select id="input-agency_id" class="form-control form-control-alternative{{ $errors->has('agency_id') ? ' is-invalid' : '' }}" placeholder="{{ __('Agency') }}" name="agency_id" disabled>
                                             <option value>Select Agency</option>
                                             @foreach ($agency as $a)
-                                                <option value="{{$a->id}}" {{ ($a->id == old('agency_id')) ? 'selected="selected"' : '' }}>{{ $a->agency_name }}</option>
+                                                <option value="{{$a->id}}" {{ ($a->id == $accreditation->agency_id) ? 'selected="selected"' : '' }}>{{ $a->agency_name }}</option>
                                             @endforeach
                                         </select>
                                         @if ($errors->has('agency_id'))
@@ -40,10 +41,10 @@
                                 <div class="col-md-6">
                                     <div class="form-group{{ $errors->has('program_id') ? ' has-danger' : '' }}">
                                         <label class="form-control-label" for="input-program_id">{{ __('Program') }}</label>
-                                        <select id="input-program_id" class="form-control form-control-alternative{{ $errors->has('program_id') ? ' is-invalid' : '' }}" placeholder="{{ __('Program') }}" name="program_id" required>
+                                        <select id="input-program_id" class="form-control form-control-alternative{{ $errors->has('program_id') ? ' is-invalid' : '' }}" placeholder="{{ __('Program') }}" name="program_id" disabled>
                                             <option value>Select Program</option>
                                             @foreach ($program as $p)
-                                                <option value="{{$p->id}}" {{ ($p->id == old('program_id')) ? 'selected="selected"' : '' }}>{{ $p->program_name }}</option>
+                                                <option value="{{$p->id}}" {{ ($p->id == $accreditation->program_id) ? 'selected="selected"' : '' }}>{{ $p->program_name }}</option>
                                             @endforeach
                                         </select>
                                         @if ($errors->has('program_id'))
@@ -60,11 +61,9 @@
                                         <label class="form-control-label" for="input-document_id">{{ __('Document Outline') }}</label>
                                         <select id="input-document_id" class="form-control form-control-alternative{{ $errors->has('document_id') ? ' is-invalid' : '' }}" placeholder="{{ __('Document Outline') }}" name="document_id" required>
                                             <option value>Select Document</option>
-                                            @if (session('document')) }}
-                                                @foreach (json_decode(session('document'), true) as $document)
-                                                <option value="{{ $document['id'] }}">{{ $document['name'] }}</option>
-                                                @endforeach
-                                            @endif
+                                            @foreach ($documents as $document)
+                                                <option value="{{ $document->id }}" {{ ($document->id == $accreditation->document_id) ? 'selected="selected"' : '' }}>{{ $document->document_name }}</option>
+                                            @endforeach
                                         </select>
                                         @if ($errors->has('document_id'))
                                             <span class="invalid-feedback" role="alert">
@@ -76,10 +75,10 @@
                                 <div class="col-md-6">
                                     <div class="form-group{{ $errors->has('type') ? ' has-danger' : '' }}">
                                         <label class="form-control-label" for="input-type">{{ __('Type') }}</label>
-                                        <select id="input-type" class="form-control form-control-alternative{{ $errors->has('type') ? ' is-invalid' : '' }}" placeholder="{{ __('Type') }}" name="type" required>
+                                        <select id="input-type" class="form-control form-control-alternative{{ $errors->has('type') ? ' is-invalid' : '' }}" placeholder="{{ __('Type') }}" name="type" disabled>
                                             <option value>Select Type</option>
-                                            <option value="initial" {{ ('initial' == old('type')) ? 'selected="selected"' : '' }}>Initial Accreditation</option>
-                                            <option value="reaccredit" {{ ('reaccredit' == old('type')) ? 'selected="selected"' : '' }}>Reaccreditation</option>
+                                            <option value="initial" {{ ('initial' == $accreditation->type) ? 'selected="selected"' : '' }}>Initial Accreditation</option>
+                                            <option value="reaccredit" {{ ('reaccredit' == $accreditation->type) ? 'selected="selected"' : '' }}>Reaccreditation</option>
                                         </select>
                                         @if ($errors->has('type'))
                                             <span class="invalid-feedback" role="alert">
@@ -89,7 +88,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="row">
+                            <div class="row">
                                 <div class="col-6">
                                     <div class="form-group{{ $errors->has('report_submission_date') ? ' has-danger' : '' }}">
                                         <label class="form-control-label">Report Submission Date</label>
@@ -112,7 +111,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
                         </div>
                         <div class="card-footer py-4">
                             <div class="text-right">
@@ -129,19 +128,4 @@
 @endsection
 @push('js')
 <script src="/vendor/datepicker/bootstrap-datepicker.min.js"></script>
-<script>
-$('#document').on('change', 'select[name="agency_id"]', function () {
-    $("#input-document_id").html('<option value>Select Document</option>');
-    if(this.value) {
-        $.getJSON( "/getAgencyDocument/" + this.value, function( data ) {
-            var items = [];
-            items.push( "<option value>Select Document</option>" );
-            $.each( data, function( key, value) {
-                items.push( "<option value='" + value.id + "'>" +  value.name + "</option>" );
-            });
-            $("#input-document_id").html( items );
-        });
-    }
-});
-</script>
 @endpush

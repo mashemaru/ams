@@ -17,6 +17,8 @@ class CreateCoursesTable extends Migration
             $table->bigIncrements('id');
             $table->text('course_name');
             $table->text('course_code');
+            $table->text('college')->nullable();
+            $table->enum('course_type', ['general', 'major', 'professional', 'free', 'core'])->nullable();
             $table->text('syllabus')->nullable();
             $table->boolean('is_academic')->default(true);
             $table->decimal('units', 8, 2)->default('0');

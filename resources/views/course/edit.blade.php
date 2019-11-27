@@ -50,6 +50,33 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
+                                        <label class="form-control-label">{{ __('Course Type') }}</label>
+                                        <select class="form-control form-control-alternative" name="course_type" required>
+                                            <option value>Select Course Type</option>
+                                            <option value="general"{{ ($course->course_type == 'general') ? ' selected="selected"' : '' }}>General</option>
+                                            <option value="major"{{ ($course->course_type == 'major') ? ' selected="selected"' : '' }}>Major</option>
+                                            <option value="professional"{{ ($course->course_type == 'professional') ? ' selected="selected"' : '' }}>Professional elective</option>
+                                            <option value="free"{{ ($course->course_type == 'free') ? ' selected="selected"' : '' }}>Free elective</option>
+                                            <option value="core"{{ ($course->course_type == 'core') ? ' selected="selected"' : '' }}>Core subject</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group{{ $errors->has('college') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-college">{{ __('College') }}</label>
+                                        <input type="text" name="college" id="input-college" class="form-control form-control-alternative{{ $errors->has('college') ? ' is-invalid' : '' }}" placeholder="{{ __('College') }}" value="{{ old('college', $course->college) }}">
+
+                                        @if ($errors->has('college'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('college') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
                                         <label class="form-control-label">{{ __('Hard Prerequisite') }}</label>
                                         <select class="form-control form-control-alternative select2" name="hardPrerequisite[]" data-toggle="select" multiple data-placeholder="Select hard prerequisite">
                                             @foreach ($courses as $c)

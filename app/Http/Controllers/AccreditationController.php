@@ -53,8 +53,8 @@ class AccreditationController extends Controller
             'program_id'             => 'required|exists:programs,id',
             'document_id'            => 'required|exists:documents,id|unique:accreditations',
             'type'                   => 'required',
-            'report_submission_date' => 'required|date_format:Y-m-d|after:now',
-            'onsite_visit_date'      => 'required|date_format:Y-m-d|after:report_submission_date',
+            // 'report_submission_date' => 'required|date_format:Y-m-d|after:now',
+            // 'onsite_visit_date'      => 'required|date_format:Y-m-d|after:report_submission_date',
         ], ['document_id.unique'     => 'Document already attached to an existing Accreditation.']);
 
         if ($validate->fails()) {
@@ -74,11 +74,13 @@ class AccreditationController extends Controller
             'program_id'             => $request->program_id,
             'document_id'            => $request->document_id,
             'type'                   => $request->type,
-            'report_submission_date' => $request->report_submission_date,
-            'onsite_visit_date'      => $request->onsite_visit_date,
+            'progress'               => 'initial',
+            // 'report_submission_date' => $request->report_submission_date,
+            // 'onsite_visit_date'      => $request->onsite_visit_date,
         ]);
 
-        return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Accreditation successfully created.'));
+        return redirect()->route('accreditation.index')->withToastSuccess(__('Accreditation successfully created.'));
+        // return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Accreditation successfully created.'));
     }
 
     /**
@@ -101,7 +103,10 @@ class AccreditationController extends Controller
      */
     public function edit(Accreditation $accreditation)
     {
-        //
+        $agency = Agency::select('id','agency_name')->get();
+        $program = Program::select('id','program_name')->get();
+        $documents = Document::select('id','document_name')->get();
+        return view('accreditation.edit',compact('accreditation','agency','program','documents'));
     }
 
     /**
@@ -113,7 +118,13 @@ class AccreditationController extends Controller
      */
     public function update(Request $request, Accreditation $accreditation)
     {
-        //
+        $accreditation->update([
+            'document_id'            => $request->document_id,
+            'progress'               => 'formal',
+            'report_submission_date' => $request->report_submission_date,
+            'onsite_visit_date'      => $request->onsite_visit_date,
+        ]);
+        return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Accreditation formally started.'));
     }
 
     /**

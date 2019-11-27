@@ -40,19 +40,30 @@
                                         <td>{{ $a->document->document_name }}</td>
                                         <td>{{ ($a->type == 'initial') ? 'Initial Accreditation' : 'Reaccreditation' }}</td>
                                         <td>
-                                            <div class="d-flex align-items-center">
-                                                <span class="mr-2">{{ number_format($a->timeline->status) }}%</span>
-                                                <div>
-                                                    <div class="progress">
-                                                    <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="{{ $a->timeline->status }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $a->timeline->status }}%;"></div>
+                                            @if($a->progress == 'initial')
+                                                <div class="d-flex align-items-center">
+                                                    <span class="mr-2">0%</span>
+                                                    <div>
+                                                        <div class="progress">
+                                                        <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            @else
+                                                <div class="d-flex align-items-center">
+                                                    <span class="mr-2">{{ number_format($a->timeline->status) }}%</span>
+                                                    <div>
+                                                        <div class="progress">
+                                                        <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="{{ $a->timeline->status }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $a->timeline->status }}%;"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </td>
                                         <td>{{ ($a->result) ?: 'N/A' }}</td>
                                         <td>{{ ($a->end_date) ? $a->end_date->format('M d Y') : 'N/A' }}</td>
                                         <td>
-                                            @if ($a->progress != 'completed')
+                                            @if ($a->progress != 'completed' && $a->progress != 'initial')
                                             <button class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#timelineModal-{{ $a->id }}"><span class="btn-inner--icon"><i class="ni ni-calendar-grid-58 mr-1"></i></span> Timeline</button>
                                             @endif
                                         </td>
@@ -62,6 +73,9 @@
                                                     <i class="fas fa-ellipsis-v"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                    @if ($a->progress == 'initial')
+                                                    <a href="{{ route('accreditation.edit', $a) }}" class="dropdown-item">{{ __('Formal Accredit') }}</a>
+                                                    @endif
                                                     <a href="{{ route('accreditation.show', $a) }}" class="dropdown-item">{{ __('View Summary') }}</a>
                                                     @if ($a->progress != 'completed')
                                                         <a href="{{ route('accreditation.assignTeam', $a) }}" class="dropdown-item">{{ __('Assign Team') }}</a>
@@ -78,6 +92,7 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    @if($a->progress != 'initial')
                                     <!-- Modal -->
                                     <div class="modal fade" id="timelineModal-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="timelineModalLabel-{{ $a->id }}" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -134,6 +149,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
                                     <!-- Modal -->
                                     <div class="modal fade" id="modal-evidence-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-evidence-{{ $a->id }}" aria-hidden="true">
                                         <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">

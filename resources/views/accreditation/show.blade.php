@@ -112,7 +112,9 @@
                                     <p class="mb-3 text-sm text-muted">Report Submission Date</p>
                                 </div>
                                 <div class="col-7">
+                                    @if($accreditation->progress != 'initial')
                                     <p class="mb-0 text-sm"><b class="font-weight-bold">{{ $accreditation->report_submission_date->format('M d Y') }}</b></p>
+                                    @endif
                                 </div>
                             </div>
                             <div class="row">
@@ -120,7 +122,9 @@
                                     <p class="mb-3 text-sm text-muted">On-Site Visit Date</p>
                                 </div>
                                 <div class="col-7">
+                                    @if($accreditation->progress != 'initial')
                                     <p class="mb-0 text-sm"><b class="font-weight-bold">{{ $accreditation->onsite_visit_date->format('M d Y') }}</b></p>
+                                    @endif
                                 </div>
                             </div>
                             <div class="row">

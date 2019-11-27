@@ -53,6 +53,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('curriculum', 'CurriculumController');
 	Route::post('getCurriculumCourses', 'CurriculumController@getCurriculumCourses');
 	Route::resource('course', 'CourseController');
+	Route::get('course-search', ['as' => 'course.search', 'uses' => 'CourseController@courseSearch']);
+	Route::post('course-search-download', ['as' => 'course.search-download', 'uses' => 'CourseController@courseSearchDownload']);
 	Route::post('course-syllabus/{course}', ['as' => 'course.syllabus', 'uses' => 'CourseController@downloadSyllabus']);
 	Route::put('courseSyllabus/{course}', ['as' => 'courseSyllabus.update', 'uses' => 'CourseController@updateSyllabus']);
 	Route::post('uploadImage', 'DocumentOutlineController@image_upload');
@@ -68,7 +70,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 	Route::get('faculty', ['as' => 'faculty.index', 'uses' => 'FacultyController@facultyIndex']);
-	Route::get('faculty/search', ['as' => 'faculty.search', 'uses' => 'FacultyController@facultySearch']);
+	Route::get('faculty-search', ['as' => 'faculty.search', 'uses' => 'FacultyController@facultySearch']);
+	Route::post('faculty-search-download', ['as' => 'faculty.search-download', 'uses' => 'FacultyController@facultySearchDownload']);
 	Route::get('faculty/{user}', ['as' => 'faculty.show', 'uses' => 'FacultyController@facultyShow']);
 	Route::get('faculty-profile', ['as' => 'faculty.profile', 'uses' => 'FacultyController@facultyProfile']);
 	Route::post('faculty-profile/{user}', ['as' => 'faculty.store', 'uses' => 'FacultyController@facultyStore']);
