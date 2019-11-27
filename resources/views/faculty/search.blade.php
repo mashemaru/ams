@@ -15,6 +15,7 @@
                         <select class="form-control form-control-alternative" name="query">
                             <option value>Select Search</option>
                             <option value="teaching_experience"{{ (request()->get('query') == 'teaching_experience') ? ' selected' : '' }}>Teaching Experience</option>
+                            <option value="professional_experience"{{ (request()->get('query') == 'professional_experience') ? ' selected' : '' }}>Professional Experience</option>
                         </select>
                         {{-- <div class="accordion search-accordion" id="search-accordion">
                             <div class="card">
@@ -58,6 +59,7 @@
                     </div>
                     <div class="card-footer py-4">
                         <div class="text-right">
+                            <a href="{{ route('faculty.search') }}" class="btn btn-warning">Reset</a>
                             <button type="submit" class="btn btn-primary">Search</button>
                         </div>
                     </div>
