@@ -4,30 +4,16 @@
     @include('layouts.headers.cards')
 
     <div class="container-fluid mt--7">
-        <div class="row">
+        @foreach($accreditations as $accreditation_doc)
+        <div class="row mb-4">
             <div class="col">
                 <div class="card shadow">
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Document Outlines') }}</h3>
+                                <h3 class="mb-0">{{ $accreditation_doc->first()->accreditation->agency->agency_code }} - {{ $accreditation_doc->first()->accreditation->program->program_code }}</h3>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="col-12">
-                        @if ($errors->any())
-                            <div class="alert alert-danger alert-dismissible fade show">
-                                <ul class="m-0 pl-4">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        @endif
                     </div>
 
                     <div class="table-responsive">
@@ -41,7 +27,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($documents as $doc)
+                                @foreach ($accreditation_doc as $doc)
                                     <tr>
                                         <td>{{ $doc->document->document_name }}</td>
                                         <td>{{ $doc->section }}</td>
@@ -61,15 +47,10 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="card-footer py-4">
-                        <nav class="d-flex justify-content-end" aria-label="...">
-                            {{ $documents->links() }}
-                        </nav>
-                    </div>
                 </div>
             </div>
         </div>
-            
+        @endforeach
         @include('layouts.footers.auth')
     </div>
 @endsection

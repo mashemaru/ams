@@ -23,7 +23,7 @@ class AccreditationController extends Controller
      */
     public function index(Accreditation $accreditation)
     {
-        $accreditation->with('agency','program','document','timeline')->get();
+        $accreditation->load('agency','program','document','timeline');
         return view('accreditation.index', ['accreditations' => $accreditation->paginate(15)]);
     }
 
@@ -51,12 +51,13 @@ class AccreditationController extends Controller
         $validate = Validator::make($request->all(), [
             'agency_id'              => 'required|exists:agencies,id',
             'program_id'             => 'required|exists:programs,id',
-            'document_id'            => 'required|exists:documents,id|unique:accreditations',
+            'document_id'            => 'required|exists:documents,id',
+            // 'document_id'            => 'required|exists:documents,id|unique:accreditations',
             'type'                   => 'required',
             // 'report_submission_date' => 'required|date_format:Y-m-d|after:now',
             // 'onsite_visit_date'      => 'required|date_format:Y-m-d|after:report_submission_date',
-        ], ['document_id.unique'     => 'Document already attached to an existing Accreditation.']);
-
+        // ], ['document_id.unique'     => 'Document already attached to an existing Accreditation.']);
+        ]);
         if ($validate->fails()) {
             $agency = Agency::findOrFail($request->agency_id);
             $documents = [];
@@ -79,8 +80,22 @@ class AccreditationController extends Controller
             // 'onsite_visit_date'      => $request->onsite_visit_date,
         ]);
 
-        return redirect()->route('accreditation.index')->withToastSuccess(__('Accreditation successfully created.'));
-        // return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Accreditation successfully created.'));
+        foreach(json_decode($accreditation->document->sections) as $s) {
+            $root = $accreditation->document->outlines()->create([
+                'accred_id'         => $accreditation->id,
+                'parent_id'         => 0,
+                'root_parent_id'    => 0,
+                'section'           => $s->section,
+                'doc_type'          => isset($s->doc_type) ? $s->doc_type : 'Narrative',
+                'score_type'        => isset($s->score) ? $s->score : 0,
+            ]);
+            if(isset($s->children)) {
+                $accreditation->document->saveChildrenRecursively($s, $root->id, $root->id, $accreditation->id);
+            }
+        }
+
+        // return redirect()->route('accreditation.index')->withToastSuccess(__('Accreditation successfully created.'));
+        return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Accreditation successfully created.'));
     }
 
     /**
@@ -91,7 +106,7 @@ class AccreditationController extends Controller
      */
     public function show(Accreditation $accreditation)
     {
-        $accreditation->with('agency','program','document','teams','teams.head','teams.users')->get();
+        $accreditation->load('agency','program','document','teams','teams.head','teams.users');
         return view('accreditation.show', compact('accreditation'));
     }
 
@@ -143,13 +158,13 @@ class AccreditationController extends Controller
     public function assign_team(Accreditation $accreditation)
     {
         $allTeams = Team::all();
-        $accreditation->with('agency','teams','program','document','document.outline_root')->get();
+        $accreditation->load('agency','teams','program','document','document.outline_root');
         return view('team.assign',compact('accreditation','allTeams'));
     }
 
     public function generateDocument(Accreditation $accreditation)
     {
-        $accreditation->with('agency','program','document','document.outlines')->get();
+        $accreditation->load('agency','program','document','document.outlines');
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
         foreach($accreditation->document->outlines as $outline) {
@@ -185,7 +200,7 @@ class AccreditationController extends Controller
 
     public function completeAccreditation(Request $request, Timeline $timeline)
     {
-        $timeline->with('accreditation')->get();
+        $timeline->load('accreditation');
 
         $validate = Validator::make($request->all(), [
             'accreditation_result' => 'required|min:2',

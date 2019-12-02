@@ -52,6 +52,11 @@ class Accreditation extends Model
         return $this->belongsToMany('App\DocumentOutline', 'document_team', 'document_id');
     }
 
+    public function outlines()
+    {
+        return $this->hasMany('App\DocumentOutline', 'accred_id');
+    }
+
     public function getEvidenceCanUploadAttribute()
     {
         return $this->evidence_complete;
