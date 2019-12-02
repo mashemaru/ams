@@ -17,7 +17,7 @@ class AgencyController extends Controller
     public function index(Agency $agency)
     {
         $scoringType = ScoringType::all();
-        $agency->with('score_types')->get();
+        $agency->load('score_types');
         return view('agency.index', ['agencies' => $agency->paginate(15), 'scoringType' => $scoringType]);
     }
 
@@ -66,7 +66,7 @@ class AgencyController extends Controller
      */
     public function edit(Agency $agency)
     {
-        $agency->with('score_types');
+        $agency->load('score_types');
         $scoringType = ScoringType::all();
         return view('agency.edit', compact('agency','scoringType'));
     }

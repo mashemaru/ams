@@ -17,7 +17,7 @@ class CurriculumController extends Controller
      */
     public function index(Curriculum $curriculum)
     {
-        $curriculum->with('courses')->get();
+        $curriculum->load('courses');
         return view('curriculum.index', ['curriculums' => $curriculum->paginate(15)]);
     }
 
@@ -82,7 +82,7 @@ class CurriculumController extends Controller
      */
     public function show(Curriculum $curriculum)
     {
-        $curriculum->with('courses','courses.courseHardPreq','courses.courseSoftPreq','courses.courseCoReq','program','curriculum_courses')->get();
+        $curriculum->load('courses','courses.courseHardPreq','courses.courseSoftPreq','courses.courseCoReq','program','curriculum_courses');
         $terms = $curriculum->courses->groupBy('pivot.term');
         return view('curriculum.show', compact('curriculum','terms'));
     }

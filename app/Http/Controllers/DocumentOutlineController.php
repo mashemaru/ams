@@ -16,10 +16,12 @@ class DocumentOutlineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(DocumentOutline $document_outline)
+    public function index()
     {
-        $document_outline->with('document');
-        return view('document.outline.index', ['documents' => $document_outline->paginate(15)]);
+        $document_outline = DocumentOutline::with('document','accreditation.agency','accreditation.program');
+        // dd($document_outline->paginate(15));
+        // dd($document_outline->paginate(15)->groupBy('accreditation.id'));
+        return view('document.outline.index', ['accreditations' => $document_outline->paginate(15)->groupBy('accreditation.id')]);
     }
 
     /**

@@ -24,6 +24,7 @@ class CreateDocumentsTable extends Migration
         Schema::create('document_outline', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('document_id');
+            $table->unsignedBigInteger('accred_id');
             $table->unsignedBigInteger('parent_id')->default(0);
             $table->unsignedBigInteger('root_parent_id')->default(0);
             $table->text('section')->nullable();

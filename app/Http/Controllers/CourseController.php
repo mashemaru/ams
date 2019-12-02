@@ -20,7 +20,7 @@ class CourseController extends Controller
     public function index(Request $request, Course $course)
     {
         if ($request->ajax()) {
-            $data = $course->with('courseHardPreq','courseSoftPreq','courseCoReq')->get();
+            $data = $course->load('courseHardPreq','courseSoftPreq','courseCoReq');
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('is_academic', function($data){
@@ -145,7 +145,7 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        $course->with('courseHardPreq','courseSoftPreq','courseCoReq','faculty','syllabus_history')->get();
+        $course->load('courseHardPreq','courseSoftPreq','courseCoReq','faculty','syllabus_history');
 
         if($course->course_type == 'general') {
             $course->course_type = 'General';
@@ -170,7 +170,7 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        $course->with('courseHardPreq','courseSoftPreq','courseCoReq','faculty')->get();
+        $course->load('courseHardPreq','courseSoftPreq','courseCoReq','faculty');
         $courses = Course::select('id','course_name')->get()->except($course->id);
         $users = User::select('id','firstname','mi','surname')->role('faculty')->get();
         return view('course.edit', compact('course','courses','users'));
