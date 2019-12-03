@@ -128,18 +128,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="form-control-label">{{ __('Faculty Members') }}</label>
-                                        <select class="form-control form-control-alternative select2" name="faculty_members[]" data-toggle="select" multiple data-placeholder="Select faculty member">
-                                            @foreach ($users as $user)
-                                                <option value="{{$user->id}}">{{ $user->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="card-footer py-4">
                             <div class="text-right">

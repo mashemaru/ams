@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Task;
+use App\User;
 use App\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -17,11 +18,14 @@ class TaskController extends Controller
     public function index(Task $task)
     {
         auth()->user()->load('teams','teams.users','teams.head','team_head','team_head.users');
-        if(auth()->user()->teams->isEmpty())
+        if(auth()->user()->teams->isEmpty() && auth()->user()->team_head->isEmpty())
+            $users = User::all();
+        elseif(auth()->user()->teams->isEmpty())
             $users = auth()->user()->team_head->first()->users;
         elseif(auth()->user()->team_head->isEmpty())
             $users = auth()->user()->teams->first()->users->push(auth()->user()->teams->first()->head);
-
+            
+    
         return view('task.index', ['tasks' => $task->paginate(15), 'users' => $users]);
     }
 

@@ -543,3 +543,7 @@
 .search-accordion .card-header[aria-expanded=true]:after {
     transform: rotate(180deg);
 }
+
+.selected .text-primary {
+    color: #f6f9fc!important;
+}

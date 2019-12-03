@@ -17,6 +17,7 @@ class CreateAppendixExhibitsTable extends Migration
             $table->bigIncrements('id');
             $table->text('name');
             $table->text('code');
+            $table->enum('type', ['appendix', 'exhibit']);
             $table->boolean('evidence_complete')->default(false);
             $table->timestamps();
         });
@@ -24,6 +25,12 @@ class CreateAppendixExhibitsTable extends Migration
         Schema::create('appendix_exhibits_evidence', function (Blueprint $table) {
             $table->unsignedBigInteger('appendix_exhibit_id');
             $table->unsignedBigInteger('evidence_id');
+        });
+
+        Schema::create('document_outline_appendix_exhibits', function (Blueprint $table) {
+            $table->unsignedBigInteger('document_outline_id');
+            $table->unsignedBigInteger('appendix_exhibits_id');
+            $table->unsignedBigInteger('accreditation_id');
         });
     }
 
@@ -35,5 +42,7 @@ class CreateAppendixExhibitsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('appendix_exhibits');
+        Schema::dropIfExists('appendix_exhibits_evidence');
+        Schema::dropIfExists('document_outline_appendix_exhibits');
     }
 }

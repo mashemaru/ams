@@ -20,7 +20,7 @@ class CourseController extends Controller
     public function index(Request $request, Course $course)
     {
         if ($request->ajax()) {
-            $data = $course->load('courseHardPreq','courseSoftPreq','courseCoReq');
+            $data = $course->with('courseHardPreq','courseSoftPreq','courseCoReq')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('is_academic', function($data){
@@ -107,7 +107,7 @@ class CourseController extends Controller
         }
         $course->requisites()->detach();
         $course->requisites()->attach($requisites);
-        $course->faculty()->sync($request->faculty_members);
+        // $course->faculty()->sync($request->faculty_members);
 
         if($request->hasFile('syllabus')) {
             $filename = $course->course_code . '_syllabus_' .now()->format("m-d-Y-his") .'.'. $request->syllabus->getClientOriginalExtension();

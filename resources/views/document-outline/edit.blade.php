@@ -159,56 +159,60 @@
                                     <th scope="col">Code</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Type</th>
-                                    <th scope="col">Last Update</th>
+                                    <th scope="col">Evidences</th>
                                     <th scope="col" width="2%"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @php $index = 'A'; @endphp
                                 @foreach($outline->appendix_exhibit as $data)
                                 <tr>
-                                    <th scope="row">Exhibit {{ $index++ }}</th>
-                                    <th scope="row">{{ $data->file_name }}</th>
-                                    <td scope="row">{{ ucfirst($data->file_type) }}</td>
-                                    <td scope="row">{{ $data->updated_at->diffForHumans() }}</td>
+                                    <th scope="row">{{ $data->code }}</th>
+                                    <th scope="row">{{ $data->name }}</th>
+                                    <td scope="row">{{ ucfirst($data->type) }}</td>
+                                    <td scope="row">
+                                        @if($data->evidences->isNotEmpty())
+                                        {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $data->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
                                     @if (!$outline->document->accreditation->evidence_can_upload)
                                     <td class="text-right">
+                                        @if(!$data->evidence_complete)
                                         <div class="dropdown">
                                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                                    data-target="#evidenceModal">Add Evidences</a>
-                                                <a class="dropdown-item" href="#">Remove</a>
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#evidenceModal{{ $data->id }}">Add Evidences</a>
+                                                {{-- <a class="dropdown-item" href="#">Remove</a> --}}
                                             </div>
                                         </div>
-            
-                                        <div class="modal fade" id="evidenceModal" tabindex="-1" role="dialog"
-                                            aria-labelledby="evidenceModalLabel" aria-hidden="true">
+                                        @endif
+                                        <div class="modal fade" id="evidenceModal{{ $data->id }}" tabindex="-1" role="dialog" aria-labelledby="evidenceModal{{ $data->id }}Label" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                 <div class="modal-content">
+                                                <form enctype="multipart/form-data" method="post" action="{{ route('evidence.upload', $data) }}" autocomplete="off">
+                                                    @csrf
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="evidenceModalLabel">Add Evidence</h5>
+                                                        <h5 class="modal-title" id="evidenceModal{{ $data->id }}Label">Add Evidence</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form role="form">
-                                                            <div class="form-group mb-3">
-                                                                <label class="form-control-label" style="float: left">Select
-                                                                    File</label>
-                                                                <input type="file" class="form-control" multiple>
-                                                            </div>
-                                                        </form>
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-control-label" style="float: left">Select File</label>
+                                                            <input type="hidden" name="accreditation" value="{{ $outline->document->accreditation->id }}">
+                                                            <input type="file" class="form-control" name="file">
+                                                        </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Cancel</button>
-                                                        <button type="button" class="btn btn-success">Add</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-success">Add</button>
                                                     </div>
+                                                </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -243,7 +247,7 @@
     @if (!$outline->document->accreditation->evidence_can_upload)
     <!-- Modal -->
     <div class="modal fade" id="selectModal1" tabindex="-1" role="dialog" aria-labelledby="selectModalLabel1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="selectModalLabel">Select Appendix/Exhibit</h5>
@@ -251,10 +255,24 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-            <form method="post" action="{{ route('outline.select', $outline) }}" autocomplete="off">
+            <form method="post" id="outline_select" action="{{ route('outline.select', $outline) }}" autocomplete="off">
                 @csrf
+                <input type="hidden" name="selected">
                 <div class="modal-body">
-                    @foreach($document_files as $key => $files)
+                    <div class="table-responsive">
+                        <table class="table data-table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Evidences</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    {{-- @foreach($document_files as $key => $files)
                     <h6 class="heading-small text-muted mb-2">{{ $key }}</h6>
                         @foreach($files as $file)
                         <div class="custom-control custom-checkbox mb-3">
@@ -262,13 +280,11 @@
                             <label class="custom-control-label" for="customCheck{{ $file->id }}">{{ $file->file_name }}</label>
                         </div>
                         @endforeach
-                    @endforeach
+                    @endforeach --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                @if(!$document_files->isEmpty())
                     <button type="submit" class="btn btn-success">Save</button>
-                @endif
                 </div>
             </form>
             </div>
@@ -320,6 +336,8 @@
 
 @push('js')
 <script src="/vendor/nestable/jquery.nestable.min.js"></script>
+<link href="/vendor/datatables/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="{{ asset('js/dataTables.js') }}"></script>
 <script>
 $(document).ready(function () {
     $('.dd-list .removeclass').remove();
@@ -348,6 +366,33 @@ $(document).ready(function () {
             },
         }
     });
+
+    var dataTable = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('appendices-exhibits.select',$outline->id) }}",
+        columns: [
+            {data: 'id', name: 'id', visible: false},
+            {data: 'code', name: 'code'},
+            {data: 'name', name: 'name'},
+            {data: 'type', name: 'type'},
+            {data: 'evidences', name: 'evidences.file_name', orderable: false, searchable: false},
+        ],
+        order:[0,'desc'],
+        language: {
+            paginate: {
+                previous: "<i class='fas fa-angle-left'>",
+                next: "<i class='fas fa-angle-right'>"
+            }
+        },
+        createdRow: function( row, data, dataIndex ) {
+            $( row ).find('td:eq(2)').attr('class', 'text-primary d-flex align-items-center');
+        }
+    });
+    $('.data-table tbody').on( 'click', 'tr', function () {
+        $(this).toggleClass('selected');
+        $('#outline_select input[name="selected"]').val(dataTable.rows('.selected').data().pluck('id').toArray());
+    } );
 });
 const Toast = Swal.mixin({
     toast: true,

@@ -34,11 +34,10 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col"></th>
-                                    <th scope="col">{{ __('File Name') }}</th>
-                                    <th scope="col">{{ __('File Type') }}</th>
-                                    <th scope="col">{{ __('File') }}</th>
-                                    <th scope="col">{{ __('Uploaded By') }}</th>
-                                    <th scope="col">{{ __('Uploaded on') }}</th>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Evidences</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -63,11 +62,10 @@
             ajax: "{{ route('appendices-exhibits.index') }}",
             columns: [
                 {data: 'id', name: 'id', visible: false},
-                {data: 'file_name', name: 'file_name'},
-                {data: 'file_type', name: 'file_type'},
-                {data: 'file', name: 'file'},
-                {data: 'user_id', name: 'user_id'},
-                {data: 'created_at', name: 'created_at'},
+                {data: 'code', name: 'code'},
+                {data: 'name', name: 'name'},
+                {data: 'type', name: 'type'},
+                {data: 'evidences', name: 'evidences.file_name', orderable: false, searchable: false},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
             order:[0,'desc'],

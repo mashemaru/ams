@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\FileRepository;
+use App\AppendixExhibit;
+use App\DocumentOutline;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\Datatables\Datatables;
@@ -144,29 +146,62 @@ class FileRepositoryController extends Controller
     public function appendicesExhibits(Request $request, FileRepository $FileRepository)
     {
         if ($request->ajax()) {
-            
-            $data = $FileRepository->with('user')->whereIn('file_type', ['appendix','exhibit'])->get();
+            $data = AppendixExhibit::with('evidences')->get();
+            // $data = $FileRepository->with('user')->whereIn('file_type', ['appendix','exhibit'])->get();
+            // <th scope="row">{{ $data->code }}</th>
+            // <th scope="row">{{ $data->name }}</th>
+            // <td scope="row">{{ ucfirst($data->type) }}</td>
+            // <td scope="row">
+            //     @if($data->evidences->isNotEmpty())
+            //     {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $data->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
+            //     @else
+            //         N/A
+            //     @endif
+            // </td>
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->editColumn('file_type', function($data){
-                    return ($data->file_type) ? ucfirst($data->file_type) : 'N\A';
+                ->addColumn('evidences', function($data) {
+                    return $data->evidences->map(function($c) {
+                        return $c->file_name;
+                    })->implode(', ');
                 })
-                ->editColumn('file_name', function($data){
-                    return ($data->file_name) ? '<strong>'.$data->file_name.'</strong>' : 'N\A';
-                })
-                ->editColumn('file', function($data){
-                    return ($data->file) ? '<div class="file-icon mr-2" data-file="'.pathinfo($data->file, PATHINFO_EXTENSION).'"></div> ' . $data->file : 'N\A';
-                })
-                ->editColumn('user_id', function($data) {
-                    return $data->user->name;
-                })
-                ->editColumn('created_at', function($data) {
-                    return $data->created_at->diffForHumans();
-                })
+                // ->editColumn('file_type', function($data){
+                //     return ($data->file_type) ? ucfirst($data->file_type) : 'N\A';
+                // })
+                // ->editColumn('file_name', function($data){
+                //     return ($data->file_name) ? '<strong>'.$data->file_name.'</strong>' : 'N\A';
+                // })
+                // ->editColumn('file', function($data){
+                //     return ($data->file) ? '<div class="file-icon mr-2" data-file="'.pathinfo($data->file, PATHINFO_EXTENSION).'"></div> ' . $data->file : 'N\A';
+                // })
+                // ->editColumn('user_id', function($data) {
+                //     return $data->user->name;
+                // })
+                // ->editColumn('created_at', function($data) {
+                //     return $data->created_at->diffForHumans();
+                // })
                 ->addColumn('action', function($row){
-                    return '<a href="'.route('file-repository.download', $row->id).'" class="btn btn-dark btn-sm"><i class="fas fa-download"></i> Download</a>';
+                    return view('file-repo.partials.indexDropdown', ['appendix_exhibits' => $row]);
+                    // return '<a href="'.route('file-repository.download', $row->id).'" class="btn btn-dark btn-sm"><i class="fas fa-download"></i> Download</a>';
                 })
-                ->rawColumns(['file_name','file','action'])
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('file-repo.appendix-exhibits');
+    }
+
+    public function selectAppendicesExhibits(Request $request, DocumentOutline $document_outline)
+    {
+        if ($request->ajax()) {
+            $data = AppendixExhibit::with('evidences')->get()->diff($document_outline->appendix_exhibit);
+            // $data = AppendixExhibit::with('evidences')->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('evidences', function($data) {
+                    return $data->evidences->map(function($c) {
+                        return $c->file_name;
+                    })->implode(', ');
+                })
                 ->make(true);
         }
         return view('file-repo.appendix-exhibits');

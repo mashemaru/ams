@@ -784,3 +784,7 @@
   transform: rotate(180deg);
 }
 
+.selected .text-primary {
+  color: #f6f9fc !important;
+}
+

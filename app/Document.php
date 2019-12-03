@@ -50,9 +50,4 @@ class Document extends Model
     {
         return $this->hasOne('App\Accreditation', 'document_id');
     }
-
-    public function appendix_exhibit()
-    {
-        return $this->belongsToMany('App\FileRepository', 'appendix_exhibit', 'document_id', 'file_id');
-    }
 }

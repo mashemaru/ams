@@ -33,7 +33,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('document-outline', 'DocumentOutlineController');
 	Route::post('document-outlineUpload/{document_outline}', ['as' => 'outline.upload', 'uses' => 'DocumentOutlineController@outlineUpload']);
 	Route::post('document-outlineSelect/{document_outline}', ['as' => 'outline.select', 'uses' => 'DocumentOutlineController@outlineSelect']);
+	Route::post('evidenceUpload/{appendix_exhibit}', ['as' => 'evidence.upload', 'uses' => 'DocumentOutlineController@evidenceUpload']);
+	Route::post('evidence-complete/{appendix_exhibit}', ['as' => 'evidence.complete', 'uses' => 'DocumentOutlineController@evidenceComplete']);
 	Route::get('appendices-exhibits', ['as' => 'appendices-exhibits.index', 'uses' => 'FileRepositoryController@appendicesExhibits']);
+	Route::get('select-appendices-exhibits/{document_outline}', ['as' => 'appendices-exhibits.select', 'uses' => 'FileRepositoryController@selectAppendicesExhibits']);
 	Route::resource('file-repository', 'FileRepositoryController', ['except' => ['show']]);
 	Route::get('file/{file_repository}', ['as' => 'file-repository.download', 'uses' => 'FileRepositoryController@download']);
 	Route::post('fileUpload/', ['as' => 'file-repository.upload', 'uses' => 'FileRepositoryController@upload']);
@@ -49,7 +52,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('generateDocument/{accreditation}', ['as' => 'accreditation.generate', 'uses' => 'AccreditationController@generateDocument']);
 	Route::get('accreditationComplete/{timeline}', ['as' => 'accreditation.show.complete', 'uses' => 'AccreditationController@showCompleteAccreditation']);
 	Route::post('accreditationComplete/{timeline}', ['as' => 'accreditation.complete', 'uses' => 'AccreditationController@completeAccreditation']);
-	Route::put('evidence-complete/{accreditation}', ['as' => 'accreditation.evidence.complete', 'uses' => 'AccreditationController@evidenceComplete']);
 	Route::resource('curriculum', 'CurriculumController');
 	Route::post('getCurriculumCourses', 'CurriculumController@getCurriculumCourses');
 	Route::resource('course', 'CourseController');

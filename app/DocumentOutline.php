@@ -34,7 +34,7 @@ class DocumentOutline extends Model
 
     public function appendix_exhibit()
     {
-        return $this->belongsToMany('App\FileRepository', 'appendix_exhibit', 'document_outline_id', 'file_id')->withPivot('document_id');
+        return $this->belongsToMany('App\AppendixExhibit', 'document_outline_appendix_exhibits', 'document_outline_id', 'appendix_exhibits_id');
     }
 
     public function scopeRootParent($query)

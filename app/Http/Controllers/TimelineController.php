@@ -47,7 +47,7 @@ class TimelineController extends Controller
             ['task' => $task]
         );
         
-        return redirect()->route('accreditation.index')->withToastSuccess(__('Timeline successfully created.'));
+        return redirect()->route('task.index')->withToastSuccess(__('Timeline successfully created.'));
         // return redirect()->route('team.create')->withToastSuccess(__('Timeline successfully created.'));
     }
 

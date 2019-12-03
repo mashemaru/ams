@@ -109,11 +109,13 @@
                             <label class="form-control-label">Assign to</label>
                             <div class="input-group input-group-alternative">
                                 <select class="form-control form-control-alternative select2" name="assign_to[]" data-toggle="select" multiple data-placeholder="Select scoring type">
+                                @if($users)
                                     @foreach ($users as $user)
                                         @if($user->id != auth()->user()->id)
                                         <option value="{{$user->id}}">{{ $user->name }}</option>
                                         @endif
                                     @endforeach
+                                @endif
                                 </select>
                             </div>
                             </div>
