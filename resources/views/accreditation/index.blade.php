@@ -150,38 +150,6 @@
                                         </div>
                                     </div>
                                     @endif
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="modal-evidence-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-evidence-{{ $a->id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
-                                            <div class="modal-content bg-gradient-danger">
-                                            
-                                                <div class="modal-header">
-                                                    <h6 class="modal-title">Your attention is required</h6>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">×</span>
-                                                    </button>
-                                                </div>
-                                                <form method="post" action="{{ route('accreditation.evidence.complete', $a ) }}" autocomplete="off">
-                                                @csrf
-                                                @method('put')
-                                                <div class="modal-body">
-                                                
-                                                    <div class="py-3 text-center">
-                                                        <i class="ni ni-bell-55 ni-3x"></i>
-                                                        <h4 class="heading mt-4">You should read this!</h4>
-                                                        <p>Completing the evidence would indicate the Appendix/Exhibit is closed and would render the Appendix/Exhibit uneditable. Are you sure the evidence is complete?</p>
-                                                    </div>
-                                                    
-                                                </div>
-                                                
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-white">Yes, it's complete</button>
-                                                    <button type="button" class="btn btn-link text-white ml-auto" data-dismiss="modal">No, it's not</button>
-                                                </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
                                 @endforeach
                             </tbody>
                         </table>
