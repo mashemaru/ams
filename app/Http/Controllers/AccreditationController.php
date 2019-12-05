@@ -139,7 +139,7 @@ class AccreditationController extends Controller
             'report_submission_date' => $request->report_submission_date,
             'onsite_visit_date'      => $request->onsite_visit_date,
         ]);
-        return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Accreditation formally started.'));
+        return redirect()->route('accreditation.index', $accreditation)->withToastSuccess(__('Accreditation formally started.'));
     }
 
     /**

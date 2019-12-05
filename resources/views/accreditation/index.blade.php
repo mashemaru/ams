@@ -63,7 +63,7 @@
                                         <td>{{ ($a->result) ?: 'N/A' }}</td>
                                         <td>{{ ($a->end_date) ? $a->end_date->format('M d Y') : 'N/A' }}</td>
                                         <td>
-                                            @if ($a->progress != 'completed' && $a->progress != 'initial')
+                                            @if ($a->progress != 'completed')
                                             <button class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#timelineModal-{{ $a->id }}"><span class="btn-inner--icon"><i class="ni ni-calendar-grid-58 mr-1"></i></span> Timeline</button>
                                             @endif
                                         </td>
@@ -79,7 +79,6 @@
                                                     <a href="{{ route('accreditation.show', $a) }}" class="dropdown-item">{{ __('View Summary') }}</a>
                                                     @if ($a->progress != 'completed')
                                                         <a href="{{ route('accreditation.assignTeam', $a) }}" class="dropdown-item">{{ __('Assign Team') }}</a>
-                                                        @if (!$a->evidence_can_upload) <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-evidence-{{ $a->id }}">Complete Evidence</a> @endif
                                                         <form action="{{ route('accreditation.destroy', $a) }}" method="post">
                                                             @csrf
                                                             @method('delete')
@@ -92,7 +91,6 @@
                                             </div>
                                         </td>
                                     </tr>
-                                    @if($a->progress != 'initial')
                                     <!-- Modal -->
                                     <div class="modal fade" id="timelineModal-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="timelineModalLabel-{{ $a->id }}" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -117,7 +115,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="submit" class="btn btn-primary">Update</button>
-                                                        @if($a->timeline->status == 100)
+                                                        @if($a->timeline->status == 100 && $a->progress != 'initial')
                                                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-notification-{{ $a->id }}">Complete Accreditation</button>
                                                         @endif
                                                     </div>
@@ -149,7 +147,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @endif
                                 @endforeach
                             </tbody>
                         </table>

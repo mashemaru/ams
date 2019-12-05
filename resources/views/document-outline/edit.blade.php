@@ -260,7 +260,7 @@
                 <input type="hidden" name="selected">
                 <div class="modal-body">
                     <div class="table-responsive">
-                        <table class="table data-table align-items-center table-flush">
+                        <table class="table data-table align-items-center table-flush w-100">
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col"></th>
