@@ -94,6 +94,17 @@ class AccreditationController extends Controller
             }
         }
 
+        if($accreditation->type == 'reaccredit') {
+            $result = Accreditation::where('id','!=',$accreditation->id)->where('agency_id', $accreditation->agency_id)->where('program_id', $accreditation->program_id)->latest()->first();
+            if($result) {
+                $accreditation->update([
+                    'recommendations'   =>  $result->recommendations,
+                ]);
+            } else {
+                return view('accreditation.recommendation',compact('accreditation'));
+            }
+        }
+
         // return redirect()->route('accreditation.index')->withToastSuccess(__('Accreditation successfully created.'));
         return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Accreditation successfully created.'));
     }
@@ -236,7 +247,7 @@ class AccreditationController extends Controller
 
         $timeline->accreditation->update([
             'result'                => $request->accreditation_result,
-            'recommendations'       => $request->recommendation,
+            // 'recommendations'       => $request->recommendation,
             'completed_document'    => $filename,
             'progress'              => 'completed',
             'end_date'              => now(),
@@ -252,5 +263,37 @@ class AccreditationController extends Controller
         ]);
 
         return redirect()->route('accreditation.index')->withToastSuccess(__('Evidence successfully completed.'));
+    }
+
+    public function showAccreditationRecommendation(Accreditation $accreditation)
+    {
+        return view('accreditation.recommendation',compact('accreditation'));
+    }
+
+    public function accreditationRecommendation(Request $request, Accreditation $accreditation)
+    {
+        $accreditation->update([
+            'recommendations'   =>  $request->recommendation,
+        ]);
+
+        if(!$accreditation->timeline) {
+            return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Recommendation successfully updated.'));
+        }
+
+        return redirect()->route('accreditation.index')->withToastSuccess(__('Recommendation successfully updated.'));
+    }
+
+    public function showAnswerRecommendation(Accreditation $accreditation)
+    {
+        return view('accreditation.answer',compact('accreditation'));
+    }
+
+    public function answerRecommendation(Request $request, Accreditation $accreditation)
+    {
+        $accreditation->update([
+            'recommendations'   =>  $request->recommendation,
+        ]);
+
+        return redirect()->route('accreditation.index')->withToastSuccess(__('Recommendation successfully updated.'));
     }
 }

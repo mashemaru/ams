@@ -76,6 +76,12 @@
                                                     @if ($a->progress == 'initial')
                                                     <a href="{{ route('accreditation.edit', $a) }}" class="dropdown-item">{{ __('Formal Accredit') }}</a>
                                                     @endif
+                                                    @if ($a->progress != 'completed')
+                                                    <a href="{{ route('answer.show.recommendation', $a) }}" class="dropdown-item">{{ __('Answer Recommendation') }}</a>
+                                                    @endif
+                                                    @if ($a->progress == 'completed' && $a->recommendations == '')
+                                                    <a href="{{ route('accreditation.show.recommendation', $a) }}" class="dropdown-item">{{ __('Add Recommendation') }}</a>
+                                                    @endif
                                                     <a href="{{ route('accreditation.show', $a) }}" class="dropdown-item">{{ __('View Summary') }}</a>
                                                     @if ($a->progress != 'completed')
                                                         <a href="{{ route('accreditation.assignTeam', $a) }}" class="dropdown-item">{{ __('Assign Team') }}</a>
@@ -92,6 +98,7 @@
                                         </td>
                                     </tr>
                                     <!-- Modal -->
+                                    @if($a->timeline)
                                     <div class="modal fade" id="timelineModal-{{ $a->id }}" tabindex="-1" role="dialog" aria-labelledby="timelineModalLabel-{{ $a->id }}" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content bg-secondary">
@@ -147,6 +154,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>

@@ -52,6 +52,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('generateDocument/{accreditation}', ['as' => 'accreditation.generate', 'uses' => 'AccreditationController@generateDocument']);
 	Route::get('accreditationComplete/{timeline}', ['as' => 'accreditation.show.complete', 'uses' => 'AccreditationController@showCompleteAccreditation']);
 	Route::post('accreditationComplete/{timeline}', ['as' => 'accreditation.complete', 'uses' => 'AccreditationController@completeAccreditation']);
+	Route::get('accreditationRecommendation/{accreditation}', ['as' => 'accreditation.show.recommendation', 'uses' => 'AccreditationController@showAccreditationRecommendation']);
+	Route::put('accreditationRecommendation/{accreditation}', ['as' => 'accreditation.recommendation', 'uses' => 'AccreditationController@accreditationRecommendation']);
+	Route::get('answerRecommendation/{accreditation}', ['as' => 'answer.show.recommendation', 'uses' => 'AccreditationController@showAnswerRecommendation']);
+	Route::put('answerRecommendation/{accreditation}', ['as' => 'answer.recommendation', 'uses' => 'AccreditationController@answerRecommendation']);
 	Route::resource('curriculum', 'CurriculumController');
 	Route::post('getCurriculumCourses', 'CurriculumController@getCurriculumCourses');
 	Route::resource('course', 'CourseController');

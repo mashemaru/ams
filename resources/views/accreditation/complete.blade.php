@@ -37,25 +37,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div><br>
-                            <hr>
-                            <div class="text-muted text-left mt-2 mb-3">
-                                Recommendations<br><br>
-                                <button type="button" class="btn btn-success" id="addRecommendation">Add</button><br>
-                            </div><br>
-                            <div id="Recommendations">
-                                <div class="row">
-                                    <div class="col-8">
-                                        <div class="form-group mb-3">
-                                            <div class="input-group input-group-alternative">
-                                                <input class="form-control recommendation" placeholder="Recommendation" name="recommendation[0]" type="text">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-1">
-                                        <button class="btn btn-icon btn-2 btn-danger removeRecommendation" type="button">X</button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="card-footer py-4">
@@ -71,24 +52,3 @@
         @include('layouts.footers.auth')
     </div>
 @endsection
-@push('js')
-<script>
-$('#addRecommendation').click(function (e) { //on add input button click
-    var Recommendations = $("#Recommendations .row").length;
-    $("#Recommendations").append('<div class="row"><div class="col-8"><div class="form-group mb-3"><div class="input-group input-group-alternative"><input class="form-control recommendation" placeholder="Recommendation" name="recommendation['+Recommendations+']" type="text"></div></div></div><div class="col-1"><button class="btn btn-icon btn-2 btn-danger removeRecommendation" type="button">X</button></div></div>');
-});
-
-$("body").on("click",".removeRecommendation", function(e) { //user click on remove text
-    if( $("#Recommendations .row").length >= 1 ) {
-        $(this).parent().closest('.row').remove();
-        var x = 0;
-        $("#Recommendations .row").each(function() {
-            var recommendation = $(this).find("input.recommendation");
-            recommendation.attr('name', 'recommendation['+x+']');
-            x++;
-        });
-    }
-    return false;
-});
-</script>
-@endpush

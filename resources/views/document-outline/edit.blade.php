@@ -65,7 +65,27 @@
             </div>
         </div>
         <div class="col-xl-9 mb-5 mb-xl-0">
-            @if ($outline->document->accreditation->progress == 'initial')
+            @if ($outline->accreditation->type == 'reaccredit')
+            <div class="card shadow mb-3">
+                <div class="card-header border-1">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Recommendations</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body px-lg-4 py-lg-4">
+                    @if($outline->accreditation->recommendations)
+                    <ol>
+                    @foreach ($outline->accreditation->recommendations as $key => $item)
+                        <li>{{ $item['label'] }}</li>
+                    @endforeach
+                    </ol>
+                    @endif
+                </div>
+            </div>
+            @endif
+            @if ($outline->accreditation->progress == 'initial')
             <div class="card shadow mb-3">
                 <div class="card-body px-lg-5 py-lg-5">
                     <div class="dd">
@@ -176,7 +196,7 @@
                                             N/A
                                         @endif
                                     </td>
-                                    @if (!$outline->document->accreditation->evidence_can_upload)
+                                    @if (!$outline->accreditation->evidence_can_upload)
                                     <td class="text-right">
                                         @if(!$data->evidence_complete)
                                         <div class="dropdown">
@@ -204,7 +224,7 @@
                                                     <div class="modal-body">
                                                         <div class="form-group mb-3">
                                                             <label class="form-control-label" style="float: left">Select File</label>
-                                                            <input type="hidden" name="accreditation" value="{{ $outline->document->accreditation->id }}">
+                                                            <input type="hidden" name="accreditation" value="{{ $outline->accreditation->id }}">
                                                             <input type="file" class="form-control" name="file">
                                                         </div>
                                                     </div>
@@ -223,7 +243,7 @@
                             </tbody>
                         </table>
                     </div>
-                    @if (!$outline->document->accreditation->evidence_can_upload)
+                    @if (!$outline->accreditation->evidence_can_upload)
                     <br>
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModal"
@@ -244,7 +264,7 @@
     </div>
 
     @include('layouts.footers.auth')
-    @if (!$outline->document->accreditation->evidence_can_upload)
+    @if (!$outline->accreditation->evidence_can_upload)
     <!-- Modal -->
     <div class="modal fade" id="selectModal1" tabindex="-1" role="dialog" aria-labelledby="selectModalLabel1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">

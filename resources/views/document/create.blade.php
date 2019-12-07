@@ -108,10 +108,13 @@ $('#document').on('change', 'select[name="agency_id"]', function () {
         $.getJSON( "/getAgencyScoring/" + this.value, function( data ) {
             var items = [];
             var score_type = [];
-            $.each( data, function( key, value) {
-                score_type.push( "<option value='" + value.id + "'>" +  value.name + "</option>" );
-            });
 
+            if(data) {
+                $.each( data, function( key, value) {
+                    score_type.push( "<option value='" + value.id + "'>" +  value.name + "</option>" );
+                });
+            }
+            
             items.push( "<option value='0'>Narrative Only</option>" );
             items.push( "<optgroup label='Narrative w/ Table'><option value='0'>w/ Table</option></optgroup>" );
             items.push( "<optgroup label='Narrative w/ Score'>" + score_type.join() + "</optgroup>" );
