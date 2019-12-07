@@ -157,7 +157,7 @@ class TeamController extends Controller
             foreach($request->document as $key => $document_team) {
                 foreach($document_team as $team) {
                     $teams[] = $team;
-                    $documents[] = ['document_outline_id' => $key, 'team_id' => $team];
+                    $documents[] = ['document_id' => $accreditation->document->id, 'document_outline_id' => $key, 'team_id' => $team];
                 }
             }
         }

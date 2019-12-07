@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Accreditation;
 use App\Agency;
+use App\User;
 use App\Program;
 use App\Team;
 use App\Timeline;
+use App\Task;
 use App\FileRepository;
 use App\Document;
 use App\DocumentTeam;
@@ -118,7 +120,8 @@ class AccreditationController extends Controller
     public function show(Accreditation $accreditation)
     {
         $accreditation->load('agency','program','document','teams','teams.head','teams.users');
-        return view('accreditation.show', compact('accreditation'));
+        $team_head = User::has('team_head')->get();
+        return view('accreditation.show', compact('accreditation','team_head'));
     }
 
     /**
@@ -169,7 +172,8 @@ class AccreditationController extends Controller
     public function assign_team(Accreditation $accreditation)
     {
         $allTeams = Team::all();
-        $accreditation->load('agency','teams','program','document','document.outline_root');
+        $accreditation->load('agency','teams.document_teams','program','document','outlines','document_teams');
+
         return view('team.assign',compact('accreditation','allTeams'));
     }
 
@@ -295,5 +299,39 @@ class AccreditationController extends Controller
         ]);
 
         return redirect()->route('accreditation.index')->withToastSuccess(__('Recommendation successfully updated.'));
+    }
+
+    public function generateAppendixExhibitList(Accreditation $accreditation)
+    {
+        $accreditation->load('appendix_exhibit');
+        $pdf = \PDF::loadView('accreditation.appendix-exhibits-export', compact('accreditation'));
+        return $pdf->download(now()->format("m-d-Y-his") . '_AppendixExhibit-List.pdf');
+    }
+
+    public function teamTask(Request $request, Accreditation $accreditation)
+    {
+        $validate = Validator::make($request->all(), [
+            'task_name'     => 'required|max:255',
+            'assign_to'     => 'required',
+        ]);
+    
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
+    
+        foreach($request->assign_to as $assign) {
+            Task::create([
+                'task_name'  => $request->task_name,
+                'assigner'   => auth()->user()->id,
+                'asigned_to' => $assign,
+                'due_date'   => $request->due_date,
+                'remarks'    => $request->remarks,
+            ]);
+        }
+
+        $team = Team::whereIn('team_head', $request->assign_to)->get();
+        $accreditation->teams()->syncWithoutDetaching($team);
+    
+        return back()->withToastSuccess(__('Task successfully created.'));
     }
 }

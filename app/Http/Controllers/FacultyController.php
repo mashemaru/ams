@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Notification;
 use App\Exports\FacultyExport;
 use App\Exports\FacultyAcademicBackgroundExport;
 use App\Exports\FacultyEducationalBackgroundExport;
 use App\Exports\FacultyProfessionalActivitiesExport;
 use App\Exports\FacultyCommunityServiceExport;
+use App\Events\FacultyFifExportEvent;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -28,7 +31,7 @@ class FacultyController extends Controller
                     return $data->name;
                 })
                 ->addColumn('action', function($row){
-                    return '<div class="dropdown"><a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></a><div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"><a class="dropdown-item" href="'. route('faculty.show', $row->id) .'">View Profile</a><a class="dropdown-item" href="#" data-toggle="modal" data-target="#otherModal">Remind FIF Update</a></div></div>';
+                    return view('faculty.partials.indexDropdown', ['faculty' => $row->id]);
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -151,11 +154,33 @@ class FacultyController extends Controller
     
     function exportFaculty(User $user)
     {
-        $user->with('faculty_community_service_dlsu')->get();
+        $user->with('faculty_academic_background','faculty_graduate_studies','faculty_special_training','faculty_teaching_experience_dlsu','faculty_teaching_experience_other','faculty_professional_experience','faculty_professional_practice_dlsu','faculty_professional_practice',
+        'faculty_leadership','faculty_membership','faculty_achievements','faculty_internally_funded_research','faculty_externally_funded_research',
+        'faculty_research_grants','faculty_journal_publication','faculty_prototypes','faculty_patents','faculty_books_and_textbooks','faculty_chapter_in_edited_book',
+        'faculty_conference_proceedings_papers','faculty_published_creative_work','faculty_creative_work_performed','faculty_programs_developeds','faculty_other_research_outputs','faculty_conferences_attended',
+        'faculty_community_service_dlsu','faculty_community_service_professional','faculty_community_service_government','faculty_community_service_others')->get();
         return (new FacultyExport($user))->download(str_slug($user->name).'-FacultyInformation-' . time() . '.xlsx');
         // return Excel::download(new FacultyCommunityServiceExport($user), str_slug($user->name).'-CommunityService-' . time() . '.xlsx');
     }
     
+    function exportAllFaculty()
+    {
+        $users = User::with('faculty_academic_background','faculty_graduate_studies','faculty_special_training','faculty_teaching_experience_dlsu','faculty_teaching_experience_other','faculty_professional_experience','faculty_professional_practice_dlsu','faculty_professional_practice',
+        'faculty_leadership','faculty_membership','faculty_achievements','faculty_internally_funded_research','faculty_externally_funded_research',
+        'faculty_research_grants','faculty_journal_publication','faculty_prototypes','faculty_patents','faculty_books_and_textbooks','faculty_chapter_in_edited_book',
+        'faculty_conference_proceedings_papers','faculty_published_creative_work','faculty_creative_work_performed','faculty_programs_developeds','faculty_other_research_outputs','faculty_conferences_attended',
+        'faculty_community_service_dlsu','faculty_community_service_professional','faculty_community_service_government','faculty_community_service_others')->role('faculty')->get();
+
+        event(new FacultyFifExportEvent($users));
+
+        return back()->withToastSuccess(__('FIF download is running on background. Please wait and come back again.'));
+    }
+
+    public function downloadExportFaculty()
+    {
+        return response()->download(base_path('fif.zip'))->deleteFileAfterSend();
+    }
+
     function facultySearch(Request $request)
     {
         $users = User::role('faculty');
@@ -194,6 +219,15 @@ class FacultyController extends Controller
         }
 
         $pdf = \PDF::loadView('faculty.search.teaching_experience', compact('teaching_experience'));
-        return $pdf->download('faculty-search-result.pdf');
+        return $pdf->download(now()->format("m-d-Y-his") . '_faculty-search-result.pdf');
+    }
+
+    public function facultyRemind(User $user)
+    {
+        Notification::create([
+            'user_id' => $user->id,
+            'text'    => 'Update <strong>Faculty Information Form</strong>',
+        ]);
+        return back()->withToastSuccess(__('Action completed successfully.'));
     }
 }

@@ -49,12 +49,17 @@ class Accreditation extends Model
 
     public function document_teams()
     {
-        return $this->belongsToMany('App\DocumentOutline', 'document_team', 'document_id');
+        return $this->belongsToMany('App\DocumentOutline', 'document_team', 'accreditation_id', 'document_outline_id')->withPivot('team_id', 'document_id');
     }
 
     public function outlines()
     {
         return $this->hasMany('App\DocumentOutline', 'accred_id');
+    }
+
+    public function appendix_exhibit()
+    {
+        return $this->belongsToMany('App\AppendixExhibit', 'document_outline_appendix_exhibits', 'accreditation_id', 'appendix_exhibits_id');
     }
 
     public function getEvidenceCanUploadAttribute()

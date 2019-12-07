@@ -108,7 +108,7 @@
                             <div class="form-group mb-3">
                             <label class="form-control-label">Assign to</label>
                             <div class="input-group input-group-alternative">
-                                <select class="form-control form-control-alternative select2" name="assign_to[]" data-toggle="select" multiple data-placeholder="Select scoring type">
+                                <select class="form-control form-control-alternative select2" name="assign_to[]" data-toggle="select" multiple >
                                 @if($users)
                                     @foreach ($users as $user)
                                         @if($user->id != auth()->user()->id)

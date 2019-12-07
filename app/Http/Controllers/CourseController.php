@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Course;
 use App\User;
+use App\Notification;
 use App\FileRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -330,6 +331,20 @@ class CourseController extends Controller
             $courses->where('college', $request->college);
         }
         $pdf = \PDF::loadView('course.partials.download', ['courses' => $courses->get()]);
-        return $pdf->download('course-search-result.pdf');
+        return $pdf->download(now()->format("m-d-Y-his") . '_course-search-result.pdf');
+    }
+
+    public function courseRemind(Course $course)
+    {
+        $course->load('faculty');
+        if($course->faculty) {
+            foreach($course->faculty as $user) {
+                Notification::create([
+                    'user_id' => $user->id,
+                    'text'    => 'Update <strong>Course ('.$course->course_code.') Syllabus</strong>',
+                ]);
+            }
+        }
+        return back()->withToastSuccess(__('Action completed successfully.'));
     }
 }

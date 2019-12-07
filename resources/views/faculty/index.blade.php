@@ -13,7 +13,22 @@
                                 <h3 class="mb-0">{{ __('Faculty Information Management') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                
+                                @if(file_exists(base_path('fif.zip'))) 
+                                <form method="post" action="{{ route('faculty.download.export') }}" class="d-inline" autocomplete="off">
+                                @csrf
+                                    <button type="submit" class="btn btn-primary btn-sm mr-4">
+                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                        Download FIF.zip
+                                    </button>
+                                </form>
+                                @endif
+                                <form method="post" action="{{ route('faculty.exportAllFaculty') }}" class="d-inline" autocomplete="off">
+                                @csrf
+                                    <button type="submit" class="btn btn-primary btn-sm mr-4 float-right">
+                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                        Generate All FIF
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

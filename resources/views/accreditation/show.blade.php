@@ -10,18 +10,27 @@
             <div class="card shadow">
                 <div class="card-header border-0">
                     <div class="row">
-                        <div class="col">
+                        <div class="col-md-4">
                             <h3 class="mb-0">Accreditations</h3>
                         </div>
                         <div class="col text-right">
-                            <form action="{{ route('accreditation.generate', $accreditation) }}" method="post">
+                            <a href="{{ route('accreditation.index') }}" class="btn btn-sm btn-primary mr-3">{{ __('Back to list') }}</a>
+                            <form action="{{ route('accreditation.appendix.generate', $accreditation) }}" method="post" class="d-inline">
                                 @csrf
-                                <a href="{{ route('accreditation.index') }}" class="btn btn-sm btn-primary mr-3">{{ __('Back to list') }}</a>
+                                <button type="submit" class="btn btn-primary btn-sm mr-3">
+                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                    Generate Appendix/Exhibit Lists
+                                </button>
+                            </form>
+                            @if($accreditation->progress != 'completed')
+                            <form action="{{ route('accreditation.generate', $accreditation) }}" method="post" class="d-inline">
+                                @csrf
                                 <button type="submit" class="btn btn-primary btn-sm" style="float:right">
                                     <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
                                     Generate Full Document
                                 </button>
                             </form>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -52,12 +61,11 @@
                                         <span>Tasks Completed</span>
                                     </div>
                                     <div class="progress-percentage">
-                                        <span>60%</span>
+                                        {{-- <span>60%</span> --}}
                                     </div>
                                 </div>
                                 <div class="progress">
-                                    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60"
-                                        aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                                    {{-- <div class="progress-bar bg-info" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div> --}}
                                 </div>
                             </div>
                         </div>
@@ -150,6 +158,11 @@
                         <div class="col">
                             <h3 class="mb-0">Teams</h3>
                         </div>
+                        <div class="col-4 text-right">
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#taskModal">
+                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Task
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="card-body">
@@ -172,11 +185,12 @@
                                     <td>{{ $team->head->name }}</td>
                                     <td>{!! $team->users->implode('name', '<br>') !!}</td>
                                     <td>
+                                        {{-- {{ $team->document_teams }}
                                         Chapter 1<br>
-                                        Chapter 5<br>
+                                        Chapter 5<br> --}}
                                     </td>
                                     <td>
-                                        <div class="d-flex align-items-center">
+                                        {{-- <div class="d-flex align-items-center">
                                             <span class="mr-2">80%</span>
                                             <div>
                                                 <div class="progress">
@@ -185,7 +199,7 @@
                                                         style="width: 80%;"></div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </td>
                                     <td class="text-right">
                                         <div class="dropdown">
@@ -209,5 +223,66 @@
         </div>
     </div>
     @include('layouts.footers.auth')
+    <!-- Modal -->
+    <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="taskModalLabel">Add Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <form method="post" action="{{ route('team.task.store', $accreditation) }}" autocomplete="off">
+                @csrf
+                    <div class="modal-body">
+                        <div class="form-group{{ $errors->has('task_name') ? ' has-danger' : '' }} mb-3">
+                            <label class="form-control-label" for="input-task_name">{{ __('Task Name') }}</label>
+                            <input type="text" name="task_name" id="input-task_name" class="form-control form-control-alternative{{ $errors->has('task_name') ? ' is-invalid' : '' }}" placeholder="{{ __('Task Name') }}" value="{{ old('task_name') }}" required autofocus>
+                            @if ($errors->has('task_name'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('task_name') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <div class="form-group mb-3">
+                        <label class="form-control-label">Assign to</label>
+                        <div class="input-group input-group-alternative">
+                            <select class="form-control form-control-alternative select2" name="assign_to[]" data-toggle="select" multiple>
+                            @if($team_head)
+                            
+                                @foreach ($team_head as $user)
+                                    @if($user->id != auth()->user()->id)
+                                    <option value="{{$user->id}}">{{ $user->name }}</option>
+                                    @endif
+                                @endforeach
+                            @endif
+                            </select>
+                        </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-control-label">Due Date</label>
+                            <div class="input-group input-group-alternative">
+                                <input class="form-control datepicker" name="due_date" data-date-format="yyyy-mm-dd" placeholder="Select due date" type="text" value="{{ old('due_date') }}" required>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-control-label">Remarks</label>
+                            <div class="input-group input-group-alternative">
+                                <input class="form-control form-control-alternative" name="remarks" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
+@push('js')
+<script src="/vendor/datepicker/bootstrap-datepicker.min.js"></script>
+@endpush

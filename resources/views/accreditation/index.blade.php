@@ -76,9 +76,6 @@
                                                     @if ($a->progress == 'initial')
                                                     <a href="{{ route('accreditation.edit', $a) }}" class="dropdown-item">{{ __('Formal Accredit') }}</a>
                                                     @endif
-                                                    @if ($a->progress != 'completed')
-                                                    <a href="{{ route('answer.show.recommendation', $a) }}" class="dropdown-item">{{ __('Answer Recommendation') }}</a>
-                                                    @endif
                                                     @if ($a->progress == 'completed' && $a->recommendations == '')
                                                     <a href="{{ route('accreditation.show.recommendation', $a) }}" class="dropdown-item">{{ __('Add Recommendation') }}</a>
                                                     @endif

@@ -42,7 +42,7 @@
                             </div>
                             <hr>
                             <div id="section">
-                                @foreach ($accreditation->document->outline_root as $outline)
+                                @foreach ($accreditation->outlines->where('parent_id',0) as $outline)
                                     <div class="row">
                                         <div class="col-10">
                                             <div class="form-group mb-3">
@@ -57,7 +57,7 @@
                                                     <select class="form-control" name="document[{{ $outline->id}}][team]">
                                                         <option value>Select team</option>
                                                         @foreach ($allTeams as $team)
-                                                            <option value="{{ $team->id }}" @foreach ($accreditation->teams as $t) {{ ($t->id == $team->id) ? 'selected="selected"' : '' }} @endforeach>{{ $team->team_name }}</option>
+                                                            <option value="{{ $team->id }}" @foreach ($accreditation->document_teams as $t) {{ (($outline->id == $t->document_outline_id) && ($t->team_id == $team->id)) ? ' selected="selected"' : '' }} @endforeach>{{ $team->team_name }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>

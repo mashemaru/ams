@@ -49,6 +49,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('assignTeam/{accreditation}', ['as' => 'team.assign', 'uses' => 'TeamController@assignTeam']);
 	Route::resource('accreditation', 'AccreditationController');
 	Route::get('assignTeam/{accreditation}', ['as' => 'accreditation.assignTeam', 'uses' => 'AccreditationController@assign_team']);
+	Route::post('generateAppendixExhibitList{accreditation}', ['as' => 'accreditation.appendix.generate', 'uses' => 'AccreditationController@generateAppendixExhibitList']);
 	Route::post('generateDocument/{accreditation}', ['as' => 'accreditation.generate', 'uses' => 'AccreditationController@generateDocument']);
 	Route::get('accreditationComplete/{timeline}', ['as' => 'accreditation.show.complete', 'uses' => 'AccreditationController@showCompleteAccreditation']);
 	Route::post('accreditationComplete/{timeline}', ['as' => 'accreditation.complete', 'uses' => 'AccreditationController@completeAccreditation']);
@@ -56,9 +57,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('accreditationRecommendation/{accreditation}', ['as' => 'accreditation.recommendation', 'uses' => 'AccreditationController@accreditationRecommendation']);
 	Route::get('answerRecommendation/{accreditation}', ['as' => 'answer.show.recommendation', 'uses' => 'AccreditationController@showAnswerRecommendation']);
 	Route::put('answerRecommendation/{accreditation}', ['as' => 'answer.recommendation', 'uses' => 'AccreditationController@answerRecommendation']);
+	Route::post('teamTask{accreditation}', ['as' => 'team.task.store', 'uses' => 'AccreditationController@teamTask']);
 	Route::resource('curriculum', 'CurriculumController');
 	Route::post('getCurriculumCourses', 'CurriculumController@getCurriculumCourses');
 	Route::resource('course', 'CourseController');
+	Route::post('courseRemind/{course}', ['as' => 'course.remind', 'uses' => 'CourseController@courseRemind']);
 	Route::get('course-search', ['as' => 'course.search', 'uses' => 'CourseController@courseSearch']);
 	Route::post('course-search-download', ['as' => 'course.search-download', 'uses' => 'CourseController@courseSearchDownload']);
 	Route::post('course-syllabus/{course}', ['as' => 'course.syllabus', 'uses' => 'CourseController@downloadSyllabus']);
@@ -81,7 +84,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('faculty/{user}', ['as' => 'faculty.show', 'uses' => 'FacultyController@facultyShow']);
 	Route::get('faculty-profile', ['as' => 'faculty.profile', 'uses' => 'FacultyController@facultyProfile']);
 	Route::post('faculty-profile/{user}', ['as' => 'faculty.store', 'uses' => 'FacultyController@facultyStore']);
+	Route::post('exportAllFaculty/', ['as' => 'faculty.exportAllFaculty', 'uses' => 'FacultyController@exportAllFaculty']);
 	Route::post('exportFaculty/{user}', ['as' => 'faculty.exportFaculty', 'uses' => 'FacultyController@exportFaculty']);
+	Route::post('exportFaculty/', ['as' => 'faculty.download.export', 'uses' => 'FacultyController@downloadExportFaculty']);
+	Route::post('facultyRemind/{user}', ['as' => 'faculty.remind', 'uses' => 'FacultyController@facultyRemind']);
 	Route::post('exportFacultyAcademicBackground/{user}', ['as' => 'faculty.exportFacultyAcademicBackground', 'uses' => 'FacultyController@exportFacultyAcademicBackground']);
 	Route::post('exportFacultyEducationalBackgroundExport/{user}', ['as' => 'faculty.exportFacultyEducationalBackgroundExport', 'uses' => 'FacultyController@exportFacultyEducationalBackgroundExport']);
 	Route::post('exportFacultyProfessionalActivitiesExport/{user}', ['as' => 'faculty.exportFacultyProfessionalActivitiesExport', 'uses' => 'FacultyController@exportFacultyProfessionalActivitiesExport']);

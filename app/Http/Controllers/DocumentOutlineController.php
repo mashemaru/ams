@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Accreditation;
 use App\DocumentOutline;
 use App\OutlineComment;
 use App\FileRepository;
@@ -19,10 +20,13 @@ class DocumentOutlineController extends Controller
      */
     public function index()
     {
-        $document_outline = DocumentOutline::with('document','accreditation.agency','accreditation.program');
+        // $document_outline = DocumentOutline::with('document','accreditation.agency','accreditation.program');
+        // dd($document_outline->paginate(15)->groupBy('accreditation.id'));
+        $accreditations = Accreditation::with('document','agency','program')->where('progress','!=','completed')->latest()->get();
+        // $document_outline = $accreditation->outlines->load('document','accreditation.agency','accreditation.program');
         // dd($document_outline->paginate(15));
         // dd($document_outline->paginate(15)->groupBy('accreditation.id'));
-        return view('document.outline.index', ['accreditations' => $document_outline->paginate(15)->groupBy('accreditation.id')]);
+        return view('document.outline.index', compact('accreditations'));
     }
 
     /**
