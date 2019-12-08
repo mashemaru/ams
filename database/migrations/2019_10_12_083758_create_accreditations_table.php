@@ -24,6 +24,7 @@ class CreateAccreditationsTable extends Migration
             $table->text('progress')->nullable();
             $table->text('completed_document')->nullable();
             $table->mediumText('recommendations')->nullable();
+            $table->mediumText('evidence_list')->nullable();
             $table->dateTime('end_date')->nullable();
             $table->dateTime('report_submission_date')->nullable();
             $table->dateTime('onsite_visit_date')->nullable();

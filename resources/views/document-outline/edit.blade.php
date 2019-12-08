@@ -16,7 +16,59 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h4>{{ $outline->doc_type }}</h4>
+                    <h4><strong>Doc Type:</strong> {{ $outline->doc_type }}</h4>
+                    @if($outline->accreditation->evidence_list)
+                    <h3 class="mt-3">Evidence List</h3>
+                    <ol class="mt-3">
+                    @foreach ($outline->accreditation->evidence_list as $item)
+                        <li>{{ $item }}</li>
+                    @endforeach
+                    </ol>
+                    @endif
+                    @if(auth()->user()->hasRole('super-admin'))
+                    <a class="btn btn-primary btn-sm mt-2" href="#" data-toggle="modal" data-target="#EditEvidenceList">Edit Evidence List</a>
+                    <div class="modal fade" id="EditEvidenceList" tabindex="-1" role="dialog" aria-labelledby="EditEvidenceListLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="sEditEvidenceListLabel">Edit Evidence List</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            <form method="post" action="{{ route('accreditation.evidence_list.update', $outline->accreditation) }}" autocomplete="off">
+                                @csrf
+                                @method('put')
+                                <div class="modal-body p-lg-5">
+                                    <div class="text-muted text-left mt-2 mb-3">
+                                        <button type="button" class="btn btn-success" id="addRecommendation">Add</button><br>
+                                    </div><br>
+                                    <div id="Recommendations">
+                                        @foreach($outline->accreditation->evidence_list as $key => $list)
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <div class="form-group mb-3">
+                                                    <div class="input-group input-group-alternative">
+                                                        <input class="form-control recommendation" placeholder="Evidence List" name="evidence_list[{{ $key }}]" type="text" value="{{ $list }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-1">
+                                                <button class="btn btn-icon btn-2 btn-danger removeRecommendation" type="button">X</button>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
             <div class="card shadow mt-4">
@@ -337,7 +389,7 @@
                                     <th scope="col">Code</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Type</th>
-                                    <th scope="col">Evidences</th>
+                                    {{-- <th scope="col">Evidences</th> --}}
                                 </tr>
                             </thead>
                         </table>
@@ -446,7 +498,7 @@ $(document).ready(function () {
             {data: 'code', name: 'code'},
             {data: 'name', name: 'name'},
             {data: 'type', name: 'type'},
-            {data: 'evidences', name: 'evidences.file_name', orderable: false, searchable: false},
+            // {data: 'evidences', name: 'evidences.file_name', orderable: false, searchable: false},
         ],
         order:[0,'desc'],
         language: {
@@ -508,5 +560,22 @@ function uploadImage(image) {
         })
     })
 }
+$('#addRecommendation').click(function (e) { //on add input button click
+    var Recommendations = $("#Recommendations .row").length;
+    $("#Recommendations").append('<div class="row"><div class="col-8"><div class="form-group mb-3"><div class="input-group input-group-alternative"><input class="form-control recommendation" placeholder="Evidence List" name="evidence_list['+Recommendations+']" type="text"></div></div></div><div class="col-1"><button class="btn btn-icon btn-2 btn-danger removeRecommendation" type="button">X</button></div></div>');
+});
+
+$("body").on("click",".removeRecommendation", function(e) { //user click on remove text
+    if( $("#Recommendations .row").length >= 1 ) {
+        $(this).parent().closest('.row').remove();
+        var x = 0;
+        $("#Recommendations .row").each(function() {
+            var recommendation = $(this).find("input.recommendation");
+            recommendation.attr('name', 'evidence_list['+x+']');
+            x++;
+        });
+    }
+    return false;
+});
 </script>
 @endpush

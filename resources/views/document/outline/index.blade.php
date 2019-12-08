@@ -14,7 +14,7 @@
                                 <h3 class="mb-0">{{ $accreditation_doc->agency->agency_code }} - {{ $accreditation_doc->program->program_code }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                @if ($accreditation_doc->progress != 'completed')
+                                @if ($accreditation_doc->progress != 'completed' && $accreditation_doc->type == 'reaccredit')
                                 <a href="{{ route('answer.show.recommendation', $accreditation_doc) }}" class="btn btn-primary btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Answer Recommendation</a>
                                 @endif
                             </div>

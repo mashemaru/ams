@@ -83,7 +83,7 @@ class AccreditationController extends Controller
         ]);
 
         foreach(json_decode($accreditation->document->sections) as $s) {
-            $root = $accreditation->outlines()->create([
+            $root = $accreditation->document->outlines()->create([
                 'accred_id'         => $accreditation->id,
                 'parent_id'         => 0,
                 'root_parent_id'    => 0,
@@ -108,7 +108,8 @@ class AccreditationController extends Controller
         }
 
         // return redirect()->route('accreditation.index')->withToastSuccess(__('Accreditation successfully created.'));
-        return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Accreditation successfully created.'));
+        return redirect()->route('accreditation.evidence_list.create', $accreditation)->withToastSuccess(__('Accreditation successfully created.'));
+        // return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Accreditation successfully created.'));
     }
 
     /**
@@ -281,7 +282,8 @@ class AccreditationController extends Controller
         ]);
 
         if(!$accreditation->timeline) {
-            return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Recommendation successfully updated.'));
+            return redirect()->route('accreditation.evidence_list.create', $accreditation)->withToastSuccess(__('Recommendation successfully updated.'));
+            // return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Recommendation successfully updated.'));
         }
 
         return redirect()->route('accreditation.index')->withToastSuccess(__('Recommendation successfully updated.'));
@@ -333,5 +335,26 @@ class AccreditationController extends Controller
         $accreditation->teams()->syncWithoutDetaching($team);
     
         return back()->withToastSuccess(__('Task successfully created.'));
+    }
+
+    public function showEvidenceList(Accreditation $accreditation)
+    {
+        return view('accreditation.evidence-list.create',compact('accreditation'));
+    }
+
+    public function createEvidenceList(Request $request, Accreditation $accreditation)
+    {
+        $accreditation->update([
+            'evidence_list' => $request->evidence_list,
+        ]);
+        return redirect()->route('timeline.view', $accreditation)->withToastSuccess(__('Evidence List successfully created.'));
+    }
+
+    public function updateEvidenceList(Request $request, Accreditation $accreditation)
+    {
+        $accreditation->update([
+            'evidence_list' => $request->evidence_list,
+        ]);
+        return back()->withToastSuccess(__('Evidence List successfully updated.'));
     }
 }
