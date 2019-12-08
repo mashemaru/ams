@@ -179,7 +179,7 @@
                                     <th scope="col">Code</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Type</th>
-                                    <th scope="col">Evidences</th>
+                                    {{-- <th scope="col">Evidences</th> --}}
                                     <th scope="col" width="2%"></th>
                                 </tr>
                             </thead>
@@ -189,13 +189,13 @@
                                     <th scope="row">{{ $data->code }}</th>
                                     <th scope="row">{{ $data->name }}</th>
                                     <td scope="row">{{ ucfirst($data->type) }}</td>
-                                    <td scope="row">
+                                    {{-- <td scope="row">
                                         @if($data->evidences->isNotEmpty())
                                         {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $data->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
                                         @else
                                             N/A
                                         @endif
-                                    </td>
+                                    </td> --}}
                                     @if (!$outline->accreditation->evidence_can_upload)
                                     <td class="text-right">
                                         @if(!$data->evidence_complete)
@@ -206,6 +206,8 @@
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#evidenceModal{{ $data->id }}">Add Evidences</a>
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#selectEvidenceModal{{ $data->id }}">Add Evidences from File Repo</a>
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#viewEvidences{{ $data->id }}">View Evidence List</a>
                                                 {{-- <a class="dropdown-item" href="#">Remove</a> --}}
                                             </div>
                                         </div>
@@ -223,9 +225,9 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="form-group mb-3">
-                                                            <label class="form-control-label" style="float: left">Select File</label>
+                                                            <label class="form-control-label" style="float: left">Select File(s)</label>
                                                             <input type="hidden" name="accreditation" value="{{ $outline->accreditation->id }}">
-                                                            <input type="file" class="form-control" name="file">
+                                                            <input type="file" class="form-control" name="file[]" multiple>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -233,6 +235,54 @@
                                                         <button type="submit" class="btn btn-success">Add</button>
                                                     </div>
                                                 </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="selectEvidenceModal{{ $data->id }}" tabindex="-1" role="dialog" aria-labelledby="selectEvidenceModal{{ $data->id }}Label" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="selectEvidenceModal{{ $data->id }}Label">Select Evidences from File Repo</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                <form method="post" class="evidence_select" action="{{ route('evidence.select', $data) }}" autocomplete="off">
+                                                    @csrf
+                                                    <input type="hidden" name="selected">
+                                                    <div class="modal-body">
+                                                        <div class="table-responsive">
+                                                            <table class="data-table2 align-items-center table-flush w-100">
+                                                                <thead class="thead-light">
+                                                                    <tr>
+                                                                        <th scope="col"></th>
+                                                                        <th scope="col">File Name</th>
+                                                                        <th scope="col">File Type</th>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <button type="submit" class="btn btn-success">Save</button>
+                                                    </div>
+                                                </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="viewEvidences{{ $data->id }}" tabindex="-1" role="dialog" aria-labelledby="viewEvidences{{ $data->id }}Label" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="viewEvidences{{ $data->id }}Label">Evidences of {{ $data->name }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body text-left">
+                                                        {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $data->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -338,8 +388,8 @@
                             </div>
                         </div>
                         <div class="form-group mb-3">
-                            <label class="form-control-label">File</label>
-                            <input type="file" class="form-control" name="file">
+                            <label class="form-control-label">File(s)</label>
+                            <input type="file" class="form-control" name="file[]" multiple>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -412,6 +462,28 @@ $(document).ready(function () {
     $('.data-table tbody').on( 'click', 'tr', function () {
         $(this).toggleClass('selected');
         $('#outline_select input[name="selected"]').val(dataTable.rows('.selected').data().pluck('id').toArray());
+    } );
+
+    var dataTable2 = $('.data-table2').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('evidence.show',$outline->id) }}",
+        columns: [
+            {data: 'id', name: 'id', visible: false},
+            {data: 'file_name', name: 'file_name'},
+            {data: 'file_type', name: 'file_type'},
+        ],
+        order:[0,'desc'],
+        language: {
+            paginate: {
+                previous: "<i class='fas fa-angle-left'>",
+                next: "<i class='fas fa-angle-right'>"
+            }
+        }
+    });
+    $('.data-table2 tbody').on( 'click', 'tr', function () {
+        $(this).toggleClass('selected');
+        $('.evidence_select input[name="selected"]').val(dataTable2.rows('.selected').data().pluck('id').toArray());
     } );
 });
 const Toast = Swal.mixin({

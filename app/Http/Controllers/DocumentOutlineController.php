@@ -167,45 +167,47 @@ class DocumentOutlineController extends Controller
     {
         $document_outline->with('document','document.accreditation','appendix_exhibit')->get();
     
-        $last = $document_outline->appendix_exhibit->where('type', $request->type)->last();
+        // $last = $document_outline->appendix_exhibit->where('type', $request->type)->last();
 
-        if($last) {
-            $code = ++$last->code;
-        } else {
-            if($request->type == 'appendix')
-                $code = 'Appendix A';
-            else
-                $code = 'Exhibit A';
-        }
+        // if($last) {
+        //     $code = ++$last->code;
+        // } else {
+        //     if($request->type == 'appendix')
+        //         $code = 'Appendix A';
+        //     else
+        //         $code = 'Exhibit A';
+        // }
         
         $appendix_exhibit = AppendixExhibit::create([
             'name'     => $request->name,
-            'code'     => $code,
+            'code'     => $request->name,
             'type'     => $request->type,
         ]);
 
         $document_outline->appendix_exhibit()->attach($appendix_exhibit->id, ['accreditation_id' => $document_outline->document->accreditation->id]);
 
         if($request->hasFile('file')) {
-            $filename = $request->file->getClientOriginalName();
+            foreach($request->file('file') as $file){
+                $filename = $file->getClientOriginalName();
             
-            while(Storage::exists('accreditation/' . $document_outline->document->accreditation->id . '/' . $request->type . '/' . $code . '/' . $filename)) {
-                $filename = '(1)' . $filename;
+                while(Storage::exists('accreditation/' . $document_outline->document->accreditation->id . '/' . $request->type . '/' . $request->name . '/' . $filename)) {
+                    $filename = '(1)' . $filename;
+                }
+
+                $file->storeAs('accreditation/' . $document_outline->document->accreditation->id . '/' . $request->type . '/' . $request->name, $filename);
+
+                $uploaded = FileRepository::create([
+                    'user_id'       => auth()->user()->id,
+                    'file_name'     => $filename,
+                    'file_type'     => 'Evidence',
+                    'file'          => $filename,
+                    'directory'     => 'accreditation/' . $document_outline->document->accreditation->id . '/' . $request->type . '/' . $request->name . '/' . $filename,
+                    'reference'     => 'AppendixExhibit',
+                    'reference_id'  => $appendix_exhibit->id,
+                ]);
+
+                $appendix_exhibit->evidences()->attach($uploaded);
             }
-
-            $request->file('file')->storeAs('accreditation/' . $document_outline->document->accreditation->id . '/' . $request->type . '/' . $code, $filename);
-
-            $uploaded = FileRepository::create([
-                'user_id'       => auth()->user()->id,
-                'file_name'     => $filename,
-                'file_type'     => 'Evidence',
-                'file'          => $filename,
-                'directory'     => 'accreditation/' . $document_outline->document->accreditation->id . '/' . $request->type . '/' . $code . '/' . $filename,
-                'reference'     => 'AppendixExhibit',
-                'reference_id'  => $appendix_exhibit->id,
-            ]);
-
-            $appendix_exhibit->evidences()->attach($uploaded);
             // $document_outline->appendix_exhibit()->attach($uploaded->id, ['document_id' => $document_outline->document->id]);
             // return back()->withToastSuccess(__('File uploaded successfully.'));
         }
@@ -236,29 +238,39 @@ class DocumentOutlineController extends Controller
         // }
     }
 
+    public function selectEvidences(Request $request, AppendixExhibit $appendix_exhibit)
+    {
+        if($request->selected) {
+            $appendix_exhibit->evidences()->syncWithoutDetaching(explode(',',$request->selected));
+        }
+        return back()->withToastSuccess(__('Action completed successfully.'));
+    }
+
     public function evidenceUpload(Request $request, AppendixExhibit $appendix_exhibit)
     {
         // dd($request);
         if($request->hasFile('file')) {
-            $filename = $request->file->getClientOriginalName();
+            foreach($request->file('file') as $file){
+                $filename = $file->getClientOriginalName();
             
-            while(Storage::exists('accreditation/' . $request->accreditation . '/' . $appendix_exhibit->type . '/' . $appendix_exhibit->code . '/' . $filename)) {
-                $filename = '(1)' . $filename;
+                while(Storage::exists('accreditation/' . $request->accreditation . '/' . $appendix_exhibit->type . '/' . $appendix_exhibit->code . '/' . $filename)) {
+                    $filename = '(1)' . $filename;
+                }
+
+                $file->storeAs('accreditation/' . $request->accreditation . '/' . $appendix_exhibit->type . '/' . $appendix_exhibit->code, $filename);
+
+                $uploaded = FileRepository::create([
+                    'user_id'       => auth()->user()->id,
+                    'file_name'     => $filename,
+                    'file_type'     => 'Evidence',
+                    'file'          => $filename,
+                    'directory'     => 'accreditation/' . $request->accreditation . '/' . $appendix_exhibit->type . '/' . $appendix_exhibit->code . '/' . $filename,
+                    'reference'     => 'AppendixExhibit',
+                    'reference_id'  => $appendix_exhibit->id,
+                ]);
+
+                $appendix_exhibit->evidences()->attach($uploaded);
             }
-
-            $request->file('file')->storeAs('accreditation/' . $request->accreditation . '/' . $appendix_exhibit->type . '/' . $appendix_exhibit->code, $filename);
-
-            $uploaded = FileRepository::create([
-                'user_id'       => auth()->user()->id,
-                'file_name'     => $filename,
-                'file_type'     => 'Evidence',
-                'file'          => $filename,
-                'directory'     => 'accreditation/' . $request->accreditation . '/' . $appendix_exhibit->type . '/' . $appendix_exhibit->code . '/' . $filename,
-                'reference'     => 'AppendixExhibit',
-                'reference_id'  => $appendix_exhibit->id,
-            ]);
-
-            $appendix_exhibit->evidences()->attach($uploaded);
             // $document_outline->appendix_exhibit()->attach($uploaded->id, ['document_id' => $document_outline->document->id]);
             return back()->withToastSuccess(__('Evidence uploaded successfully.'));
         }

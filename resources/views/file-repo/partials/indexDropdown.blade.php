@@ -1,4 +1,3 @@
-@if($appendix_exhibits->type == 'appendix' && !$appendix_exhibits->evidence_complete) 
 <div class="dropdown">
     <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-ellipsis-v"></i>
@@ -13,9 +12,13 @@
                 {{ __('Delete') }}
             </button>
         </form> --}}
+        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#viewEvidences{{ $appendix_exhibits->id }}">View Evidence List</a>
+        @if($appendix_exhibits->type == 'appendix' && !$appendix_exhibits->evidence_complete)
         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-evidence-{{ $appendix_exhibits->id }}">Complete Evidence</a>
+        @endif
     </div>
 </div>
+@if($appendix_exhibits->type == 'appendix' && !$appendix_exhibits->evidence_complete)
 <!-- Modal -->
 <div class="modal fade" id="modal-evidence-{{ $appendix_exhibits->id }}" tabindex="-1" role="dialog" aria-labelledby="modal-evidence-{{ $appendix_exhibits->id }}" aria-hidden="true">
     <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
@@ -48,3 +51,18 @@
     </div>
 </div>
 @endif
+<div class="modal fade" id="viewEvidences{{ $appendix_exhibits->id }}" tabindex="-1" role="dialog" aria-labelledby="viewEvidences{{ $appendix_exhibits->id }}Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewEvidences{{ $appendix_exhibits->id }}Label">Evidences of {{ $appendix_exhibits->name }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-left">
+                {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $appendix_exhibits->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
+            </div>
+        </div>
+    </div>
+</div>

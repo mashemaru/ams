@@ -33,6 +33,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('document-outline', 'DocumentOutlineController');
 	Route::post('document-outlineUpload/{document_outline}', ['as' => 'outline.upload', 'uses' => 'DocumentOutlineController@outlineUpload']);
 	Route::post('document-outlineSelect/{document_outline}', ['as' => 'outline.select', 'uses' => 'DocumentOutlineController@outlineSelect']);
+	Route::get('select-evidences/{document_outline}', ['as' => 'evidence.show', 'uses' => 'FileRepositoryController@showEvidences']);
+	Route::post('select-evidences/{appendix_exhibit}', ['as' => 'evidence.select', 'uses' => 'DocumentOutlineController@selectEvidences']);
 	Route::post('evidenceUpload/{appendix_exhibit}', ['as' => 'evidence.upload', 'uses' => 'DocumentOutlineController@evidenceUpload']);
 	Route::post('evidence-complete/{appendix_exhibit}', ['as' => 'evidence.complete', 'uses' => 'DocumentOutlineController@evidenceComplete']);
 	Route::get('appendices-exhibits', ['as' => 'appendices-exhibits.index', 'uses' => 'FileRepositoryController@appendicesExhibits']);

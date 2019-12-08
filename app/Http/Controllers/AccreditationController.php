@@ -83,7 +83,7 @@ class AccreditationController extends Controller
         ]);
 
         foreach(json_decode($accreditation->document->sections) as $s) {
-            $root = $accreditation->document->outlines()->create([
+            $root = $accreditation->outlines()->create([
                 'accred_id'         => $accreditation->id,
                 'parent_id'         => 0,
                 'root_parent_id'    => 0,
@@ -182,7 +182,7 @@ class AccreditationController extends Controller
         $accreditation->load('agency','program','document','document.outlines');
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
-        foreach($accreditation->document->outlines as $outline) {
+        foreach($accreditation->outlines as $outline) {
             $section = $phpWord->addSection();
             $section->addText($outline->section,array('name'=>'Arial','size' => (($outline->parent_id == 0) ? 24 : 20),'bold' => true));
     

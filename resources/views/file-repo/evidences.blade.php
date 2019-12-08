@@ -1,4 +1,4 @@
-@extends('layouts.app', ['title' => __('Appendices / Exhibits Management')])
+@extends('layouts.app', ['title' => __('Evidences Management')])
 
 @section('content')
     @include('layouts.headers.cards')
@@ -10,7 +10,7 @@
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Appendices / Exhibits') }}</h3>
+                                <h3 class="mb-0">{{ __('Select Evidences from File Repository') }}</h3>
                             </div>
                     </div>
                     
@@ -37,7 +37,7 @@
                                     <th scope="col">Code</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Type</th>
-                                    {{-- <th scope="col">Evidences</th> --}}
+                                    <th scope="col">Evidences</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -65,7 +65,7 @@
                 {data: 'code', name: 'code'},
                 {data: 'name', name: 'name'},
                 {data: 'type', name: 'type'},
-                // {data: 'evidences', name: 'evidences.file_name', orderable: false, searchable: false},
+                {data: 'evidences', name: 'evidences.file_name', orderable: false, searchable: false},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ],
             order:[0,'desc'],
@@ -74,9 +74,6 @@
                     previous: "<i class='fas fa-angle-left'>",
                     next: "<i class='fas fa-angle-right'>"
                 }
-            },
-            createdRow: function( row, data, dataIndex ) {
-                $( row ).find('td:eq(2)').attr('class', 'text-primary d-flex align-items-center');
             }
         });
     });
