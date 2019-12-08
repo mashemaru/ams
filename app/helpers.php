@@ -6,5 +6,5 @@ function renderDocumentSections($sections, $scores) {
 
 function getPermissions()
 {
-    return ['program', 'agency', 'user', 'accreditation', 'course', 'document', 'document-outline', 'scoring-type', 'team', 'timeline', 'role-permission'];
+    return ['program', 'agency', 'user', 'accreditation', 'course', 'document', 'document-outline', 'scoring-type', 'curriculum', 'faculty', 'team', 'timeline', 'role-permission'];
 }

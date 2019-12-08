@@ -17,7 +17,7 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permissions
-        $items = ['program', 'agency', 'user', 'accreditation', 'course', 'document', 'document-outline', 'scoring-type', 'team', 'timeline', 'role-permission'];
+        $items = ['program', 'agency', 'user', 'accreditation', 'course', 'document', 'document-outline', 'scoring-type', 'curriculum', 'faculty', 'team', 'timeline', 'role-permission'];
         foreach($items as $item) {
             Permission::create(['name' => 'create ' . $item]);
             Permission::create(['name' => 'edit ' . $item]);
@@ -29,11 +29,17 @@ class RolesAndPermissionsSeeder extends Seeder
         $role = Role::create(['name' => 'super-admin', 'label' => 'Super Admin']);
         $role->givePermissionTo(Permission::all());
 
-        Role::create(['name' => 'faculty', 'label' => 'Faculty']);
-        Role::create(['name' => 'department-chair', 'label' => 'Department Chair']);
-        Role::create(['name' => 'department-secretary', 'label' => 'Department Secretary']);
-        Role::create(['name' => 'department-staff', 'label' => 'Department Staff']);
-        Role::create(['name' => 'member', 'label' => 'Member']);
-        Role::create(['name' => 'team-head', 'label' => 'Team Head']);
+        $faculty = Role::create(['name' => 'faculty', 'label' => 'Faculty']);
+        $faculty->givePermissionTo('view faculty');
+        $chair = Role::create(['name' => 'department-chair', 'label' => 'Department Chair']);
+        $chair->givePermissionTo(['view course','view curriculum','view faculty']);
+        $secretary = Role::create(['name' => 'department-secretary', 'label' => 'Department Secretary']);
+        $secretary->givePermissionTo(['view course','view curriculum','view faculty']);
+        $staff = Role::create(['name' => 'department-staff', 'label' => 'Department Staff']);
+        $staff->givePermissionTo(['view course','view curriculum','view faculty']);
+        $member = Role::create(['name' => 'member', 'label' => 'Member']);
+        $member->givePermissionTo('view document-outline');
+        $team_head = Role::create(['name' => 'team-head', 'label' => 'Team Head']);
+        $team_head->givePermissionTo('view document-outline');
     }
 }

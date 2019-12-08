@@ -28,7 +28,10 @@ class HomeController extends Controller
 
     public function activities()
     {
-        $events = Task::select('task_name','due_date')->get();
+        $events = Task::select('task_name','due_date')->where('asigned_to', auth()->user()->id)->get();
+
+        if(auth()->user()->hasRole('super-admin'))
+            $events = Task::select('task_name','due_date')->get();
 
         return view('activities.index', compact('events'));
     }

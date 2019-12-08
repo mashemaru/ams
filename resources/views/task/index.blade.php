@@ -13,6 +13,9 @@
                                 <h3 class="mb-0">{{ __('Tasks') }}</h3>
                             </div>
                             <div class="col-4 text-right">
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#groupTaskModal">
+                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Group Task
+                                </button>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#taskModal">
                                     <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Task
                                 </button>
@@ -120,6 +123,18 @@
                             </div>
                             </div>
                             <div class="form-group mb-3">
+                            <label class="form-control-label">Assign to Role(s)</label>
+                            <div class="input-group input-group-alternative">
+                                <select class="form-control form-control-alternative select2" name="assign_to_roles[]" data-toggle="select" multiple >
+                                @if($users)
+                                    @foreach ($roles as $role)
+                                        <option value="{{$role->id}}">{{ ucfirst($role->name) }}</option>
+                                    @endforeach
+                                @endif
+                                </select>
+                            </div>
+                            </div>
+                            <div class="form-group mb-3">
                                 <label class="form-control-label">Due Date</label>
                                 <div class="input-group input-group-alternative">
                                     <input class="form-control datepicker" name="due_date" data-date-format="yyyy-mm-dd" placeholder="Select due date" type="text" value="{{ old('due_date') }}" required>
@@ -140,6 +155,60 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="groupTaskModal" tabindex="-1" role="dialog" aria-labelledby="groupTaskModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="groupTaskModalLabel">Add Task</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <form method="post" action="{{ route('task.store') }}" autocomplete="off">
+                        @csrf
+                            <div class="modal-body">
+                                <div class="form-group{{ $errors->has('task_name') ? ' has-danger' : '' }} mb-3">
+                                    <label class="form-control-label" for="input-task_name">{{ __('Task Name') }}</label>
+                                    <input type="text" name="task_name" id="input-task_name" class="form-control form-control-alternative{{ $errors->has('task_name') ? ' is-invalid' : '' }}" placeholder="{{ __('Task Name') }}" value="{{ old('task_name') }}" required autofocus>
+                                    @if ($errors->has('task_name'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('task_name') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="form-group mb-3">
+                                <label class="form-control-label">Assign to team</label>
+                                <div class="input-group input-group-alternative">
+                                    <select class="form-control form-control-alternative select2" name="assign_to_team[]" data-toggle="select" multiple>
+                                    @if($teams)
+                                        @foreach ($teams as $team)
+                                            <option value="{{$team->id}}">{{ $team->team_name }}</option>
+                                        @endforeach
+                                    @endif
+                                    </select>
+                                </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-control-label">Due Date</label>
+                                    <div class="input-group input-group-alternative">
+                                        <input class="form-control datepicker" name="due_date" data-date-format="yyyy-mm-dd" placeholder="Select due date" type="text" value="{{ old('due_date') }}" required>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-control-label">Remarks</label>
+                                    <div class="input-group input-group-alternative">
+                                        <input class="form-control form-control-alternative" name="remarks" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Add</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         @include('layouts.footers.auth')
     </div>
 @endsection

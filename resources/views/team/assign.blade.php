@@ -57,7 +57,13 @@
                                                     <select class="form-control" name="document[{{ $outline->id}}][team]">
                                                         <option value>Select team</option>
                                                         @foreach ($allTeams as $team)
-                                                            <option value="{{ $team->id }}" @foreach ($accreditation->document_teams as $t) {{ (($outline->id == $t->document_outline_id) && ($t->team_id == $team->id)) ? ' selected="selected"' : '' }} @endforeach>{{ $team->team_name }}</option>
+                                                            <option value="{{ $team->id }}"
+                                                                @foreach ($accreditation->document_teams as $t)
+                                                                @if(($outline->id == $t->id) && ($t->pivot->team_id == $team->id))
+                                                                    {{ ' selected="selected"' }}
+                                                                @endif
+                                                                @endforeach
+                                                            >{{ $team->team_name }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>

@@ -99,37 +99,48 @@
                     </a>
                 </li>
             </ul>
-            @role('super-admin')
+            {{-- @role('super-admin') --}}
             <!-- Divider -->
             <hr class="my-3">
             <!-- Heading -->
             <h6 class="navbar-heading text-muted">Administration & Setup</h6>
             <ul class="navbar-nav">
+                @if(auth()->user()->can('view agency'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('agency.*') ? ' active' : '' }}" href="{{ route('agency.index') }}">
                         <i class="ni ni-building text-blue"></i> Agencies
                     </a>
                 </li>
+                @endif
+                @if(auth()->user()->can('view program'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('program.*') ? ' active' : '' }}" href="{{ route('program.index') }}">
                         <i class="ni ni-hat-3 text-blue"></i> Programs
                     </a>
                 </li>
+                @endif
+                @if(auth()->user()->can('view course'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('course.*') ? ' active' : '' }}" href="{{ route('course.index') }}">
                         <i class="ni ni-ruler-pencil text-yellow"></i> Courses
                     </a>
                 </li>
+                @endif
+                @if(auth()->user()->can('view scoring-type'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('scoring.*') ? ' active' : '' }}" href="{{ route('scoring.index') }}">
                         <i class="ni ni-book-bookmark text-teal"></i> Scoring Types
                     </a>
                 </li>
+                @endif
+                @if(auth()->user()->can('view curriculum'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('curriculum.*') ? ' active' : '' }}" href="{{ route('curriculum.index') }}">
                         <i class="ni ni-paper-diploma text-yellow"></i> Curriculums
                     </a>
                 </li>
+                @endif
+                @canany(['view user','view role-permission'])
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#navbar-user" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-user">
                         <i class="ni ni-single-02 text-orange"></i>
@@ -137,58 +148,77 @@
                     </a>
                     <div class="collapse" id="navbar-user" style="">
                         <ul class="nav nav-sm flex-column">
+                            @if(auth()->user()->can('view user'))
                             <li class="nav-item">
                                 <a href="{{ route('user.index') }}" class="nav-link">Users</a>
                             </li>
+                            @endif
+                            @if(auth()->user()->can('view role-permission'))
                             <li class="nav-item">
                                 <a href="{{ route('roles-permission.index') }}" class="nav-link">Roles & Permissions</a>
                             </li>
+                            @endif
                         </ul>
                     </div>
                 </li>
+                @endcanany
+                @if(auth()->user()->can('view faculty'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('faculty.*') ? ' active' : '' }}" href="{{ route('faculty.index') }}">
                         <i class="ni ni-badge text-orange"></i> FIF
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('document.*') ? ' active' : '' }}" href="{{ route('document.index') }}">
                         <i class="ni ni-single-copy-04 text-blue"></i> Document Template
                     </a>
                 </li>
+                @if(auth()->user()->can('view document-outline'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('document-outline.*') ? ' active' : '' }}" href="{{ route('document-outline.index') }}">
                         <i class="ni ni-single-copy-04 text-blue"></i> Document Outline
                     </a>
                 </li>
+                @endif
+                @if(auth()->user()->can('view accreditation'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('accreditation.*') ? ' active' : '' }}" href="{{ route('accreditation.index') }}">
                         <i class="ni ni-paper-diploma text-blue"></i> Accreditations
                     </a>
                 </li>
+                @endif
+                @if(auth()->user()->can('view team'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('team.*') ? ' active' : '' }}" href="{{ route('team.index') }}">
                     <i class="ni ni-circle-08 text-orange"></i> Teams
                 </a>
+                @endif
                 </li>
             </ul>
+            @canany(['view accreditation','view team'])
             <!-- Divider -->
             <hr class="my-3">
             <!-- Heading -->
             <h6 class="navbar-heading text-muted">Configuration</h6>
             <ul class="navbar-nav">
+                @if(auth()->user()->can('view accreditation'))
                 <li class="nav-item">
                 <a class="nav-link" href="{{ route('accreditation.create') }}">
                     <i class="ni ni-paper-diploma text-blue"></i> New Accreditation
                 </a>
                 </li>
+                @endif
+                @if(auth()->user()->can('view team'))
                 <li class="nav-item">
                 <a class="nav-link" href="{{ route('team.create') }}">
                     <i class="ni ni-circle-08 text-orange"></i> Create Team
                 </a>
                 </li>
+                @endif
             </ul>
-            @endrole
+            @endcanany
+            {{-- @endrole --}}
             <!-- Divider -->
             <hr class="my-3">
             <!-- Heading -->

@@ -163,7 +163,8 @@ class TeamController extends Controller
         }
 
         $accreditation->teams()->sync($teams);
-        $accreditation->document_teams()->sync($documents);
+        $accreditation->document_teams()->detach();
+        $accreditation->document_teams()->attach($documents);
         return back()->withToastSuccess(__('Team successfully assigned.'));
     }
 }
