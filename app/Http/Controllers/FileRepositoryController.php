@@ -207,18 +207,36 @@ class FileRepositoryController extends Controller
         return view('file-repo.appendix-exhibits');
     }
 
-    public function showEvidences(Request $request, DocumentOutline $document_outline)
+    public function showEvidences(Request $request)
     {
         if ($request->ajax()) {
-            $document_outline->load('appendix_exhibit.evidences');
-            $items = collect();
-            $document_outline->appendix_exhibit->each(function($q) use(&$items) {
-                $items = $items->concat($q->evidences);
-            });
-            $evidences = $items->pluck('id');
+            // $document_outline->load('appendix_exhibit.evidences');
+            // $items = collect();
+            // $document_outline->appendix_exhibit->each(function($q) use(&$items) {
+            //     $items = $items->concat($q->evidences);
+            // });
+            // $evidences = $items->pluck('id');
 
             // $data = FileRepository::get()->diff($items);
             $data = FileRepository::all();
+            // $data = AppendixExhibit::with('evidences')->get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                // ->addColumn('evidences', function($data) {
+                //     return $data->evidences->map(function($c) {
+                //         return $c->file_name;
+                //     })->implode(', ');
+                // })
+                ->make(true);
+        }
+        // return view('file-repo.evidences');
+    }
+
+    public function showFileRepository(Request $request)
+    {
+        if ($request->ajax()) {
+            // $data = FileRepository::get()->diff($items);
+            $data = AppendixExhibit::all();
             // $data = AppendixExhibit::with('evidences')->get();
             return Datatables::of($data)
                 ->addIndexColumn()

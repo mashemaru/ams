@@ -12,6 +12,7 @@ use App\Task;
 use App\FileRepository;
 use App\Document;
 use App\DocumentTeam;
+use App\AppendixExhibit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -356,5 +357,55 @@ class AccreditationController extends Controller
             'evidence_list' => $request->evidence_list,
         ]);
         return back()->withToastSuccess(__('Evidence List successfully updated.'));
+    }
+
+    public function accreditationRecommendationEvidenceSelect(Request $request, Accreditation $accreditation)
+    {
+        if($request->selected) {
+            $appendix_exhibit = collect();
+            $string = explode(',',$request->selected);
+
+            foreach($string as $item) {    
+                $appendix_exhibit->push(['appendix_exhibits_id' => $item, 'accreditation_id' => $accreditation->id]);
+            }
+        }
+        $accreditation->recommendations_appendix_exhibits()->syncWithoutDetaching($appendix_exhibit);
+        return back()->withToastSuccess(__('Action completed successfully.'));
+    }
+
+    public function accreditationRecommendationEvidenceUpload(Request $request, Accreditation $accreditation)
+    {
+        $appendix_exhibit = AppendixExhibit::create([
+            'name'     => $request->name,
+            'code'     => $request->name,
+            'type'     => $request->type,
+        ]);
+
+        $accreditation->recommendations_appendix_exhibits()->attach($appendix_exhibit->id);
+
+        if($request->hasFile('file')) {
+            foreach($request->file('file') as $file){
+                $filename = $file->getClientOriginalName();
+            
+                while(Storage::exists('accreditation/' . $accreditation->id . '/' . $request->type . '/' . $request->name . '/' . $filename)) {
+                    $filename = '(1)' . $filename;
+                }
+
+                $file->storeAs('accreditation/' . $accreditation->id . '/' . $request->type . '/' . $request->name, $filename);
+
+                $uploaded = FileRepository::create([
+                    'user_id'       => auth()->user()->id,
+                    'file_name'     => $filename,
+                    'file_type'     => 'Evidence',
+                    'file'          => $filename,
+                    'directory'     => 'accreditation/' . $accreditation->id . '/' . $request->type . '/' . $request->name . '/' . $filename,
+                    'reference'     => 'AppendixExhibit',
+                    'reference_id'  => $appendix_exhibit->id,
+                ]);
+
+                $appendix_exhibit->evidences()->attach($uploaded);
+            }
+        }
+        return back()->withToastSuccess(__('Action completed successfully.'));
     }
 }

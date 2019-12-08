@@ -67,4 +67,9 @@ class Accreditation extends Model
     {
         return $this->evidence_complete;
     }
+
+    public function recommendations_appendix_exhibits()
+    {
+        return $this->belongsToMany('App\AppendixExhibit', 'recommendations_appendix_exhibits', 'accreditation_id', 'appendix_exhibits_id');
+    }
 }

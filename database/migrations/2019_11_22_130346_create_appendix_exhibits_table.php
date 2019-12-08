@@ -32,6 +32,11 @@ class CreateAppendixExhibitsTable extends Migration
             $table->unsignedBigInteger('appendix_exhibits_id');
             $table->unsignedBigInteger('accreditation_id');
         });
+
+        Schema::create('recommendations_appendix_exhibits', function (Blueprint $table) {
+            $table->unsignedBigInteger('accreditation_id');
+            $table->unsignedBigInteger('appendix_exhibits_id');
+        });
     }
 
     /**
@@ -44,5 +49,6 @@ class CreateAppendixExhibitsTable extends Migration
         Schema::dropIfExists('appendix_exhibits');
         Schema::dropIfExists('appendix_exhibits_evidence');
         Schema::dropIfExists('document_outline_appendix_exhibits');
+        Schema::dropIfExists('recommendations_appendix_exhibits');
     }
 }

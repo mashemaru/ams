@@ -519,7 +519,7 @@ $(document).ready(function () {
     var dataTable2 = $('.data-table2').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('evidence.show',$outline->id) }}",
+        ajax: "{{ route('evidence.show') }}",
         columns: [
             {data: 'id', name: 'id', visible: false},
             {data: 'file_name', name: 'file_name'},

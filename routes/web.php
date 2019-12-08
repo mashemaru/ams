@@ -33,12 +33,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('document-outline', 'DocumentOutlineController');
 	Route::post('document-outlineUpload/{document_outline}', ['as' => 'outline.upload', 'uses' => 'DocumentOutlineController@outlineUpload']);
 	Route::post('document-outlineSelect/{document_outline}', ['as' => 'outline.select', 'uses' => 'DocumentOutlineController@outlineSelect']);
-	Route::get('select-evidences/{document_outline}', ['as' => 'evidence.show', 'uses' => 'FileRepositoryController@showEvidences']);
+	Route::get('select-evidences', ['as' => 'evidence.show', 'uses' => 'FileRepositoryController@showEvidences']);
 	Route::post('select-evidences/{appendix_exhibit}', ['as' => 'evidence.select', 'uses' => 'DocumentOutlineController@selectEvidences']);
 	Route::post('evidenceUpload/{appendix_exhibit}', ['as' => 'evidence.upload', 'uses' => 'DocumentOutlineController@evidenceUpload']);
 	Route::post('evidence-complete/{appendix_exhibit}', ['as' => 'evidence.complete', 'uses' => 'DocumentOutlineController@evidenceComplete']);
 	Route::get('appendices-exhibits', ['as' => 'appendices-exhibits.index', 'uses' => 'FileRepositoryController@appendicesExhibits']);
 	Route::get('select-appendices-exhibits/{document_outline}', ['as' => 'appendices-exhibits.select', 'uses' => 'FileRepositoryController@selectAppendicesExhibits']);
+	Route::get('show-file-repository', ['as' => 'show.file.repo', 'uses' => 'FileRepositoryController@showFileRepository']);
+	Route::post('accreditationRecommendationEvidenceSelect/{accreditation}', ['as' => 'accreditation.recommendation.evidence.select', 'uses' => 'AccreditationController@accreditationRecommendationEvidenceSelect']);
+	Route::post('accreditationRecommendationEvidenceUpload/{accreditation}', ['as' => 'accreditation.recommendation.evidence.upload', 'uses' => 'AccreditationController@accreditationRecommendationEvidenceUpload']);
 	Route::resource('file-repository', 'FileRepositoryController', ['except' => ['show']]);
 	Route::get('file/{file_repository}', ['as' => 'file-repository.download', 'uses' => 'FileRepositoryController@download']);
 	Route::post('fileUpload/', ['as' => 'file-repository.upload', 'uses' => 'FileRepositoryController@upload']);
