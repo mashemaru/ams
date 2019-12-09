@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('teamTask{accreditation}', ['as' => 'team.task.store', 'uses' => 'AccreditationController@teamTask']);
 	Route::resource('curriculum', 'CurriculumController');
 	Route::post('getCurriculumCourses', 'CurriculumController@getCurriculumCourses');
+	Route::get('curriculum-search', ['as' => 'curriculum.search', 'uses' => 'CurriculumController@curriculumSearch']);
 	Route::resource('course', 'CourseController');
 	Route::post('courseRemind/{course}', ['as' => 'course.remind', 'uses' => 'CourseController@courseRemind']);
 	Route::get('course-search', ['as' => 'course.search', 'uses' => 'CourseController@courseSearch']);

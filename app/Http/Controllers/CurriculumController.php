@@ -138,4 +138,24 @@ class CurriculumController extends Controller
             return json_encode($view);
         }
     }
+
+    function curriculumSearch(Request $request)
+    {
+        $number_course_type = array();
+
+        if ($request->has('query')) {
+            $curriculum = Curriculum::with('program')->get();
+            if($request->get('query') == 'number_course_type') {
+                $number_course_type = Curriculum::with('courses')->get()->map(function ($curriculum) {
+                    return $curriculum->courses->groupBy('course_type')->map(function ($courses) {
+                        return count($courses);
+                    });
+                });
+            }
+            // dd($number_course_type);
+            // dd($teaching_experience);
+        }
+
+        return view('curriculum.search', compact('number_course_type','curriculum'));
+    }
 }
