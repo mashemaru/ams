@@ -17,10 +17,10 @@
                 </div>
                 <div class="card-body">
                     <h4><strong>Doc Type:</strong> {{ $outline->doc_type }}</h4>
-                    @if($outline->accreditation->evidence_list)
+                    @if($outline->evidence_list)
                     <h3 class="mt-3">Evidence List</h3>
                     <ol class="mt-3">
-                    @foreach ($outline->accreditation->evidence_list as $item)
+                    @foreach ($outline->evidence_list as $item)
                         <li>{{ $item }}</li>
                     @endforeach
                     </ol>
@@ -36,7 +36,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                            <form method="post" action="{{ route('accreditation.evidence_list.update', $outline->accreditation) }}" autocomplete="off">
+                            <form method="post" action="{{ route('accreditation.evidence_list.update', $outline) }}" autocomplete="off">
                                 @csrf
                                 @method('put')
                                 <div class="modal-body p-lg-5">
@@ -44,7 +44,8 @@
                                         <button type="button" class="btn btn-success" id="addRecommendation">Add</button><br>
                                     </div><br>
                                     <div id="Recommendations">
-                                        @foreach($outline->accreditation->evidence_list as $key => $list)
+                                        @if($outline->evidence_list)
+                                        @foreach($outline->evidence_list as $key => $list)
                                         <div class="row">
                                             <div class="col-8">
                                                 <div class="form-group mb-3">
@@ -58,6 +59,7 @@
                                             </div>
                                         </div>
                                         @endforeach
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="modal-footer">

@@ -9,7 +9,11 @@ class DocumentOutline extends Model
     protected $table = 'document_outline';
 
     protected $fillable = [
-        'document_id', 'accred_id', 'parent_id', 'root_parent_id', 'section', 'body', 'score', 'reference', 'doc_type', 'score_type',
+        'document_id', 'accred_id', 'parent_id', 'root_parent_id', 'section', 'body', 'score', 'reference', 'evidence_list', 'doc_type', 'score_type',
+    ];
+
+    protected $casts = [
+        'evidence_list' => 'array',
     ];
 
     public function document()

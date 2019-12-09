@@ -20,9 +20,29 @@ class DocumentOutlineController extends Controller
      */
     public function index()
     {
+        /*
+        // $users = collect();
+        // $mash = auth()->user()->team_head->each(function($query) use(&$users) {
+        //     // return $q;
+        //     $query->accreditations->each(function($q) use(&$users) {
+        //         $users->push($q->where('progress','!=','completed'));
+        //     });
+        //     // $users->push();
+        //     // $users = $users->concat($q->users);
+        // });
+        $number_course_type = auth()->user()->team_head->map(function ($query) {
+            return $query->accreditations->where('progress','!=','completed');
+            // return $query->accreditations->each(function($q) {
+            //     return $q->where('id','==','completed');
+            // });
+            // return $curriculum->courses->groupBy('course_type')->map(function ($courses) {
+            //     return count($courses);
+            // });
+        });
+        dd($number_course_type->load('document','outlines','agency','program')));*/
         // $document_outline = DocumentOutline::with('document','accreditation.agency','accreditation.program');
         // dd($document_outline->paginate(15)->groupBy('accreditation.id'));
-        $accreditations = Accreditation::with('document','agency','program')->where('progress','!=','completed')->latest()->get();
+        $accreditations = Accreditation::with('document','outlines','agency','program')->where('progress','!=','completed')->latest()->get();
         // $document_outline = $accreditation->outlines->load('document','accreditation.agency','accreditation.program');
         // dd($document_outline->paginate(15));
         // dd($document_outline->paginate(15)->groupBy('accreditation.id'));
@@ -102,6 +122,14 @@ class DocumentOutlineController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function updateEvidenceList(Request $request, DocumentOutline $document_outline)
+    {
+        $document_outline->update([
+            'evidence_list' => $request->evidence_list,
+        ]);
+        return back()->withToastSuccess(__('Evidence List successfully updated.'));
     }
 
     public function image_upload(Request $request)
