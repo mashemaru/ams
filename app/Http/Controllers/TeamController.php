@@ -60,6 +60,9 @@ class TeamController extends Controller
             'team_name' => $request->team_name,
             'team_head' => $request->team_head,
         ]);
+        $team_head = User::where('id', $request->team_head)->first();
+        $team_head->assignRole('team-head');
+
         $team->users()->sync($request->team_members);
 
         if($request->has('save_create'))
@@ -121,6 +124,9 @@ class TeamController extends Controller
             'team_name' => $request->team_name,
             'team_head' => $request->team_head,
         ]);
+        $team_head = User::where('id', $request->team_head)->first();
+        $team_head->assignRole('team-head');
+
         $team->users()->sync($request->team_members);
 
         return back()->withToastSuccess(__('Team successfully updated.'));

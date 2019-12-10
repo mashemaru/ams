@@ -159,6 +159,9 @@
                             <h3 class="mb-0">Teams</h3>
                         </div>
                         <div class="col-4 text-right">
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createTeamModal">
+                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Create Sub Team
+                            </button>
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#taskModal">
                                 <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Task
                             </button>
@@ -279,6 +282,60 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="createTeamModal" tabindex="-1" role="dialog" aria-labelledby="createTeamModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="createTeamModalLabel">Create Sub Team</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form method="post" action="{{ route('team.store') }}" autocomplete="off">
+        @csrf
+            <div class="card-body">
+                <div class="form-group{{ $errors->has('team_name') ? ' has-danger' : '' }}">
+                    <label class="form-control-label" for="input-team_name">{{ __('Team Name') }}</label>
+                    <input type="text" name="team_name" id="input-team_name" class="form-control form-control-alternative{{ $errors->has('team_name') ? ' is-invalid' : '' }}" placeholder="{{ __('Team Name') }}" value="{{ old('team_name') }}" required>
+
+                    @if ($errors->has('team_name'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('team_name') }}</strong>
+                        </span>
+                    @endif
+                </div>
+                <div class="form-group{{ $errors->has('team_head') ? ' has-danger' : '' }}">
+                    <label class="form-control-label" for="input-team_head">{{ __('Team Head') }}</label>
+                    <select id="input-team_head" class="form-control form-control-alternative{{ $errors->has('team_head') ? ' is-invalid' : '' }}" placeholder="{{ __('Team Head') }}" name="team_head" required>
+                        <option value>Select Team Head</option>
+                        @foreach ($users as $user)
+                            <option value="{{$user->id}}" {{ ($user->id == old('team_head')) ? 'selected="selected"' : '' }}>{{ $user->name }}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('team_head'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('team_head') }}</strong>
+                        </span>
+                    @endif
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label">{{ __('Team Members') }}</label>
+                    <select class="form-control form-control-alternative select2" name="team_members[]" data-toggle="select" multiple data-placeholder="Select team member">
+                        @foreach ($users as $user)
+                            <option value="{{$user->id}}">{{ $user->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="card-footer py-4">
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>
         </div>
     </div>
 </div>

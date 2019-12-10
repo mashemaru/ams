@@ -123,7 +123,9 @@ class AccreditationController extends Controller
     {
         $accreditation->load('agency','program','document','teams','teams.head','teams.users');
         $team_head = User::has('team_head')->get();
-        return view('accreditation.show', compact('accreditation','team_head'));
+        $users = User::select('id','firstname','mi','surname')->role('member')->get();
+
+        return view('accreditation.show', compact('accreditation','team_head','users'));
     }
 
     /**
@@ -407,5 +409,35 @@ class AccreditationController extends Controller
             }
         }
         return back()->withToastSuccess(__('Action completed successfully.'));
+    }
+
+    public function createSubTeam(Request $request, Accreditation $accreditation)
+    {
+        $validate = Validator::make($request->all(), [
+            'team_name'     => 'required|min:4',
+            'team_head'     => 'required',
+            'team_members'  => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
+
+        foreach($request->team_members as $members) {
+            if($members == $request->team_head)
+                return back()->with('error', 'User cannot be both Team Head and Member')->withInput();
+        }
+
+        $team = Team::create([
+            'team_name' => $request->team_name,
+            'team_head' => $request->team_head,
+        ]);
+        $team_head = User::where('id', $request->team_head)->first();
+        $team_head->assignRole('team-head');
+
+        $team->users()->sync($request->team_members);
+
+        $accreditation->teams()->syncWithoutDetaching($team);
+        return back()->withToastSuccess(__('Sub Team successfully created.'));
     }
 }

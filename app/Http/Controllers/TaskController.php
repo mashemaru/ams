@@ -30,8 +30,8 @@ class TaskController extends Controller
             $users = User::all();
 
         $roles = Role::all();
-        $teams = Team::whereHas('accreditations')->get();
-
+        // $teams = Team::whereHas('accreditations')->get();
+        $teams = Team::all();
         $assigned = $users->pluck('id');
         $assigned->push(auth()->user()->id);
 
