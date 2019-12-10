@@ -54,7 +54,7 @@
                         </div>
                         <div class="col-1">
                         </div>
-                        <div class="col-5">
+                        <div class="col-5 d-none">
                             <div class="progress-wrapper">
                                 <div class="progress-info">
                                     <div class="progress-label">
@@ -177,7 +177,7 @@
                                     <th scope="col">Team Head</th>
                                     <th scope="col">Team Members</th>
                                     <th scope="col">Assigned to</th>
-                                    <th scope="col">Tasks Completed</th>
+                                    {{-- <th scope="col">Tasks Completed</th> --}}
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -188,12 +188,12 @@
                                     <td>{{ $team->head->name }}</td>
                                     <td>{!! $team->users->implode('name', '<br>') !!}</td>
                                     <td>
-                                        {{-- {{ $team->document_teams }}
-                                        Chapter 1<br>
-                                        Chapter 5<br> --}}
+                                        @if($team->document_teams->where('pivot.accreditation_id', $accreditation->id))
+                                        {!! $team->document_teams->where('pivot.accreditation_id', $accreditation->id)->implode('section', '<br>') !!}
+                                        @endif
                                     </td>
-                                    <td>
-                                        {{-- <div class="d-flex align-items-center">
+                                    {{-- <td>
+                                        <div class="d-flex align-items-center">
                                             <span class="mr-2">80%</span>
                                             <div>
                                                 <div class="progress">
@@ -202,9 +202,9 @@
                                                         style="width: 80%;"></div>
                                                 </div>
                                             </div>
-                                        </div> --}}
-                                    </td>
-                                    <td class="text-right">
+                                        </div>
+                                    </td> --}}
+                                    {{-- <td class="text-right">
                                         <div class="dropdown">
                                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -215,7 +215,7 @@
                                                 <a class="dropdown-item" href="#">Delete</a>
                                             </div>
                                         </div>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -294,7 +294,7 @@
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form method="post" action="{{ route('team.store') }}" autocomplete="off">
+        <form method="post" action="{{ route('accreditation.team.store', $accreditation) }}" autocomplete="off">
         @csrf
             <div class="card-body">
                 <div class="form-group{{ $errors->has('team_name') ? ' has-danger' : '' }}">

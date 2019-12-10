@@ -249,4 +249,10 @@ class FileRepositoryController extends Controller
         }
         // return view('file-repo.evidences');
     }
+
+    public function evidenceRemove(AppendixExhibit $appendix_exhibit, FileRepository $file_repository)
+    {
+        $appendix_exhibit->evidences()->detach($file_repository);
+        return back()->withToastSuccess(__('Evidence successfully removed.'));
+    }
 }

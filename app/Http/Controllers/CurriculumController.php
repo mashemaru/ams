@@ -142,9 +142,8 @@ class CurriculumController extends Controller
     function curriculumSearch(Request $request)
     {
         $number_course_type = array();
-
+        $curriculum = Curriculum::with('program')->get();
         if ($request->has('query')) {
-            $curriculum = Curriculum::with('program')->get();
             if($request->get('query') == 'number_course_type') {
                 $number_course_type = Curriculum::with('courses')->get()->map(function ($curriculum) {
                     return $curriculum->courses->groupBy('course_type')->map(function ($courses) {

@@ -61,7 +61,14 @@
                 </button>
             </div>
             <div class="modal-body text-left">
-                {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $appendix_exhibits->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
+                @if($appendix_exhibits->evidences)
+                    @foreach($appendix_exhibits->evidences as $evidences)
+                    <form method="post" action="/evidenceRemove/{{$appendix_exhibits->id}}/{{$evidences->id}}" autocomplete="off">
+                    @csrf
+                        <p><span class="badge badge-dot mr-4"><i class="bg-info"></i> {{ $evidences->file_name }}</span> <button type="submit" class="btn btn-danger btn-sm"><i class="ni ni-fat-remove"></i></button></p>
+                    </form>
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>

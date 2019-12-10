@@ -27,7 +27,13 @@ class AccreditationController extends Controller
     public function index(Accreditation $accreditation)
     {
         $accreditation->load('agency','program','document','timeline');
-        return view('accreditation.index', ['accreditations' => $accreditation->paginate(15)]);
+        if(!auth()->user()->hasRole('super-admin')) {
+            $accreditation = $accreditation->where('progress','!=','completed')->whereHas('teams', function ($query) {
+                $query->whereIn('team_id', auth()->user()->teams->merge(auth()->user()->team_head)->pluck('id')->toArray());
+            });
+        }
+
+        return view('accreditation.index', ['accreditations' => $accreditation->latest()->paginate(15)]);
     }
 
     /**
@@ -436,8 +442,17 @@ class AccreditationController extends Controller
         $team_head->assignRole('team-head');
 
         $team->users()->sync($request->team_members);
-
         $accreditation->teams()->syncWithoutDetaching($team);
+
+        $result = \DB::table('document_team')->where('accreditation_id', $accreditation->id)->whereIn('team_id', auth()->user()->teams->diff(auth()->user()->team_head)->pluck('id')->toArray())->distinct()->get();
+        $documents = [];
+        if($result) {
+            foreach($result as $item) {
+                $documents[] = ['document_id' => $item->document_id, 'document_outline_id' => $item->document_outline_id, 'team_id' => $team->id];
+            }
+        }
+        $accreditation->document_teams()->attach($documents);
+
         return back()->withToastSuccess(__('Sub Team successfully created.'));
     }
 }

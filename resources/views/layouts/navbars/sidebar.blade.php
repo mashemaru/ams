@@ -119,24 +119,69 @@
                     </a>
                 </li>
                 @endif
-                @if(auth()->user()->can('view course'))
+                @canany(['view course','view curriculum'])
                 <li class="nav-item">
-                    <a class="nav-link{{ Route::is('course.*') ? ' active' : '' }}" href="{{ route('course.index') }}">
-                        <i class="ni ni-ruler-pencil text-yellow"></i> Courses
+                    <a class="nav-link collapsed" href="#navbar-instruction" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-instruction">
+                        <i class="ni ni-ruler-pencil text-yellow"></i>
+                        <span class="nav-link-text">Instruction</span>
                     </a>
+                    <div class="collapse" id="navbar-instruction" style="">
+                        <ul class="nav nav-sm flex-column">
+                            @if(auth()->user()->can('view course'))
+                            <li class="nav-item">
+                                <a class="nav-link{{ Route::is('course.*') ? ' active' : '' }}" href="{{ route('course.index') }}">
+                                    Courses
+                                </a>
+                            </li>
+                            @endif
+                            @if(auth()->user()->can('view curriculum'))
+                            <li class="nav-item">
+                                <a class="nav-link{{ Route::is('curriculum.*') ? ' active' : '' }}" href="{{ route('curriculum.index') }}">
+                                    Curriculums
+                                </a>
+                            </li>
+                            @endif
+                        </ul>
+                    </div>
                 </li>
-                @endif
+                @endcanany
+                @canany(['view course','view curriculum','view faculty'])
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#navbar-reports" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="navbar-reports">
+                        <i class="ni ni-collection text-red"></i>
+                        <span class="nav-link-text">Reports</span>
+                    </a>
+                    <div class="collapse" id="navbar-reports" style="">
+                        <ul class="nav nav-sm flex-column">
+                            @if(auth()->user()->can('view course'))
+                            <li class="nav-item">
+                                <a class="nav-link{{ Route::is('course.*') ? ' active' : '' }}" href="/course-search">
+                                    Courses
+                                </a>
+                            </li>
+                            @endif
+                            @if(auth()->user()->can('view curriculum'))
+                            <li class="nav-item">
+                                <a class="nav-link{{ Route::is('curriculum.*') ? ' active' : '' }}" href="/curriculum-search">
+                                    Curriculums
+                                </a>
+                            </li>
+                            @endif
+                            @if(auth()->user()->can('view faculty'))
+                            <li class="nav-item">
+                                <a class="nav-link{{ Route::is('faculty.*') ? ' active' : '' }}" href="/faculty-search">
+                                    Faculty
+                                </a>
+                            </li>
+                            @endif
+                        </ul>
+                    </div>
+                </li>
+                @endcanany
                 @if(auth()->user()->can('view scoring-type'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('scoring.*') ? ' active' : '' }}" href="{{ route('scoring.index') }}">
                         <i class="ni ni-book-bookmark text-teal"></i> Scoring Types
-                    </a>
-                </li>
-                @endif
-                @if(auth()->user()->can('view curriculum'))
-                <li class="nav-item">
-                    <a class="nav-link{{ Route::is('curriculum.*') ? ' active' : '' }}" href="{{ route('curriculum.index') }}">
-                        <i class="ni ni-paper-diploma text-yellow"></i> Curriculums
                     </a>
                 </li>
                 @endif

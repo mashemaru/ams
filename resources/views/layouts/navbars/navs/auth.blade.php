@@ -29,7 +29,7 @@
                         <i class="ni ni-single-02"></i>
                         <span>Faculty Information Form</span>
                     </a>
-                    <a href="#" class="dropdown-item">
+                    {{-- <a href="#" class="dropdown-item">
                         <i class="ni ni-support-16"></i>
                         <span>My Team</span>
                     </a>
@@ -44,7 +44,7 @@
                     <a href="#" class="dropdown-item">
                         <i class="ni ni-settings-gear-65"></i>
                         <span>Settings</span>
-                    </a>
+                    </a> --}}
                     <div class="dropdown-divider"></div>
                     <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();">

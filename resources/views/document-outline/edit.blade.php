@@ -139,7 +139,7 @@
                 </div>
             </div>
             @endif
-            @if ($outline->accreditation->progress == 'initial')
+            {{-- @if ($outline->accreditation->progress == 'initial')
             <div class="card shadow mb-3">
                 <div class="card-body px-lg-5 py-lg-5">
                     <div class="dd">
@@ -149,7 +149,7 @@
                     </div>
                 </div>
             </div>
-            @else
+            @else --}}
             <form method="post" action="{{ route('document-outline.update', $outline) }}" autocomplete="off">
             @csrf
             @method('put')
@@ -175,11 +175,13 @@
                         @endif
                         <textarea name="content" id="content">{{ $outline->body }}</textarea>
                     </div>
+                    @if ($outline->accreditation->progress == 'formal')
                     <div class="card-footer py-4">
                         <div class="text-right">
                             <button type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </div>
+                    @endif
                 </div>
                 @if ($outline->score_type != 0)      
                 <!-- Modal -->     
@@ -216,7 +218,7 @@
                 </div>
                 @endif
             </form>
-            @endif
+            {{-- @endif --}}
             <div class="card shadow">
                 <div class="card-header border-1">
                     <div class="row align-items-center">
@@ -335,8 +337,18 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body text-left">
-                                                        {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $data->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
+                                                        @if($data->evidences)
+                                                            @foreach($data->evidences as $evidences)
+                                                            <form method="post" action="/evidenceRemove/{{$data->id}}/{{$evidences->id}}" autocomplete="off">
+                                                            @csrf
+                                                                <p><span class="badge badge-dot mr-4"><i class="bg-info"></i> {{ $evidences->file_name }}</span> <button type="submit" class="btn btn-danger btn-sm"><i class="ni ni-fat-remove"></i></button></p>
+                                                            </form>
+                                                            @endforeach
+                                                        @endif
                                                     </div>
+                                                    {{-- <div class="modal-body text-left">
+                                                        {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $data->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
+                                                    </div> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -464,6 +476,9 @@
 <script src="{{ asset('js/dataTables.js') }}"></script>
 <script>
 $(document).ready(function () {
+    @if ($outline->accreditation->progress != 'formal')
+    $('#content').summernote('disable');
+    @endif
     $('.dd-list .removeclass').remove();
     $('.dd-list input').attr('disabled', true);
     $('.dd-list select').attr('disabled', true);

@@ -138,6 +138,53 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xl-4 order-xl-2">
+                    <div class="card bg-secondary shadow">
+                        <div class="card-header bg-white border-0">
+                            <div class="row align-items-center">
+                                <h3 class="col-12 mb-0">Accreditations</h3>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                        <!-- Projects table -->
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Accreditation</th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Team</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @if($accreditations)
+                                @foreach ($accreditations as $item)
+                                <tr>
+                                    <th scope="row">
+                                        {{ $item->agency->agency_code }} - {{ $item->program->program_code }}
+                                    </th>
+                                        @php $break = false; @endphp
+                                        @if($teams)
+                                        @foreach ($item->teams as $accredition_team)
+                                            @foreach ($teams as $team)
+                                                @if($accredition_team->id == $team->id)
+                                                    <td>{{ ($team->team_head == auth()->user()->id) ? 'Team Head' : 'Member' }}</td>
+                                                    <td>{{ $team->team_name }}</td>
+                                                    @php $break = true; @endphp
+                                                    @break
+                                                @endif
+                                            @endforeach
+                                            @if($break) @break @endif
+                                        @endforeach
+                                        @endif
+                                </tr>
+                                @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         @include('layouts.footers.auth')

@@ -41,12 +41,17 @@ class DocumentOutlineController extends Controller
         });
         dd($number_course_type->load('document','outlines','agency','program')));*/
         // $document_outline = DocumentOutline::with('document','accreditation.agency','accreditation.program');
-        // dd($document_outline->paginate(15)->groupBy('accreditation.id'));
-        $accreditations = Accreditation::with('document','outlines','agency','program')->where('progress','!=','completed')->latest()->get();
+        // dd($document_outline->paginate(15)->groupBy('accreditation.id'));\
+        $accreditations = Accreditation::with('document','outlines','agency','program')->where('progress','!=','completed')->latest();
+        if(!auth()->user()->hasRole('super-admin')) {
+            $accreditations = $accreditations->whereHas('teams', function ($query) {
+                $query->whereIn('team_id', auth()->user()->teams->merge(auth()->user()->team_head)->pluck('id')->toArray());
+            });
+        }
         // $document_outline = $accreditation->outlines->load('document','accreditation.agency','accreditation.program');
         // dd($document_outline->paginate(15));
         // dd($document_outline->paginate(15)->groupBy('accreditation.id'));
-        return view('document.outline.index', compact('accreditations'));
+        return view('document.outline.index', ['accreditations' => $accreditations->get()]);
     }
 
     /**

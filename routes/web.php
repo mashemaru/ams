@@ -53,6 +53,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('team', 'TeamController');
 	Route::post('assignTeam/{accreditation}', ['as' => 'team.assign', 'uses' => 'TeamController@assignTeam']);
 	Route::resource('accreditation', 'AccreditationController');
+	Route::post('createSubTeam{accreditation}', ['as' => 'accreditation.team.store', 'uses' => 'AccreditationController@createSubTeam']);
 	Route::get('assignTeam/{accreditation}', ['as' => 'accreditation.assignTeam', 'uses' => 'AccreditationController@assign_team']);
 	Route::post('generateAppendixExhibitList{accreditation}', ['as' => 'accreditation.appendix.generate', 'uses' => 'AccreditationController@generateAppendixExhibitList']);
 	Route::post('generateDocument/{accreditation}', ['as' => 'accreditation.generate', 'uses' => 'AccreditationController@generateDocument']);
@@ -64,6 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('answerRecommendation/{accreditation}', ['as' => 'answer.recommendation', 'uses' => 'AccreditationController@answerRecommendation']);
 	Route::get('evidence_list/{accreditation}', ['as' => 'accreditation.evidence_list.create', 'uses' => 'AccreditationController@showEvidenceList']);
 	// Route::post('evidence_list/{accreditation}', ['as' => 'accreditation.evidence_list', 'uses' => 'AccreditationController@createEvidenceList']);
+	Route::post('evidenceRemove/{appendix_exhibit}/{file_repository}', 'FileRepositoryController@evidenceRemove');
 	Route::put('evidence_list/{document_outline}', ['as' => 'accreditation.evidence_list.update', 'uses' => 'DocumentOutlineController@updateEvidenceList']);
 	Route::post('teamTask{accreditation}', ['as' => 'team.task.store', 'uses' => 'AccreditationController@teamTask']);
 	Route::resource('curriculum', 'CurriculumController');
