@@ -255,4 +255,26 @@ class FileRepositoryController extends Controller
         $appendix_exhibit->evidences()->detach($file_repository);
         return back()->withToastSuccess(__('Evidence successfully removed.'));
     }
+
+    public function evidenceDownload(AppendixExhibit $appendix_exhibit)
+    {
+        $appendix_exhibit->load('evidences');
+        if($appendix_exhibit->evidences) {
+            $zip_file = storage_path('app/evidences/' . $appendix_exhibit->name . '-' . $appendix_exhibit->type . '-' . now()->format("m-d-Y-his") . '.zip'); // Name of our archive to download
+
+            // Initializing PHP class
+            $zip = new \ZipArchive();
+            $zip->open( $zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+    
+            // Adding file: second parameter is what will the path inside of the archive
+            // So it will create another folder called "storage/" inside ZIP, and put the file there.
+            foreach($appendix_exhibit->evidences as $evidences) {
+                $zip->addFile($evidences->directory, $evidences->file);
+            }
+
+            $zip->close();
+            return response()->download($zip_file)->deleteFileAfterSend();
+            // return response()->download(public_path($zip_file))->deleteFileAfterSend();
+        }
+    }
 }

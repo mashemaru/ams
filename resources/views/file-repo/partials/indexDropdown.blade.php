@@ -13,6 +13,10 @@
             </button>
         </form> --}}
         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#viewEvidences{{ $appendix_exhibits->id }}">View Evidence List</a>
+        <form method="post" action="{{ route('evidence.download', $appendix_exhibits->id ) }}" autocomplete="off">
+        @csrf
+        <button type="submit" class="dropdown-item" style="cursor:pointer">Download Evidences as zip</button>
+        </form>
         @if($appendix_exhibits->type == 'appendix' && !$appendix_exhibits->evidence_complete)
         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modal-evidence-{{ $appendix_exhibits->id }}">Complete Evidence</a>
         @endif
