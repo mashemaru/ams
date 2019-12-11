@@ -64,6 +64,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('answerRecommendation/{accreditation}', ['as' => 'answer.show.recommendation', 'uses' => 'AccreditationController@showAnswerRecommendation']);
 	Route::put('answerRecommendation/{accreditation}', ['as' => 'answer.recommendation', 'uses' => 'AccreditationController@answerRecommendation']);
 	Route::get('evidence_list/{accreditation}', ['as' => 'accreditation.evidence_list.create', 'uses' => 'AccreditationController@showEvidenceList']);
+	Route::post('evidenceDownload/{appendix_exhibit}', ['as' => 'evidence.download', 'uses' => 'FileRepositoryController@evidenceDownload']);
 	// Route::post('evidence_list/{accreditation}', ['as' => 'accreditation.evidence_list', 'uses' => 'AccreditationController@createEvidenceList']);
 	Route::post('evidenceRemove/{appendix_exhibit}/{file_repository}', 'FileRepositoryController@evidenceRemove');
 	Route::put('evidence_list/{document_outline}', ['as' => 'accreditation.evidence_list.update', 'uses' => 'DocumentOutlineController@updateEvidenceList']);
