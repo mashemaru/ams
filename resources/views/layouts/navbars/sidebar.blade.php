@@ -214,11 +214,13 @@
                     </a>
                 </li>
                 @endif
+                @if(auth()->user()->can('view document'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('document.*') ? ' active' : '' }}" href="{{ route('document.index') }}">
                         <i class="ni ni-single-copy-04 text-blue"></i> Document Template
                     </a>
                 </li>
+                @endif
                 @if(auth()->user()->can('view document-outline'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('document-outline.*') ? ' active' : '' }}" href="{{ route('document-outline.index') }}">
