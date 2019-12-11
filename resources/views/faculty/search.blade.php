@@ -1,8 +1,21 @@
 @extends('layouts.app', ['title' => __('Faculty Information Management')])
 
 @section('content')
-    @include('layouts.headers.cards')
-
+    {{-- @include('layouts.headers.cards') --}}
+    <div class="header bg-gradient-primary py-7 py-lg-8">
+        @if ($teaching_experience)
+        <div class="container">
+            <div class="header-body text-center">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <h1 class="text-white">Faculty teaching experience as of <small><em>{{ now()->setTimezone('Asia/Singapore')->toDayDateTimeString() }}</em></small></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+    </div>
+    
     <div class="container-fluid mt--7">
         <div class="row">
             <div class="col-3">
