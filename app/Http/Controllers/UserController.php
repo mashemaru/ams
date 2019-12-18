@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Accreditation;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Http\Requests\UserRequest;
@@ -59,6 +60,16 @@ class UserController extends Controller
         $roles = Role::select('id','name','label')->get();
         $permissions = getPermissions();
         return view('users.edit', compact('user','roles','permissions'));
+    }
+
+    public function show(User $user)
+    {
+        $user->load('team_head','teams');
+        $accreditations = Accreditation::with('teams','agency','program')->whereHas('teams', function ($query) use(&$user) {
+            $query->whereIn('team_id', $user->teams->merge($user->team_head)->pluck('id')->toArray());
+        });
+
+        return view('users.view', ['user' => $user, 'accreditations' => $accreditations->get(), 'teams' => $user->teams->merge($user->team_head)]);
     }
 
     /**

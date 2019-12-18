@@ -10,10 +10,10 @@
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col-8">
-                                <h3 class="mb-0">{{ __('Document Template') }}</h3>
+                                <h3 class="mb-0">{{ __('Evaluation Instrument') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                <a href="{{ route('document.create') }}" class="btn btn-primary btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Document Outline</a>
+                                <a href="{{ route('document.create') }}" class="btn btn-primary btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Evaluation Instrument</a>
                             </div>
                         </div>
                     </div>

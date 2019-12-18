@@ -347,4 +347,30 @@ class CourseController extends Controller
         }
         return back()->withToastSuccess(__('Action completed successfully.'));
     }
+
+    public function allCourseRemind()
+    {
+        $courses = Course::with('faculty')->get();
+        $users = User::role('department-secretary')->get();
+
+        foreach($courses as $course) {
+            if(!$course->faculty->isEmpty()) {
+                foreach($course->faculty as $user) {
+                    Notification::create([
+                        'user_id' => $user->id,
+                        'text'    => 'Update <strong>Course ('.$course->course_code.') Syllabus</strong>',
+                    ]);
+                }
+            } else {
+                foreach($users as $secretary) {
+                    Notification::create([
+                        'user_id' => $secretary->id,
+                        'text'    => 'Update <strong>Course ('.$course->course_code.') Syllabus</strong>',
+                    ]);
+                }
+            }
+        }
+        
+        return back()->withToastSuccess(__('Action completed successfully.'));
+    }
 }

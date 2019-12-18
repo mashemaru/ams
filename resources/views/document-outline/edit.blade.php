@@ -119,7 +119,7 @@
             </div>
         </div>
         <div class="col-xl-9 mb-5 mb-xl-0">
-            @if ($outline->accreditation->type == 'reaccredit')
+            {{-- @if ($outline->accreditation->type == 'reaccredit')
             <div class="card shadow mb-3">
                 <div class="card-header border-1">
                     <div class="row align-items-center">
@@ -138,7 +138,7 @@
                     @endif
                 </div>
             </div>
-            @endif
+            @endif --}}
             {{-- @if ($outline->accreditation->progress == 'initial')
             <div class="card shadow mb-3">
                 <div class="card-body px-lg-5 py-lg-5">

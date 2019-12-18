@@ -58,9 +58,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group{{ $errors->has('document_id') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-document_id">{{ __('Document Outline') }}</label>
+                                        <label class="form-control-label" for="input-document_id">{{ __('Evaluation Instrument') }}</label>
                                         <select id="input-document_id" class="form-control form-control-alternative{{ $errors->has('document_id') ? ' is-invalid' : '' }}" placeholder="{{ __('Document Outline') }}" name="document_id" required>
-                                            <option value>Select Document</option>
+                                            <option value>Select Evaluation Instrument</option>
                                             @foreach ($documents as $document)
                                                 <option value="{{ $document->id }}" {{ ($document->id == $accreditation->document_id) ? 'selected="selected"' : '' }}>{{ $document->document_name }}</option>
                                             @endforeach

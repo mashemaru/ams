@@ -12,7 +12,16 @@
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Course Overview') }}</h3>
                             </div>
-                            <div class="col-4 text-right">
+                            <div class="col-3 text-right">
+                                <form method="post" action="{{ route('course.remindAll') }}" class="d-inline" autocomplete="off">
+                                @csrf
+                                    <button type="submit" class="btn btn-primary btn-sm mr-4 float-right">
+                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                        Remind All Syllabus Update
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-1 text-right">
                                 <a href="{{ route('course.create') }}" class="btn btn-success btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Course</a>
                             </div>
                         </div>

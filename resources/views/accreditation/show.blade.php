@@ -99,7 +99,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-5">
-                                    <p class="mb-3 text-sm text-muted">Document</p>
+                                    <p class="mb-3 text-sm text-muted">Evaluation Instrument</p>
                                 </div>
                                 <div class="col-7">
                                     <p class="mb-0 text-sm"><b class="font-weight-bold">{{ $accreditation->document->document_name }}</b></p>

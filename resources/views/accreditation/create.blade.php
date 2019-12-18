@@ -57,9 +57,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group{{ $errors->has('document_id') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-document_id">{{ __('Document Outline') }}</label>
+                                        <label class="form-control-label" for="input-document_id">{{ __('Evaluation Instrument') }}</label>
                                         <select id="input-document_id" class="form-control form-control-alternative{{ $errors->has('document_id') ? ' is-invalid' : '' }}" placeholder="{{ __('Document Outline') }}" name="document_id" required>
-                                            <option value>Select Document</option>
+                                            <option value>Select Evaluation Instrument</option>
                                             @if (session('document')) }}
                                                 @foreach (json_decode(session('document'), true) as $document)
                                                 <option value="{{ $document['id'] }}">{{ $document['name'] }}</option>
@@ -131,11 +131,11 @@
 <script src="/vendor/datepicker/bootstrap-datepicker.min.js"></script>
 <script>
 $('#document').on('change', 'select[name="agency_id"]', function () {
-    $("#input-document_id").html('<option value>Select Document</option>');
+    $("#input-document_id").html('<option value>Select Evaluation Instrument</option>');
     if(this.value) {
         $.getJSON( "/getAgencyDocument/" + this.value, function( data ) {
             var items = [];
-            items.push( "<option value>Select Document</option>" );
+            items.push( "<option value>Select Evaluation Instrument</option>" );
             $.each( data, function( key, value) {
                 items.push( "<option value='" + value.id + "'>" +  value.name + "</option>" );
             });

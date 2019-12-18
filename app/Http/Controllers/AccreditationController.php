@@ -192,6 +192,19 @@ class AccreditationController extends Controller
         $accreditation->load('agency','program','document','document.outlines');
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
+        if ($accreditation->type == 'reaccredit') {
+            if($accreditation->recommendations) {
+                $output = '<ol>';
+                foreach ($accreditation->recommendations as $key => $item) {
+                    $output .= '<li>'.$item['label'].'<ul><li>'.$item['answer'].'</li></ul>'.'</li>';
+                }
+                $output .= '</ol>';
+                $section = $phpWord->addSection();
+                $section->addText('Recommendations',array('name'=>'Arial','size' => 24,'bold' => true));
+                \PhpOffice\PhpWord\Shared\Html::addHtml($section, $output);
+            }
+        }
+
         foreach($accreditation->outlines as $outline) {
             $section = $phpWord->addSection();
             $section->addText($outline->section,array('name'=>'Arial','size' => (($outline->parent_id == 0) ? 24 : 20),'bold' => true));
@@ -309,7 +322,8 @@ class AccreditationController extends Controller
             'recommendations'   =>  $request->recommendation,
         ]);
 
-        return redirect()->route('accreditation.index')->withToastSuccess(__('Recommendation successfully updated.'));
+        return back()->withToastSuccess(__('Recommendation successfully updated.'));
+        // return redirect()->route('accreditation.index')->withToastSuccess(__('Recommendation successfully updated.'));
     }
 
     public function generateAppendixExhibitList(Accreditation $accreditation)

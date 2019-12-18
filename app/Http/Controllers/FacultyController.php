@@ -230,4 +230,17 @@ class FacultyController extends Controller
         ]);
         return back()->withToastSuccess(__('Action completed successfully.'));
     }
+
+    public function facultyRemindAll()
+    {
+        $users = User::role('faculty')->get();
+        foreach($users as $user) {
+            Notification::create([
+                'user_id' => $user->id,
+                'text'    => 'Update <strong>Faculty Information Form</strong>',
+            ]);
+        }
+
+        return back()->withToastSuccess(__('Action completed successfully.'));
+    }
 }

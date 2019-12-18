@@ -29,6 +29,13 @@
                                         Generate All FIF
                                     </button>
                                 </form>
+                                <form method="post" action="{{ route('faculty.remindAll') }}" class="d-inline" autocomplete="off">
+                                @csrf
+                                    <button type="submit" class="btn btn-primary btn-sm mr-4 float-right">
+                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                        Remind All Faculty
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

@@ -22,7 +22,7 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('agency', 'AgencyController', ['except' => ['show','create']]);
 	Route::resource('program', 'ProgramController', ['except' => ['show','create']]);
-	Route::resource('user', 'UserController', ['except' => ['show']]);
+	Route::resource('user', 'UserController');
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
 	Route::resource('task', 'TaskController', ['except' => ['show']]);
 	Route::get('notification', ['as' => 'notification.index', 'uses' => 'NotificationController@index']);
@@ -73,6 +73,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('getCurriculumCourses', 'CurriculumController@getCurriculumCourses');
 	Route::get('curriculum-search', ['as' => 'curriculum.search', 'uses' => 'CurriculumController@curriculumSearch']);
 	Route::resource('course', 'CourseController');
+	Route::post('courseRemindAll', ['as' => 'course.remindAll', 'uses' => 'CourseController@allCourseRemind']);
 	Route::post('courseRemind/{course}', ['as' => 'course.remind', 'uses' => 'CourseController@courseRemind']);
 	Route::get('course-search', ['as' => 'course.search', 'uses' => 'CourseController@courseSearch']);
 	Route::post('course-search-download', ['as' => 'course.search-download', 'uses' => 'CourseController@courseSearchDownload']);
@@ -91,6 +92,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 	Route::get('faculty', ['as' => 'faculty.index', 'uses' => 'FacultyController@facultyIndex']);
+	Route::post('facultyRemindAll', ['as' => 'faculty.remindAll', 'uses' => 'FacultyController@facultyRemindAll']);
 	Route::get('faculty-search', ['as' => 'faculty.search', 'uses' => 'FacultyController@facultySearch']);
 	Route::post('faculty-search-download', ['as' => 'faculty.search-download', 'uses' => 'FacultyController@facultySearchDownload']);
 	Route::get('faculty/{user}', ['as' => 'faculty.show', 'uses' => 'FacultyController@facultyShow']);
