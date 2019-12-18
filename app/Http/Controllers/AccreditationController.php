@@ -210,6 +210,8 @@ class AccreditationController extends Controller
             $section->addText($outline->section,array('name'=>'Arial','size' => (($outline->parent_id == 0) ? 24 : 20),'bold' => true));
     
             $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$outline->body);
+            $html = str_replace("&quot;","'",$outline->body);
+            
             \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
         }
 
