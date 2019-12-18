@@ -320,6 +320,7 @@ class AccreditationController extends Controller
     {
         $accreditation->update([
             'recommendations'   =>  $request->recommendation,
+            'evidence_list'     =>  $request->evidence_list,
         ]);
 
         return back()->withToastSuccess(__('Recommendation successfully updated.'));

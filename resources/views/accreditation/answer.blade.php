@@ -40,6 +40,30 @@
                         </div>
                     @endforeach
                     </div>
+                    <hr>
+                    <h2>Evidence List</h2>
+                    <div class="text-muted text-left mt-2 mb-3">
+                        {{-- Recommendations<br><br> --}}
+                        <button type="button" class="btn btn-success" id="addRecommendation">Add</button><br>
+                    </div><br>
+                    <div id="Recommendations">
+                        @if($accreditation->evidence_list)
+                        @foreach ($accreditation->evidence_list as $key => $evidence)
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="form-group mb-3">
+                                    <div class="input-group input-group-alternative">
+                                        <input class="form-control recommendation" placeholder="Evidence List" name="evidence_list[{{$key}}]" type="text" value="{{ $evidence }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1">
+                                <button class="btn btn-icon btn-2 btn-danger removeRecommendation" type="button">X</button>
+                            </div>
+                        </div>
+                        @endforeach
+                        @endif
+                    </div>
                     @endif
                 </div>
                 <div class="modal-footer">
@@ -319,7 +343,24 @@ $(document).ready(function () {
     $('.data-table2 tbody').on( 'click', 'tr', function () {
         $(this).toggleClass('selected');
         $('.evidence_select input[name="selected"]').val(dataTable2.rows('.selected').data().pluck('id').toArray());
-    } );
+    });
+    $('#addRecommendation').click(function (e) { //on add input button click
+        var Recommendations = $("#Recommendations .row").length;
+        $("#Recommendations").append('<div class="row"><div class="col-8"><div class="form-group mb-3"><div class="input-group input-group-alternative"><input class="form-control recommendation" placeholder="Evidence List" name="evidence_list['+Recommendations+']" type="text"></div></div></div><div class="col-1"><button class="btn btn-icon btn-2 btn-danger removeRecommendation" type="button">X</button></div></div>');
+    });
+
+    $("body").on("click",".removeRecommendation", function(e) { //user click on remove text
+        if( $("#Recommendations .row").length >= 1 ) {
+            $(this).parent().closest('.row').remove();
+            var x = 0;
+            $("#Recommendations .row").each(function() {
+                var recommendation = $(this).find("input.recommendation");
+                recommendation.attr('name', 'evidence_list['+x+']');
+                x++;
+            });
+        }
+        return false;
+    });
 });
 </script>
 @endpush
