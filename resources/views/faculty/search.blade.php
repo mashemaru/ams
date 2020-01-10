@@ -13,6 +13,16 @@
                 </div>
             </div>
         </div>
+        @elseif ($professional_practice)
+        <div class="container">
+            <div class="header-body text-center">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <h1 class="text-white">Professional practice as of <small><em>{{ now()->setTimezone('Asia/Singapore')->toDayDateTimeString() }}</em></small></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
         @endif
     </div>
     
@@ -41,6 +51,7 @@
                         <select class="form-control form-control-alternative" name="query">
                             <option value>Select Search</option>
                             <option value="teaching_experience"{{ (request()->get('query') == 'teaching_experience') ? ' selected' : '' }}>Teaching Experience</option>
+                            <option value="professional_practice"{{ (request()->get('query') == 'professional_practice') ? ' selected' : '' }}>Professional Practice</option>
                             {{-- <option value="professional_experience"{{ (request()->get('query') == 'professional_experience') ? ' selected' : '' }}>Professional Experience</option> --}}
                         </select>
                         {{-- <div class="accordion search-accordion" id="search-accordion">
@@ -94,6 +105,8 @@
             </div>
             @if ($teaching_experience)
                 @include('faculty.search.teaching_experience')
+            @elseif ($professional_practice)
+                @include('faculty.search.professional_practice')
             @endif
             {{-- <div class="col-9">
                 <div class="card shadow">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Notification;
+use App\Events\LiveNotification;
 use App\Exports\FacultyExport;
 use App\Exports\FacultyAcademicBackgroundExport;
 use App\Exports\FacultyEducationalBackgroundExport;
@@ -185,6 +186,7 @@ class FacultyController extends Controller
     {
         $users = User::role('faculty');
         $teaching_experience = array();
+        $professional_practice = array();
 
         if ($request->has('query')) {
             if($request->get('query') == 'teaching_experience') {
@@ -194,18 +196,26 @@ class FacultyController extends Controller
                 ->get()
                 ->groupBy('rank')
                 ->toArray();
+            } else if($request->get('query') == 'professional_practice') {
+                $professional_practice = $users->select("users.rank",
+                \DB::raw('(SELECT SUM(years) FROM faculty_professional_practice_dlsu WHERE faculty_professional_practice_dlsu.user_id = users.id) as faculty_experience_dlsu'),
+                \DB::raw('(SELECT SUM(years) FROM faculty_professional_practice WHERE faculty_professional_practice.user_id = users.id) as faculty_experience_other'))
+                ->get()
+                ->groupBy('rank')
+                ->toArray();
             }
-            // dd($teaching_experience);
+            // dd($professional_practice);
         }
 
         // $users = User::role('faculty')->paginate(15);
-        return view('faculty.search', compact('teaching_experience'));
+        return view('faculty.search', compact('teaching_experience','professional_practice'));
     }
 
     public function facultySearchDownload(Request $request)
     {
         $users = User::role('faculty');
         $teaching_experience = array();
+        $professional_practice = array();
 
         if ($request->has('query')) {
             if($request->get('query') == 'teaching_experience') {
@@ -215,11 +225,18 @@ class FacultyController extends Controller
                 ->get()
                 ->groupBy('rank')
                 ->toArray();
+                $pdf = \PDF::loadView('faculty.search.teaching_experience', compact('teaching_experience'));
+            } else if($request->get('query') == 'professional_practice') {
+                $professional_practice = $users->select("users.rank",
+                \DB::raw('(SELECT SUM(years) FROM faculty_professional_practice_dlsu WHERE faculty_professional_practice_dlsu.user_id = users.id) as faculty_experience_dlsu'),
+                \DB::raw('(SELECT SUM(years) FROM faculty_professional_practice WHERE faculty_professional_practice.user_id = users.id) as faculty_experience_other'))
+                ->get()
+                ->groupBy('rank')
+                ->toArray();
+                $pdf = \PDF::loadView('faculty.search.professional_practice', compact('professional_practice'));
             }
+            return $pdf->download(now()->format("m-d-Y-his") . '_faculty-search-result.pdf');
         }
-
-        $pdf = \PDF::loadView('faculty.search.teaching_experience', compact('teaching_experience'));
-        return $pdf->download(now()->format("m-d-Y-his") . '_faculty-search-result.pdf');
     }
 
     public function facultyRemind(User $user)
@@ -228,6 +245,7 @@ class FacultyController extends Controller
             'user_id' => $user->id,
             'text'    => 'Update <strong>Faculty Information Form</strong>',
         ]);
+        event(new LiveNotification('Update Faculty Information Form',$user->id));
         return back()->withToastSuccess(__('Action completed successfully.'));
     }
 
@@ -239,6 +257,7 @@ class FacultyController extends Controller
                 'user_id' => $user->id,
                 'text'    => 'Update <strong>Faculty Information Form</strong>',
             ]);
+            event(new LiveNotification('Update Faculty Information Form',$user->id));
         }
 
         return back()->withToastSuccess(__('Action completed successfully.'));

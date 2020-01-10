@@ -20,7 +20,7 @@
                             @foreach ($tasks as $task)
                                 <div class="list-group-item list-group-item-action flex-column align-items-start py-3 px-4">
                                     <div class="d-flex w-100 justify-content-between">
-                                        <h5 class="mb-1">Tim</h5>
+                                        <h5 class="mb-1">&nbsp;</h5>
                                         <small><i class="fas fa-clock mr-1"></i>{{ $task->created_at->diffForHumans() }}</small>
                                     </div>
                                     <div class="d-flex w-100 justify-content-between">

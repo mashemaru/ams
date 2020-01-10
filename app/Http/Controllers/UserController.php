@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Notifications\EmailInvitations;
 use App\Accreditation;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -120,5 +121,16 @@ class UserController extends Controller
     {
         $role->syncPermissions($request->permission);
         return redirect()->route('roles-permission.index')->withToastSuccess(__('Role permissions successfully updated.'));
+    }
+
+    public function userEmailInvitation(Request $request)
+    {
+        $users = User::whereIn('id', $request->team_members)->get();
+        if($users) {
+            foreach($users as $user) {
+                $user->notify(new EmailInvitations());
+            }
+            return back()->withToastSuccess(__('User successfully notified.'));
+        }
     }
 }

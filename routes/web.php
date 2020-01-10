@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('agency', 'AgencyController', ['except' => ['show','create']]);
 	Route::resource('program', 'ProgramController', ['except' => ['show','create']]);
 	Route::resource('user', 'UserController');
+	Route::post('userEmailInvitation', ['as' => 'email.invitation', 'uses' => 'UserController@userEmailInvitation']);
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
 	Route::resource('task', 'TaskController', ['except' => ['show']]);
 	Route::get('notification', ['as' => 'notification.index', 'uses' => 'NotificationController@index']);

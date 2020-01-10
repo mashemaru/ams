@@ -44,5 +44,28 @@
 
         <!-- Argon JS -->
         <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0"></script>
+        <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3500,
+            onOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        @if(!auth()->guest())
+            Echo.private('user.{{ auth()->user()->id }}')
+                .listen('LiveNotification', (e) => {
+                    Toast.fire({
+                        type: 'info',
+                        title: e.message
+                    })
+                });
+        @endif
+
+        </script>
     </body>
 </html>

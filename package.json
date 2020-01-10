@@ -23,6 +23,8 @@
     },
     "dependencies": {
         "jquery": "^3.4.1",
+        "laravel-echo": "^1.6.1",
+        "pusher-js": "^5.0.3",
         "select2": "^4.0.10"
     }
 }

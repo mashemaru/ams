@@ -1,7 +1,7 @@
 @php
 $ft_dlsu_0 = $ft_dlsu_3 = $ft_dlsu_9 = $ft_dlsu_14 = $ft_dlsu_15 = $pt_dlsu_0 = $pt_dlsu_3 = $pt_dlsu_9 = $pt_dlsu_14 = $pt_dlsu_15 = 0;
 $ft_other_0 = $ft_other_3 = $ft_other_9 = $ft_other_14 = $ft_other_15 = $pt_other_0 = $pt_other_3 = $pt_other_9 = $pt_other_14 = $pt_other_15 = 0;
-foreach($teaching_experience as $key => $exp) {
+foreach($professional_practice as $key => $exp) {
     if($key == 'FT') {
         foreach($exp as $item) {
             if($item['faculty_experience_dlsu'] <= 0 && $item['faculty_experience_dlsu'] != null) {

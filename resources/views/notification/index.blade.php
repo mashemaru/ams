@@ -28,11 +28,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="card-footer py-4">
+                    {{-- <div class="card-footer py-4">
                         <nav class="d-flex justify-content-end" aria-label="...">
                             {{ $notifications->links() }}
                         </nav>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

@@ -13,6 +13,7 @@ use App\FileRepository;
 use App\Document;
 use App\DocumentTeam;
 use App\AppendixExhibit;
+use App\Events\LiveNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -355,6 +356,7 @@ class AccreditationController extends Controller
                 'due_date'   => $request->due_date,
                 'remarks'    => $request->remarks,
             ]);
+            event(new LiveNotification('Task ('.$request->task_name.') assigned.',$assign));
         }
 
         $team = Team::whereIn('team_head', $request->assign_to)->get();

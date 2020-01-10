@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Course;
 use App\User;
 use App\Notification;
+use App\Events\LiveNotification;
 use App\FileRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -343,6 +344,7 @@ class CourseController extends Controller
                     'user_id' => $user->id,
                     'text'    => 'Update <strong>Course ('.$course->course_code.') Syllabus</strong>',
                 ]);
+                event(new LiveNotification('Update Course ('.$course->course_code.') Syllabus',$user->id));
             }
         }
         return back()->withToastSuccess(__('Action completed successfully.'));
@@ -360,6 +362,7 @@ class CourseController extends Controller
                         'user_id' => $user->id,
                         'text'    => 'Update <strong>Course ('.$course->course_code.') Syllabus</strong>',
                     ]);
+                    event(new LiveNotification('Update Course ('.$course->course_code.') Syllabus',$user->id));
                 }
             } else {
                 foreach($users as $secretary) {
@@ -367,6 +370,7 @@ class CourseController extends Controller
                         'user_id' => $secretary->id,
                         'text'    => 'Update <strong>Course ('.$course->course_code.') Syllabus</strong>',
                     ]);
+                    event(new LiveNotification('Update Course ('.$course->course_code.') Syllabus',$user->id));
                 }
             }
         }

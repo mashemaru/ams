@@ -6,6 +6,7 @@ use App\Task;
 use App\User;
 use App\Team;
 use App\Notification;
+use App\Events\LiveNotification;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -35,6 +36,12 @@ class TaskController extends Controller
         $assigned = $users->pluck('id');
         $assigned->push(auth()->user()->id);
 
+        if(auth()->user()->hasRole('super-admin')) {
+            $query = $task->whereIn('asigned_to', $assigned)->latest()->paginate(15);
+        } else {
+            $query = $task->where('asigned_to', auth()->user()->id)->latest()->paginate(15);
+        }
+
         // if(auth()->user()->teams->isEmpty() && auth()->user()->team_head->isEmpty())
         //     $users = User::all();
         // elseif(auth()->user()->teams->isEmpty())
@@ -43,7 +50,7 @@ class TaskController extends Controller
         //     $users = auth()->user()->teams->first()->users->push(auth()->user()->teams->first()->head);
             
     
-        return view('task.index', ['tasks' => $task->whereIn('asigned_to', $assigned)->latest()->paginate(15), 'users' => $users, 'roles' => $roles, 'teams' => $teams]);
+        return view('task.index', ['tasks' => $query, 'users' => $users, 'roles' => $roles, 'teams' => $teams]);
     }
 
     /**
@@ -81,6 +88,7 @@ class TaskController extends Controller
                     'due_date'   => $request->due_date,
                     'remarks'    => $request->remarks,
                 ]);
+                event(new LiveNotification('Task ('.$request->task_name.') assigned.',$assign));
             }
         }
 
@@ -95,6 +103,7 @@ class TaskController extends Controller
                         'due_date'   => $request->due_date,
                         'remarks'    => $request->remarks,
                     ]);
+                    event(new LiveNotification('Task ('.$request->task_name.') assigned.',$user->id));
                 }
             }
         }
@@ -115,6 +124,7 @@ class TaskController extends Controller
                     'due_date'   => $request->due_date,
                     'remarks'    => $request->remarks,
                 ]);
+                event(new LiveNotification('Task ('.$request->task_name.') assigned.',$user->id));
             }
         }
 

@@ -25,6 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        /*
         auth()->user()->load('teams.users','teams.head','team_head.users');
         $users = collect();
         auth()->user()->teams->each(function($q) use(&$users) {
@@ -38,11 +39,13 @@ class HomeController extends Controller
         if(auth()->user()->hasRole('super-admin')) {
             $users = User::all();
         }
-        $notification = Notification::with('user')->latest()->get();
-
+        
         $assigned = $users->pluck('id');
         $assigned->push(auth()->user()->id);
-        $tasks = Task::whereIn('asigned_to', $assigned)->latest()->get();
+        */
+        $notification = Notification::with('user')->where('user_id', auth()->user()->id)->latest()->get()->unique('text');
+        $tasks = Task::where('asigned_to', auth()->user()->id)->latest()->get();
+    
         return view('dashboard', ['tasks' => $tasks, 'notifications' => $notification]);
     }
 
@@ -50,8 +53,8 @@ class HomeController extends Controller
     {
         $events = Task::select('task_name','due_date')->where('asigned_to', auth()->user()->id)->get();
 
-        if(auth()->user()->hasRole('super-admin'))
-            $events = Task::select('task_name','due_date')->get();
+        // if(auth()->user()->hasRole('super-admin'))
+        //     $events = Task::select('task_name','due_date')->get();
 
         return view('activities.index', compact('events'));
     }
