@@ -40,10 +40,9 @@
                         </div>
                     @endforeach
                     </div>
-                    <hr>
+                    {{-- <hr>
                     <h2>Evidence List</h2>
                     <div class="text-muted text-left mt-2 mb-3">
-                        {{-- Recommendations<br><br> --}}
                         <button type="button" class="btn btn-success" id="addRecommendation">Add</button><br>
                     </div><br>
                     <div id="Recommendations">
@@ -63,7 +62,7 @@
                         </div>
                         @endforeach
                         @endif
-                    </div>
+                    </div> --}}
                     @endif
                 </div>
                 <div class="modal-footer">
