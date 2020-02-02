@@ -1,5 +1,5 @@
 @foreach($sections as $s)
-<li class="dd-item" data-section="{{ $s->section }}"{!! isset($s->doc_type) ? ' data-doc_type="' . $s->doc_type . '"' : '' !!}{!! isset($s->score) ? ' data-score="' . $s->score . '"' : '' !!}>
+<li class="dd-item" data-section="{{ $s->section }}"{!! isset($s->doc_type) ? ' data-doc_type="' . $s->doc_type . '"' : '' !!}{!! isset($s->score) ? ' data-score="' . $s->score . '"' : '' !!}{!! isset($s->description) ? ' data-description="' . $s->description . '"' : '' !!}>
     <div class="form-inline">
         <div class="dd-handle"><i class="fas fa-arrows-alt"></i></div>
         <div class="form-group mr-3">
@@ -26,6 +26,8 @@
             </div>
         </div>
         <button class="btn btn-icon btn-2 btn-danger removeclass" type="button">x</button>
+        <div class="flex-break"></div>
+        <textarea class="form-control doc-textarea" rows="3" placeholder="Description">{{ isset($s->description) ? $s->description : '' }}</textarea>
     </div>
     @if(isset($s->children))
         <ol class="dd-list">

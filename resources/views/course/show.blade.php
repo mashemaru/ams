@@ -15,12 +15,13 @@
                         <div class="col text-right">
                         <a href="{{ route('course.index') }}" class="btn btn-sm btn-primary">Back to list</a>
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal" style="float:right">
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal" style="float:right"{{ (auth()->check() && auth()->user()->hasAnyRole('department-staff|department-secretary')) ? '' : ' disabled' }}>
                             <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
                             Update Syllabus
                         </button>
                         </div>
 
+                        @if(auth()->check() && auth()->user()->hasAnyRole('department-staff|department-secretary'))
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <form enctype="multipart/form-data" method="post" action="{{ route('courseSyllabus.update', $course) }}" autocomplete="off">
@@ -52,6 +53,7 @@
                                 </div>
                             </form>
                         </div>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body pt-0">
@@ -168,7 +170,7 @@
             </div>
             </div>
         </div>
-        <br>
+        {{-- <br>
         <div class="row">
             <div class="col-xl-12 order-xl-1">
             <div class="card">
@@ -205,7 +207,7 @@
                 </div>
             </div>
             </div>
-        </div>
+        </div> --}}
         <br>
         <div class="row">
             <div class="col-xl-12 order-xl-1">

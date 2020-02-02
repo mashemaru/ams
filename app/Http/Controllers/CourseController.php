@@ -29,19 +29,26 @@ class CourseController extends Controller
                     return ($data->is_academic) ? '<span class="badge badge-lg badge-success">Academic</span>' : '<span class="badge badge-lg badge-dark">Non-academic</span>';
                 })
                 ->addColumn('courseHardPreq', function($data) {
+                    $softPreq = '';
+                    if($data->courseSoftPreq->isNotEmpty()) {
+                        $softPreq = ' (' . $data->courseSoftPreq->map(function($c) {
+                            return $c->course_code;
+                        })->implode(', ') . ')';
+                    }
+                    // ($data->courseSoftPreq) ? ' (' . $data->courseSoftPreq->map(function($c) { return $c->course_code; })->implode(', ') . ')' : '';
                     return $data->courseHardPreq->map(function($c) {
                         return $c->course_code;
-                    })->implode(' ,');
+                    })->implode(', ') . $softPreq;
                 })
-                ->addColumn('courseSoftPreq', function($data) {
-                    return $data->courseSoftPreq->map(function($c) {
-                        return $c->course_code;
-                    })->implode(' ,');
-                })
+                // ->addColumn('courseSoftPreq', function($data) {
+                //     return $data->courseSoftPreq->map(function($c) {
+                //         return $c->course_code;
+                //     })->implode(', ');
+                // })
                 ->addColumn('courseCoReq', function($data) {
                     return $data->courseCoReq->map(function($c) {
                         return $c->course_code;
-                    })->implode(' ,');
+                    })->implode(', ');
                 })
                 ->addColumn('action', function($row){
                     return view('course.partials.indexDropdown', ['course' => $row->id]);

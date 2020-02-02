@@ -105,7 +105,7 @@ $(function () {
 function addSection(){
     if($('select[name="agency_id"]').val()) {
         var scores = $( ".agency-score-type").html();
-        var x = '<li class="dd-item" data-section> <div class="form-inline"> <div class="dd-handle"><i class="fas fa-arrows-alt"></i></div><div class="form-group mr-3"> <div class="input-group input-group-alternative"> <input class="form-control section" placeholder="Section" type="text"> </div></div><div class="form-group mr-3"> <div class="input-group input-group-alternative"> <select class="form-control score">'+scores+'</select> </div></div><button class="btn btn-icon btn-2 btn-danger removeclass" type="button">x</button> </div></li>';
+        var x = '<li class="dd-item" data-section> <div class="form-inline"> <div class="dd-handle"><i class="fas fa-arrows-alt"></i></div><div class="form-group mr-3"> <div class="input-group input-group-alternative"> <input class="form-control section" placeholder="Section" type="text"> </div></div><div class="form-group mr-3"> <div class="input-group input-group-alternative"> <select class="form-control score">'+scores+'</select> </div></div><button class="btn btn-icon btn-2 btn-danger removeclass" type="button">x</button><div class="flex-break"></div><textarea class="form-control doc-textarea" rows="3" placeholder="Description"></textarea> </div></li>';
         document.getElementById('dd-list').insertAdjacentHTML('beforeend', x);
     }
 }
@@ -116,6 +116,9 @@ $('#dd-list').on('change', 'select.score', function () {
     var opt = $(this).find(':selected').closest('optgroup').attr('label');
     $(this).closest('.dd-item').data( 'doc_type', opt );
     $(this).closest('.dd-item').data( 'score', this.value );
+});
+$('#dd-list').on('input', 'textarea.doc-textarea', function () {
+    $(this).closest('.dd-item').data( 'description', this.value );
 });
 $('#document').on('change', 'select[name="agency_id"]', function () {
     $("#dd-list").html('');

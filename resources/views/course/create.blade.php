@@ -109,7 +109,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label">{{ __('Syllabus') }}</label>
-                                        <input type="file" class="form-control form-control-alternative" name="syllabus">
+                                        <input type="file" class="form-control form-control-alternative" name="syllabus"{{ (auth()->check() && auth()->user()->hasAnyRole('department-staff|department-secretary')) ? '' : ' disabled' }}>
                                     </div>
                                 </div>
                                 <div class="col-md-1">

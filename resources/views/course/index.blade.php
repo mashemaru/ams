@@ -49,8 +49,8 @@
                                     <th scope="col">{{ __('ID') }}</th>
                                     <th scope="col">{{ __('Course Name') }}</th>
                                     <th scope="col">{{ __('Course Code') }}</th>
-                                    <th scope="col">{{ __('Hard PreRequisite') }}</th>
-                                    <th scope="col">{{ __('Soft PreRequisite') }}</th>
+                                    <th scope="col">{{ __('PreRequisite') }}</th>
+                                    {{-- <th scope="col">{{ __('Soft PreRequisite') }}</th> --}}
                                     <th scope="col">{{ __('Co Requisite') }}</th>
                                     <th scope="col">{{ __('Units') }}</th>
                                     <th scope="col"></th>
@@ -85,7 +85,7 @@
                 {data: 'course_name', name: 'course_name'},
                 {data: 'course_code', name: 'course_code'},
                 {data: 'courseHardPreq', name: 'courseHardPreq.course_code', orderable: false, searchable: false},
-                {data: 'courseSoftPreq', name: 'courseSoftPreq.course_code', orderable: false, searchable: false},
+                // {data: 'courseSoftPreq', name: 'courseSoftPreq.course_code', orderable: false, searchable: false},
                 {data: 'courseCoReq', name: 'courseCoReq.course_code', orderable: false, searchable: false},
                 {data: 'units', name: 'units'},
                 {data: 'is_academic', name: 'is_academic'},
