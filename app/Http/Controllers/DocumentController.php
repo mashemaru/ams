@@ -96,6 +96,11 @@ class DocumentController extends Controller
      */
     public function update(Request $request, Document $document)
     {
+        $document->load('accreditation_in_progress');
+        if($document->accreditation_in_progress->count()) {
+            return back()->withToastError(__('Document has active accreditation.'));
+        }
+
         $validate = $request->validate([
             'agency_id'        => 'required|exists:agencies,id',
             'document_name'    => 'required',

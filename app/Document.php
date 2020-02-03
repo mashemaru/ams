@@ -48,6 +48,11 @@ class Document extends Model
 
     public function accreditation()
     {
-        return $this->hasOne('App\Accreditation', 'document_id');
+        return $this->hasMany('App\Accreditation', 'document_id');
+    }
+
+    public function accreditation_in_progress()
+    {
+        return $this->hasMany('App\Accreditation', 'document_id')->where('progress','<>','completed');
     }
 }
