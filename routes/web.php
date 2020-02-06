@@ -85,6 +85,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('outlineResolve/{outline_comment}', ['as' => 'outlineResolve', 'uses' => 'DocumentOutlineController@resolved_comment']);
 	Route::get('getAgencyScoring/{agency}', 'AgencyController@get_agency_scoring');
 	Route::get('getAgencyDocument/{agency}', 'AgencyController@get_agency_document');
+	Route::post('addRole', ['as' => 'role.store', 'uses' => 'UserController@addRole']);
 	Route::get('roles-permission', ['as' => 'roles-permission.index', 'uses' => 'UserController@roles_index']);
 	Route::get('roles-permission/{role}/edit', ['as' => 'roles-permission.edit', 'uses' => 'UserController@roles_edit']);
 	Route::put('roles-permission/{role}', ['as' => 'roles-permission.update', 'uses' => 'UserController@roles_update']);

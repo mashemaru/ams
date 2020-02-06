@@ -12,6 +12,11 @@
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Roles & Permissions') }}</h3>
                             </div>
+                            <div class="col-4 text-right">
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#roleModal">
+                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Role
+                                </button>
+                            </div>
                         </div>
                     </div>
                     
@@ -67,7 +72,37 @@
                 </div>
             </div>
         </div>
-            
+        
+        <!-- Modal -->
+        <div class="modal fade" id="roleModal" tabindex="-1" role="dialog" aria-labelledby="roleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-secondary">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="roleModalLabel">Add Role</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form method="post" action="{{ route('role.store') }}" autocomplete="off">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }} mb-3">
+                                <label class="form-control-label" for="input-name">{{ __('Role Name') }}</label>
+                                <input type="text" name="name" id="input-name" class="form-control form-control-alternative{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Role Name') }}" value="{{ old('name') }}" required autofocus>
+                                @if ($errors->has('name'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         @include('layouts.footers.auth')
     </div>
 @endsection

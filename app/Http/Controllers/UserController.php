@@ -11,6 +11,7 @@ use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -132,5 +133,24 @@ class UserController extends Controller
             }
             return back()->withToastSuccess(__('User successfully notified.'));
         }
+    }
+
+    function addRole(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'name' => 'required|unique:roles|min:2',
+        ]);
+    
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
+    
+        Role::create([
+            'name' => str_replace(' ', '-', strtolower($request->name)),
+            'label' => $request->name,
+        ]);
+    
+        return back()->withToastSuccess(__('Role successfully created.'));
+        Role::create(['name' => 'department-secretary', 'label' => 'Department Secretary']);
     }
 }
