@@ -3,7 +3,11 @@
         <i class="fas fa-ellipsis-v"></i>
     </a>
     <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-        <a class="dropdown-item" href="{{ route('faculty.show', $faculty) }}">View Profile</a>
+        <a class="dropdown-item" href="{{ route('faculty.show', $faculty) }}">View FIF</a>
+        <form method="post" action="{{ route('faculty.exportFaculty', $faculty) }}" autocomplete="off">
+        @csrf
+            <button type="submit" class="dropdown-item">Download FIF</button>
+        </form>
         <form method="post" action="{{ route('faculty.remind', $faculty) }}" class="d-inline" autocomplete="off">
         @csrf
             <button type="submit" class="dropdown-item">Remind FIF Update</button>

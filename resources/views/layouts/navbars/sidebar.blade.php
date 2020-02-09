@@ -210,7 +210,7 @@
                 @if(auth()->user()->can('view faculty'))
                 <li class="nav-item">
                     <a class="nav-link{{ Route::is('faculty.*') ? ' active' : '' }}" href="{{ route('faculty.index') }}">
-                        <i class="ni ni-badge text-orange"></i> FIF
+                        <i class="ni ni-badge text-orange"></i> Faculty Management
                     </a>
                 </li>
                 @endif
