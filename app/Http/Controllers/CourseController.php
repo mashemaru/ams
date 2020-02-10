@@ -344,9 +344,10 @@ class CourseController extends Controller
 
     public function courseRemind(Course $course)
     {
-        $course->load('faculty');
-        if($course->faculty) {
-            foreach($course->faculty as $user) {
+        // $course->load('faculty');
+        $users = User::role('department-staff')->get();
+        if($users) {
+            foreach($users as $user) {
                 Notification::create([
                     'user_id' => $user->id,
                     'text'    => 'Update <strong>Course ('.$course->course_code.') Syllabus</strong>',
@@ -360,26 +361,35 @@ class CourseController extends Controller
     public function allCourseRemind()
     {
         $courses = Course::with('faculty')->get();
-        $users = User::role('department-secretary')->get();
+        $users = User::role('department-staff')->get();
 
         foreach($courses as $course) {
-            if(!$course->faculty->isEmpty()) {
-                foreach($course->faculty as $user) {
+            if($users) {
+                foreach($users as $user) {
                     Notification::create([
                         'user_id' => $user->id,
                         'text'    => 'Update <strong>Course ('.$course->course_code.') Syllabus</strong>',
                     ]);
                     event(new LiveNotification('Update Course ('.$course->course_code.') Syllabus',$user->id));
                 }
-            } else {
-                foreach($users as $secretary) {
-                    Notification::create([
-                        'user_id' => $secretary->id,
-                        'text'    => 'Update <strong>Course ('.$course->course_code.') Syllabus</strong>',
-                    ]);
-                    event(new LiveNotification('Update Course ('.$course->course_code.') Syllabus',$user->id));
-                }
             }
+            // if(!$course->faculty->isEmpty()) {
+            //     foreach($course->faculty as $user) {
+            //         Notification::create([
+            //             'user_id' => $user->id,
+            //             'text'    => 'Update <strong>Course ('.$course->course_code.') Syllabus</strong>',
+            //         ]);
+            //         event(new LiveNotification('Update Course ('.$course->course_code.') Syllabus',$user->id));
+            //     }
+            // } else {
+            //     foreach($users as $secretary) {
+            //         Notification::create([
+            //             'user_id' => $secretary->id,
+            //             'text'    => 'Update <strong>Course ('.$course->course_code.') Syllabus</strong>',
+            //         ]);
+            //         event(new LiveNotification('Update Course ('.$course->course_code.') Syllabus',$user->id));
+            //     }
+            // }
         }
         
         return back()->withToastSuccess(__('Action completed successfully.'));
