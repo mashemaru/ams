@@ -173,7 +173,9 @@
                             </h4>
                             <br>
                         @endif
+                        @if ($outline->accreditation->progress != 'initial')
                         <textarea name="content" id="content">{{ $outline->body }}</textarea>
+                        @endif
                     </div>
                     @if ($outline->accreditation->progress == 'formal')
                     <div class="card-footer py-4">
