@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Course;
 use App\User;
 use App\Notification;
+use App\NotificationSettings;
 use App\Events\LiveNotification;
 use App\FileRepository;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ class CourseController extends Controller
      */
     public function index(Request $request, Course $course)
     {
+        $notifs = NotificationSettings::where('name', 'syllabus')->get();
         if ($request->ajax()) {
             $data = $course->with('courseHardPreq','courseSoftPreq','courseCoReq')->get();
             return Datatables::of($data)
@@ -56,7 +58,7 @@ class CourseController extends Controller
                 ->rawColumns(['action','is_academic'])
                 ->make(true);
         }
-        return view('course.index');
+        return view('course.index', compact('notifs'));
     }
 
     /**
@@ -345,7 +347,7 @@ class CourseController extends Controller
     public function courseRemind(Course $course)
     {
         // $course->load('faculty');
-        $users = User::role('department-staff')->get();
+        $users = User::role(['department-staff','department-secretary'])->get();
         if($users) {
             foreach($users as $user) {
                 Notification::create([
@@ -358,21 +360,40 @@ class CourseController extends Controller
         return back()->withToastSuccess(__('Action completed successfully.'));
     }
 
-    public function allCourseRemind()
+    public function allCourseRemind(Request $request)
     {
-        $courses = Course::with('faculty')->get();
-        $users = User::role('department-staff')->get();
+        $cron = '';
+        if($request->frequency == 'daily') {
+            $cron = '0 0 * * *';
+        } else if ($request->frequency == 'weekly') {
+            $cron = '0 0 * * ' . $request->number_freq;
+        } else if ($request->frequency == 'monthly') {
+            $cron = '0 0 '. $request->number_freq.' * *';
+        }
 
-        foreach($courses as $course) {
-            if($users) {
-                foreach($users as $user) {
-                    Notification::create([
-                        'user_id' => $user->id,
-                        'text'    => 'Update <strong>Course ('.$course->course_code.') Syllabus</strong>',
-                    ]);
-                    event(new LiveNotification('Update Course ('.$course->course_code.') Syllabus',$user->id));
-                }
-            }
+        NotificationSettings::updateOrCreate(
+            ['name' => 'syllabus'],
+            [
+                'number_freq' => $request->number_freq,
+                'frequency' => $request->frequency,
+                'cron' => $cron,
+                'enabled' => isset($request->enabled) ? true : false
+            ]
+        );
+        // $users = User::role('department-staff')->get();
+
+        // if($users) {
+        //     foreach($users as $user) {
+        //         Notification::create([
+        //             'user_id' => $user->id,
+        //             'text'    => 'Update All <strong>Course Syllabus</strong>',
+        //         ]);
+        //         event(new LiveNotification('Update All Course Syllabus',$user->id));
+        //     }
+        // }
+
+        // 0 0 * * * - daily
+
             // if(!$course->faculty->isEmpty()) {
             //     foreach($course->faculty as $user) {
             //         Notification::create([
@@ -390,7 +411,7 @@ class CourseController extends Controller
             //         event(new LiveNotification('Update Course ('.$course->course_code.') Syllabus',$user->id));
             //     }
             // }
-        }
+        // }
         
         return back()->withToastSuccess(__('Action completed successfully.'));
     }

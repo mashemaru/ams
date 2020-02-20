@@ -13,13 +13,10 @@
                                 <h3 class="mb-0">{{ __('Course Overview') }}</h3>
                             </div>
                             <div class="col-3 text-right">
-                                <form method="post" action="{{ route('course.remindAll') }}" class="d-inline" autocomplete="off">
-                                @csrf
-                                    <button type="submit" class="btn btn-primary btn-sm mr-4 float-right">
-                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                                        Remind All Syllabus Update
-                                    </button>
-                                </form>
+                                <button type="button" class="btn btn-primary btn-sm mr-4 float-right" data-toggle="modal" data-target="#reminderModal">
+                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                    Remind All Syllabus Update
+                                </button>
                             </div>
                             <div class="col-1 text-right">
                                 <a href="{{ route('course.create') }}" class="btn btn-success btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Course</a>
@@ -62,7 +59,48 @@
                 </div>
             </div>
         </div>
-            
+        
+        <!-- Modal -->
+        <div class="modal fade" id="reminderModal" tabindex="-1" role="dialog" aria-labelledby="reminderModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content bg-secondary">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reminderModalLabel">Schedule Reminder for Syllabus Update</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <form method="post" action="{{ route('course.remindAll') }}" autocomplete="off">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="form-group{{ $errors->has('number_freq') ? ' has-danger' : '' }} mb-3">
+                                <label class="form-control-label" for="input-name">{{ __('Day') }}</label>  <small>0 daily | 0 (sun) - 6 (sat) Weekly | 1 - 31 (day) Monthly</small>
+                                <input type="number" name="number_freq" id="input-name" class="form-control form-control-alternative{{ $errors->has('number_freq') ? ' is-invalid' : '' }}" placeholder="{{ __('Day') }}" value="{{ old('number_freq', ($notifs) ?? $notifs->number_freq) }}" required autofocus>
+                                @if ($errors->has('number_freq'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('number_freq') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">{{ __('Frequency') }}</label>
+                                <select class="form-control form-control-alternative" name="frequency">
+                                    <option value="daily"{{ ($notifs) ?? (($notifs->frequency == 'daily') ? ' selected' : '') }}>Everyday</option>
+                                    <option value="weekly"{{ ($notifs) ?? (($notifs->frequency == 'weekly') ? ' selected' : '') }}>Weekly</option>
+                                    <option value="monthly"{{ ($notifs) ?? (($notifs->frequency == 'monthly') ? ' selected' : '') }}>Monthly</option>
+                                </select>
+                            </div>
+                            <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline d-block">
+                                <input class="custom-control-input" name="enabled" id="enabled" type="checkbox" {{ old('enabled', ($notifs) ?? ($notifs->enabled) ? 'checked' : '') }}>
+                                <label class="custom-control-label" for="enabled">Enabled</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         @include('layouts.footers.auth')
     </div>
 @endsection
