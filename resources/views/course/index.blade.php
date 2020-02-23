@@ -73,7 +73,7 @@
                         <div class="modal-body">
                             <div class="form-group{{ $errors->has('number_freq') ? ' has-danger' : '' }} mb-3">
                                 <label class="form-control-label" for="input-name">{{ __('Day') }}</label>  <small>0 daily | 0 (sun) - 6 (sat) Weekly | 1 - 31 (day) Monthly</small>
-                                <input type="number" name="number_freq" id="input-name" class="form-control form-control-alternative{{ $errors->has('number_freq') ? ' is-invalid' : '' }}" placeholder="{{ __('Day') }}" value="{{ old('number_freq', ($notifs) ?? $notifs->number_freq) }}" required autofocus>
+                                <input type="number" name="number_freq" id="input-name" class="form-control form-control-alternative{{ $errors->has('number_freq') ? ' is-invalid' : '' }}" placeholder="{{ __('Day') }}" value="{{ old('number_freq', (isset($notifs->number_freq) ? $notifs->number_freq : '') ) }}" required autofocus>
                                 @if ($errors->has('number_freq'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('number_freq') }}</strong>
@@ -83,13 +83,13 @@
                             <div class="form-group">
                                 <label class="form-control-label">{{ __('Frequency') }}</label>
                                 <select class="form-control form-control-alternative" name="frequency">
-                                    <option value="daily"{{ ($notifs) ?? (($notifs->frequency == 'daily') ? ' selected' : '') }}>Everyday</option>
-                                    <option value="weekly"{{ ($notifs) ?? (($notifs->frequency == 'weekly') ? ' selected' : '') }}>Weekly</option>
-                                    <option value="monthly"{{ ($notifs) ?? (($notifs->frequency == 'monthly') ? ' selected' : '') }}>Monthly</option>
+                                    <option value="daily"{{ (isset($notifs->frequency) && $notifs->frequency == 'daily' ? ' selected' : '') }}>Everyday</option>
+                                    <option value="weekly"{{ (isset($notifs->frequency) && $notifs->frequency == 'weekly' ? ' selected' : '') }}>Weekly</option>
+                                    <option value="monthly"{{ (isset($notifs->frequency) && $notifs->frequency == 'monthly' ? ' selected' : '') }}>Monthly</option>
                                 </select>
                             </div>
                             <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline d-block">
-                                <input class="custom-control-input" name="enabled" id="enabled" type="checkbox" {{ old('enabled', ($notifs) ?? ($notifs->enabled) ? 'checked' : '') }}>
+                                <input class="custom-control-input" name="enabled" id="enabled" type="checkbox"{{ (isset($notifs->enabled) && $notifs->enabled == true ? ' checked' : '') }}>
                                 <label class="custom-control-label" for="enabled">Enabled</label>
                             </div>
                         </div>

@@ -22,7 +22,7 @@ class CourseController extends Controller
      */
     public function index(Request $request, Course $course)
     {
-        $notifs = NotificationSettings::where('name', 'syllabus')->get();
+        $notifs = NotificationSettings::where('name', 'syllabus')->first();
         if ($request->ajax()) {
             $data = $course->with('courseHardPreq','courseSoftPreq','courseCoReq')->get();
             return Datatables::of($data)

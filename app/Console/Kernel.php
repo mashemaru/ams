@@ -74,8 +74,15 @@ class Kernel extends ConsoleKernel
                                     event(new LiveNotification('Update All Course Syllabus',$user->id));
                                 }
                             }
-                        } else {
-
+                        } elseif ($notif->name == 'fif') {
+                            $users = User::role('faculty')->get();
+                            foreach($users as $user) {
+                                Notification::create([
+                                    'user_id' => $user->id,
+                                    'text'    => 'Update <strong>Faculty Information Form</strong>',
+                                ]);
+                                event(new LiveNotification('Update Faculty Information Form',$user->id));
+                            }
                         }
                     })->cron($notif->cron)->timezone('Asia/Manila');
                 }

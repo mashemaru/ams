@@ -108,19 +108,23 @@
                                                     @method('put')
                                                     <div class="modal-body">
                                                         <div class="form-group mb-3">
-                                                            <label class="form-control-label d-flex">{{ $a->program->program_name }} {{ $a->agency->agency_name }} Timeline <a href="{{ route('timeline.edit', $a) }}" class="btn btn-primary btn-sm ml-auto">Edit Timeline</a></label><br>
+                                                            <label class="form-control-label d-flex">{{ $a->program->program_name }} {{ $a->agency->agency_name }} Timeline {{--<a href="{{ route('timeline.edit', $a) }}" class="btn btn-primary btn-sm ml-auto">Edit Timeline</a>--}}</label><br>
                                                             @foreach($a->timeline->task as $key => $t)
                                                                 <div class="custom-control custom-control-alternative custom-checkbox mb-3">
-                                                                    <input class="custom-control-input" name="task[{{ $key }}]" id="customCheck{{ $a->id }}-{{ $key }}" type="checkbox"{{ ($t['is_complete']) ? ' checked' : '' }}>
+                                                                    <input class="custom-control-input" name="task[{{ $key }}]" id="customCheck{{ $a->id }}-{{ $key }}" type="checkbox"{{ ($t['is_complete']) ? ' checked disabled' : '' }}>
+                                                                    @if($t['is_complete'])
+                                                                    <input type="hidden" name="task[{{ $key }}]" value="on">
+                                                                    @endif
                                                                     <label class="custom-control-label" for="customCheck{{ $a->id }}-{{ $key }}">{{ $t['task'] }}<span><h6 class="text-muted">{{ $t['date'] }}</h6></span></label>
                                                                 </div>
                                                             @endforeach
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-primary">Update</button>
                                                         @if($a->timeline->status == 100 && $a->progress != 'initial')
                                                             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-notification-{{ $a->id }}">Complete Accreditation</button>
+                                                        @else
+                                                            <button type="submit" class="btn btn-primary">Update</button>
                                                         @endif
                                                     </div>
                                                 </form>

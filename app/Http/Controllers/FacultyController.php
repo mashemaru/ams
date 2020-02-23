@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Notification;
+use App\NotificationSettings;
 use App\Events\LiveNotification;
 use App\Exports\FacultyExport;
 use App\Exports\FacultyAcademicBackgroundExport;
@@ -23,6 +24,7 @@ class FacultyController extends Controller
 {
     public function facultyIndex(Request $request)
     {
+        $notifs = NotificationSettings::where('name', 'fif')->first();
         if ($request->ajax()) {
             
             $data = User::role('faculty')->get();
@@ -37,7 +39,7 @@ class FacultyController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('faculty.index');
+        return view('faculty.index', compact('notifs'));
     }
 
     public function facultyShow(User $user)
@@ -187,9 +189,13 @@ class FacultyController extends Controller
         $users = User::role('faculty');
         $teaching_experience = array();
         $professional_practice = array();
-
+        $relations = array();
+    
         if ($request->has('query')) {
             if($request->get('query') == 'teaching_experience') {
+                $relations = $users->with('faculty_teaching_experience_dlsu','faculty_teaching_experience_other')->where(function ($query) {
+                    $query->has('faculty_teaching_experience_dlsu')->orHas('faculty_teaching_experience_other');
+                })->get()->groupBy('rank');
                 $teaching_experience = $users->select("users.rank",
                 \DB::raw('(SELECT SUM(years) FROM faculty_teaching_experience_dlsu WHERE faculty_teaching_experience_dlsu.user_id = users.id) as faculty_experience_dlsu'),
                 \DB::raw('(SELECT SUM(years) FROM faculty_teaching_experience_other WHERE faculty_teaching_experience_other.user_id = users.id) as faculty_experience_other'))
@@ -197,6 +203,9 @@ class FacultyController extends Controller
                 ->groupBy('rank')
                 ->toArray();
             } else if($request->get('query') == 'professional_practice') {
+                $relations = $users->with('faculty_professional_practice_dlsu','faculty_professional_practice')->where(function ($query) {
+                    $query->has('faculty_professional_practice_dlsu')->orHas('faculty_professional_practice');
+                })->get()->groupBy('rank');
                 $professional_practice = $users->select("users.rank",
                 \DB::raw('(SELECT SUM(years) FROM faculty_professional_practice_dlsu WHERE faculty_professional_practice_dlsu.user_id = users.id) as faculty_experience_dlsu'),
                 \DB::raw('(SELECT SUM(years) FROM faculty_professional_practice WHERE faculty_professional_practice.user_id = users.id) as faculty_experience_other'))
@@ -204,11 +213,11 @@ class FacultyController extends Controller
                 ->groupBy('rank')
                 ->toArray();
             }
-            // dd($professional_practice);
+            // dd($relations);
         }
 
         // $users = User::role('faculty')->paginate(15);
-        return view('faculty.search', compact('teaching_experience','professional_practice'));
+        return view('faculty.search', compact('teaching_experience','professional_practice','relations'));
     }
 
     public function facultySearchDownload(Request $request)
@@ -249,16 +258,26 @@ class FacultyController extends Controller
         return back()->withToastSuccess(__('Action completed successfully.'));
     }
 
-    public function facultyRemindAll()
+    public function facultyRemindAll(Request $request)
     {
-        $users = User::role('faculty')->get();
-        foreach($users as $user) {
-            Notification::create([
-                'user_id' => $user->id,
-                'text'    => 'Update <strong>Faculty Information Form</strong>',
-            ]);
-            event(new LiveNotification('Update Faculty Information Form',$user->id));
+        $cron = '';
+        if($request->frequency == 'daily') {
+            $cron = '0 0 * * *';
+        } else if ($request->frequency == 'weekly') {
+            $cron = '0 0 * * ' . $request->number_freq;
+        } else if ($request->frequency == 'monthly') {
+            $cron = '0 0 '. $request->number_freq.' * *';
         }
+
+        NotificationSettings::updateOrCreate(
+            ['name' => 'fif'],
+            [
+                'number_freq' => $request->number_freq,
+                'frequency' => $request->frequency,
+                'cron' => $cron,
+                'enabled' => isset($request->enabled) ? true : false
+            ]
+        );
 
         return back()->withToastSuccess(__('Action completed successfully.'));
     }

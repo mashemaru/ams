@@ -125,4 +125,63 @@ foreach($teaching_experience as $key => $exp) {
             </table>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow mt-4">
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush"">
+                        <thead class="thead-light" align="center">
+                            <tr>
+                                <th rowspan="2">Faculty</th>
+                                <th colspan="3">{{ __('Full Time') }}</th>
+                            </tr>
+                            <tr>
+                                <th>{{ __('In this school') }}</th>
+                                <th>{{ __('In other schools') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody align="center">
+                            @foreach ($relations['FT'] as $faculty)
+                                <tr>
+                                    <td>{{ $faculty->name }}</td>
+                                    <td>{{ $faculty->faculty_teaching_experience_dlsu->sum('years') }}</td>
+                                    <td>{{ $faculty->faculty_teaching_experience_other->sum('years') }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-md-6">
+            <div class="card shadow mt-4">
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush"">
+                        <thead class="thead-light" align="center">
+                            <tr>
+                                <th rowspan="2">Faculty</th>
+                                <th colspan="3">{{ __('Part Time') }}</th>
+                            </tr>
+                            <tr>
+                                <th>{{ __('In this school') }}</th>
+                                <th>{{ __('In other schools') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody align="center">
+                            @foreach ($relations['PT'] as $faculty)
+                                <tr>
+                                    <td>{{ $faculty->name }}</td>
+                                    <td>{{ $faculty->faculty_teaching_experience_dlsu->sum('years') }}</td>
+                                    <td>{{ $faculty->faculty_teaching_experience_other->sum('years') }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </div>
