@@ -31,6 +31,7 @@
                                     <th scope="col">{{ __('Assigned To') }}</th>
                                     <th scope="col">{{ __('Due Date') }}</th>
                                     <th scope="col">{{ __('Status') }}</th>
+                                    <th scope="col">{{ __('Priority') }}</th>
                                     <th scope="col">{{ __('Remarks') }}</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -46,6 +47,7 @@
                                                 <i class="bg-{{ ($task->status == 'complete') ? 'success' : (($task->status == 'in-progress') ? 'primary' : 'warning') }}"></i> {{ $task->status }}
                                             </span>
                                         </td>
+                                        <td>{{ ucfirst($task->priority) }}</td>
                                         <td>{{ $task->remarks }}</td>
                                         <td class="text-right">
                                             <div class="dropdown">
@@ -141,6 +143,16 @@
                                 </div>
                             </div>
                             <div class="form-group mb-3">
+                                <label class="form-control-label">Priority</label>
+                                <div class="input-group input-group-alternative">
+                                    <select class="form-control form-control-alternative" name="priority">
+                                        <option value="low">Low</option>
+                                        <option value="med">Medium</option>
+                                        <option value="high">High</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group mb-3">
                                 <label class="form-control-label">Remarks</label>
                                 <div class="input-group input-group-alternative">
                                     <input class="form-control form-control-alternative" name="remarks" type="text">
@@ -192,6 +204,16 @@
                                     <label class="form-control-label">Due Date</label>
                                     <div class="input-group input-group-alternative">
                                         <input class="form-control datepicker" name="due_date" data-date-format="yyyy-mm-dd" placeholder="Select due date" type="text" value="{{ old('due_date') }}" required>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label class="form-control-label">Priority</label>
+                                    <div class="input-group input-group-alternative">
+                                        <select class="form-control form-control-alternative" name="priority">
+                                            <option value="low">Low</option>
+                                            <option value="med">Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group mb-3">

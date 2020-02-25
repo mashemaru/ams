@@ -43,6 +43,16 @@ class Accreditation extends Model
         return $this->belongsToMany('App\Accreditation', 'accreditation_team', 'accreditation_id', 'team_id');
     }
 
+    public function accreditation_users()
+    {
+        return $this->belongsToMany('App\User', 'accreditation_users', 'accreditation_id', 'user_id');
+    }
+
+    public function invited_teams()
+    {
+        return $this->belongsToMany('App\Team', 'accreditation_teams_invited', 'accreditation_id', 'team_id');
+    }
+
     public function teams()
     {
         return $this->belongsToMany('App\Team', 'accreditation_team', 'accreditation_id', 'team_id');

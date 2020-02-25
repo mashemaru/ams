@@ -11,14 +11,15 @@ class EmailInvitations extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    private $details;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($details)
     {
-        //
+        $this->details = $details;
     }
 
     /**
@@ -41,9 +42,10 @@ class EmailInvitations extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('Email Invitations Test')
-                    ->action('Click here', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->greeting('Hello! '. $this->details['user'])
+                    ->line('Team Accreditation Invitation - ' . $this->details['accreditation'] )
+                    ->action('Click here to accept', $this->details['actionURL'])
+                    ->line('Thank you.');
     }
 
     /**

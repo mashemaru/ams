@@ -256,13 +256,13 @@
                 </a>
                 </li>
                 @endif
-                @if(auth()->user()->can('view team'))
+                {{-- @if(auth()->user()->can('view team'))
                 <li class="nav-item">
                 <a class="nav-link" href="{{ route('team.create') }}">
                     <i class="ni ni-circle-08 text-orange"></i> Create Team
                 </a>
                 </li>
-                @endif
+                @endif --}}
             </ul>
             @endcanany
             {{-- @endrole --}}

@@ -87,6 +87,7 @@ class TaskController extends Controller
                     'asigned_to' => $assign,
                     'due_date'   => $request->due_date,
                     'remarks'    => $request->remarks,
+                    'priority'   => $request->priority,
                 ]);
                 event(new LiveNotification('Task ('.$request->task_name.') assigned.',$assign));
             }
@@ -102,6 +103,7 @@ class TaskController extends Controller
                         'asigned_to' => $user->id,
                         'due_date'   => $request->due_date,
                         'remarks'    => $request->remarks,
+                        'priority'   => $request->priority,
                     ]);
                     event(new LiveNotification('Task ('.$request->task_name.') assigned.',$user->id));
                 }
@@ -123,6 +125,7 @@ class TaskController extends Controller
                     'asigned_to' => $user->id,
                     'due_date'   => $request->due_date,
                     'remarks'    => $request->remarks,
+                    'priority'   => $request->priority,
                 ]);
                 event(new LiveNotification('Task ('.$request->task_name.') assigned.',$user->id));
             }

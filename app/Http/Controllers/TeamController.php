@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Team;
 use App\User;
 use App\Accreditation;
+use App\Notifications\EmailInvitations;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
 class TeamController extends Controller
@@ -173,4 +175,73 @@ class TeamController extends Controller
         $accreditation->document_teams()->attach($documents);
         return back()->withToastSuccess(__('Team successfully assigned.'));
     }
+
+    public function userEmailInvitation(Request $request, Accreditation $accreditation)
+    {
+        $accreditation->load('agency','program');
+        $users = User::whereIn('id', $request->team_members)->get();
+        if($users) {
+            foreach($users as $user) {
+                $details = [
+                    'user' => $user->name,
+                    'accreditation' => $accreditation->agency->agency_code . '-' . $accreditation->program->program_code,
+                    'actionURL' => URL::signedRoute('team-invite', ['user' => $user->id, 'accreditation' => $accreditation->id])
+                ];
+                $user->notify(new EmailInvitations($details));
+            }
+            return back()->withToastSuccess(__('User successfully notified.'));
+        }
+    }
+
+    public function userAccreditationAssign(Request $request, User $user)
+    {
+        if (! $request->hasValidSignature()) {
+            abort(401);
+        }
+        $accreditation = Accreditation::findOrFail($request->accreditation);
+        $accreditation->accreditation_users()->syncWithoutDetaching($user);
+
+        return 'User successfully added.';
+    }
+
+    public function createTeam(Request $request, Accreditation $accreditation)
+    {
+        $users = $accreditation->accreditation_users;
+        return view('team.accreditation.create',compact('users','accreditation'));
+    }
+    
+    public function storeAccreditationTeam(Request $request, Accreditation $accreditation)
+    {
+        $validate = Validator::make($request->all(), [
+            'team_name'     => 'required|min:4',
+            'team_head'     => 'required',
+            'team_members'  => 'required',
+        ]);
+
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
+
+        foreach($request->team_members as $members) {
+            if($members == $request->team_head)
+                return back()->with('error', 'User cannot be both Team Head and Member')->withInput();
+        }
+
+        $team = Team::create([
+            'team_name' => $request->team_name,
+            'team_head' => $request->team_head,
+        ]);
+
+        $accreditation->invited_teams()->syncWithoutDetaching($team);
+        $team_head = User::where('id', $request->team_head)->first();
+        $team_head->assignRole('team-head');
+
+        $team->users()->sync($request->team_members);
+
+        if($request->has('save_create'))
+            return back()->withToastSuccess(__('Team successfully created.'));
+        elseif($request->has('save_next'))
+            return redirect()->route('accreditation.index')->withToastSuccess(__('Team successfully created.'));
+    }
+    // invited_teams
 }

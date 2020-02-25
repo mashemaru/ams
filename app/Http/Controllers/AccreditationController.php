@@ -128,11 +128,12 @@ class AccreditationController extends Controller
      */
     public function show(Accreditation $accreditation)
     {
-        $accreditation->load('agency','program','document','teams','teams.head','teams.users');
-        $team_head = User::has('team_head')->get();
-        $users = User::select('id','firstname','mi','surname')->role('member')->get();
-
-        return view('accreditation.show', compact('accreditation','team_head','users'));
+        $accreditation->load('agency','program','document','teams','teams.head','teams.users','accreditation_users');
+        // $team_head = User::has('team_head')->get();
+        // $users = User::select('id','firstname','mi','surname')->role('member')->get();
+        // $users = User::role('member')->get()->diff($accreditation->accreditation_users);
+        $users = $accreditation->accreditation_users;
+        return view('accreditation.show', compact('accreditation','users'));
     }
 
     /**
@@ -182,9 +183,8 @@ class AccreditationController extends Controller
 
     public function assign_team(Accreditation $accreditation)
     {
-        $allTeams = Team::all();
-        $accreditation->load('agency','teams.document_teams','program','document','outlines','document_teams');
-
+        $accreditation->load('agency','teams.document_teams','program','document','outlines','document_teams','invited_teams');
+        $allTeams = $accreditation->invited_teams;
         return view('team.assign',compact('accreditation','allTeams'));
     }
 
@@ -355,6 +355,7 @@ class AccreditationController extends Controller
                 'asigned_to' => $assign,
                 'due_date'   => $request->due_date,
                 'remarks'    => $request->remarks,
+                'priority'   => $request->priority,
             ]);
             event(new LiveNotification('Task ('.$request->task_name.') assigned.',$assign));
         }
@@ -462,6 +463,7 @@ class AccreditationController extends Controller
 
         $team->users()->sync($request->team_members);
         $accreditation->teams()->syncWithoutDetaching($team);
+        $accreditation->invited_teams()->syncWithoutDetaching($team);
 
         $result = \DB::table('document_team')->where('accreditation_id', $accreditation->id)->whereIn('team_id', auth()->user()->teams->diff(auth()->user()->team_head)->pluck('id')->toArray())->distinct()->get();
         $documents = [];

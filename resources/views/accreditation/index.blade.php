@@ -81,6 +81,7 @@
                                                     @endif
                                                     <a href="{{ route('accreditation.show', $a) }}" class="dropdown-item">{{ __('View Summary') }}</a>
                                                     @if ($a->progress != 'completed')
+                                                        <a href="{{ route('accreditation.team.create', $a) }}" class="dropdown-item">{{ __('Create Team') }}</a>
                                                         <a href="{{ route('accreditation.assignTeam', $a) }}" class="dropdown-item">{{ __('Assign Team') }}</a>
                                                         <form action="{{ route('accreditation.destroy', $a) }}" method="post">
                                                             @csrf

@@ -13,7 +13,7 @@
                                 <h3 class="mb-0">{{ __('Team Management') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                    <a href="{{ route('team.create') }}" class="btn btn-primary btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Team</a>
+                                    {{-- <a href="{{ route('team.create') }}" class="btn btn-primary btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Team</a> --}}
                             </div>
                         </div>
                     </div>

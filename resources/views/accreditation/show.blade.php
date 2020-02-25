@@ -159,11 +159,16 @@
                             <h3 class="mb-0">Teams</h3>
                         </div>
                         <div class="col-4 text-right">
+                            @if(auth()->user()->hasAnyRole('super-admin|team-head'))
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createTeamModal">
                                 <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Create Sub Team
                             </button>
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#taskModal">
+                            @endif
+                            {{-- <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#taskModal">
                                 <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Task
+                            </button> --}}
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#userModal">
+                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Send Member Invites
                             </button>
                         </div>
                     </div>
@@ -227,7 +232,7 @@
     </div>
     @include('layouts.footers.auth')
     <!-- Modal -->
-    <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -283,7 +288,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 <div class="modal fade" id="createTeamModal" tabindex="-1" role="dialog" aria-labelledby="createTeamModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -336,6 +341,35 @@
                 </div>
             </div>
         </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content bg-secondary">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userModalLabel">Send Notification Email</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <form method="post" action="{{ route('email.invitation', $accreditation) }}" autocomplete="off">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-control-label">{{ __('Select faculty') }}</label>
+                        <select class="form-control form-control-alternative select2" name="team_members[]" data-toggle="select" multiple data-placeholder="Select faculty">
+                            @foreach ($users as $user)
+                                <option value="{{$user->id}}">{{ $user->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

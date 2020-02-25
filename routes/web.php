@@ -19,11 +19,13 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
+Route::get('/team-invite/{user}', 'TeamController@userAccreditationAssign')->name('team-invite');
+
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('agency', 'AgencyController', ['except' => ['show','create']]);
 	Route::resource('program', 'ProgramController', ['except' => ['show','create']]);
 	Route::resource('user', 'UserController');
-	Route::post('userEmailInvitation', ['as' => 'email.invitation', 'uses' => 'UserController@userEmailInvitation']);
+	Route::post('userEmailInvitation/{accreditation}', ['as' => 'email.invitation', 'uses' => 'TeamController@userEmailInvitation']);
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
 	Route::resource('task', 'TaskController', ['except' => ['show']]);
 	Route::get('notification', ['as' => 'notification.index', 'uses' => 'NotificationController@index']);
@@ -52,6 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('timeline/{timeline}', ['as' => 'timeline.update', 'uses' => 'TimelineController@update']);
 	Route::put('timeline-complete/{timeline}', ['as' => 'timeline.is_complete_update', 'uses' => 'TimelineController@is_complete_update']);
 	Route::resource('team', 'TeamController');
+	Route::get('createTeam/{accreditation}', ['as' => 'accreditation.team.create', 'uses' => 'TeamController@createTeam']);
 	Route::post('assignTeam/{accreditation}', ['as' => 'team.assign', 'uses' => 'TeamController@assignTeam']);
 	Route::resource('accreditation', 'AccreditationController');
 	Route::post('createSubTeam{accreditation}', ['as' => 'accreditation.team.store', 'uses' => 'AccreditationController@createSubTeam']);
@@ -69,7 +72,8 @@ Route::group(['middleware' => 'auth'], function () {
 	// Route::post('evidence_list/{accreditation}', ['as' => 'accreditation.evidence_list', 'uses' => 'AccreditationController@createEvidenceList']);
 	Route::post('evidenceRemove/{appendix_exhibit}/{file_repository}', 'FileRepositoryController@evidenceRemove');
 	Route::put('evidence_list/{document_outline}', ['as' => 'accreditation.evidence_list.update', 'uses' => 'DocumentOutlineController@updateEvidenceList']);
-	Route::post('teamTask{accreditation}', ['as' => 'team.task.store', 'uses' => 'AccreditationController@teamTask']);
+	Route::post('teamTask/{accreditation}', ['as' => 'team.task.store', 'uses' => 'AccreditationController@teamTask']);
+	Route::post('createTeam/{accreditation}', ['as' => 'team.store.accreditation', 'uses' => 'TeamController@storeAccreditationTeam']);
 	Route::resource('curriculum', 'CurriculumController');
 	Route::post('getCurriculumCourses', 'CurriculumController@getCurriculumCourses');
 	Route::get('curriculum-search', ['as' => 'curriculum.search', 'uses' => 'CurriculumController@curriculumSearch']);

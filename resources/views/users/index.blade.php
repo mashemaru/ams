@@ -12,11 +12,6 @@
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Users') }}</h3>
                             </div>
-                            <div class="col-3 text-right">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#userModal">
-                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Send Notification Email
-                                </button>
-                            </div>
                             <div class="col-1 text-right">
                                 <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('Add user') }}</a>
                             </div>
@@ -85,32 +80,4 @@
         @include('layouts.footers.auth')
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content bg-secondary">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="userModalLabel">Send Notification Email</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                </div>
-                <form method="post" action="{{ route('email.invitation') }}" autocomplete="off">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="form-control-label">{{ __('Select faculty') }}</label>
-                            <select class="form-control form-control-alternative select2" name="team_members[]" data-toggle="select" multiple data-placeholder="Select faculty">
-                                @foreach ($users as $user)
-                                    <option value="{{$user->id}}">{{ $user->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 @endsection
