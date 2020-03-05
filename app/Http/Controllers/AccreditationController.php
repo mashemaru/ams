@@ -188,11 +188,33 @@ class AccreditationController extends Controller
         return view('team.assign',compact('accreditation','allTeams'));
     }
 
+    function htmltodocx_clean_text($text) {
+  
+        // Replace each &nbsp; with a single space:
+        $text = str_replace('&nbsp;', ' ', $text);
+        if (strpos($text, '<') !== FALSE) {
+          // We only run strip_tags if it looks like there might be some tags in the text
+          // as strip_tags is expensive:
+          $text = strip_tags($text);
+        }
+          
+        // Strip out extra spaces:
+        $text = preg_replace('/\s+/u', ' ', $text);
+        
+        // Convert entities:
+        $text = html_entity_decode($text, ENT_COMPAT, 'UTF-8');
+        return $text;
+      }
+
     public function generateDocument(Accreditation $accreditation)
     {
+        
         $accreditation->load('agency','program','document','document.outlines');
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
+        // echo '<pre>';
+        // print_r($accreditation);
+        // dd();
         if ($accreditation->type == 'reaccredit') {
             if($accreditation->recommendations) {
                 $output = '<ol>';
@@ -205,17 +227,76 @@ class AccreditationController extends Controller
                 \PhpOffice\PhpWord\Shared\Html::addHtml($section, $output);
             }
         }
-
-        foreach($accreditation->outlines as $outline) {
-            $section = $phpWord->addSection();
-            $section->addText($outline->section,array('name'=>'Arial','size' => (($outline->parent_id == 0) ? 24 : 20),'bold' => true));
     
-            $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$outline->body);
-            $html = str_replace("&quot;","'",$outline->body);
+        // $section = $phpWord->addSection();
+        // $section->addText('Some text <w:br/> another text in the line ');
+        $section = $phpWord->addSection();
+        foreach($accreditation->outlines as $outline) {
+            $phpWord->setDefaultParagraphStyle(
+                array(
+                    'alignment'  => \PhpOffice\PhpWord\SimpleType\Jc::BOTH,
+                    'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(12),
+                    'spacebefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(12),
+                    'spacing'    => 120,
+                )
+            );
             
-            \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
-        }
+            
+            
+            // switch($accreditation->agency->agency_code){
+            //     case 'ABET':
+                    
+            //         // echo 'derald pogi '.$accreditation->agency->agency_code;
+            //         // $section->addText($outline->section,
+            //         //     array('name'=>'Courier New','size' => 12,'bold' => true, 'color' => 'ED7540'),
+            //         //     array('align' => 'left')
+            //         // );
+            //         // $section->addText($outline->body,
+            //         //     array('name'=>'Courier New','size' => (($outline->parent_id == 0) ? 12 : 20),'bold' => true),
+            //         //     array('align' => 'left')
+            //         // );
+            //         // $html->addText($outline->body,
+            //         // // $html = preg_replace('/(\>)\s*(\<)/m', '$1$2', $outline->body);
+            //         // // $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$outline->body);
+            //         $html = str_replace("&quot;","'",$outline->section);
+            //         $html .= str_replace("&quot;","'",$outline->body);
+                    
+            //         // print_r($outline->body);
+            //         // dd();
+            //         // $html = str_replace(array("\n", "\r"), '', $outline->body);
+            //         // $outline->body
+            //     break;
+            //     case 'PAASCU':
+            //         echo 'derald pogi '.$accreditation->agency->agency_code;
+            //         $html = str_replace("&quot;","'",$outline->section);
+            //         $html .= str_replace("&quot;","'",$outline->body);
+            //     break;
+            //     case 'AUN':
+            //         echo 'derald pogi '.$accreditation->agency->agency_code;
+            //         $html = str_replace("&quot;","'",$outline->section);
+            //         $html .= str_replace("&quot;","'",$outline->body);
+            //     break;
+            //     default;
+            //         echo 'testing ';
+            // }
+        //     print_r($html);
+        //    dd();
+        // $html = $outline->body;
+            // $section->addText($outline->section,array('name'=>'Arial','size' => (($outline->parent_id == 0) ? 24 : 20),'bold' => true));
+    
+            // $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$outline->body);
+            // $html = str_replace("&quot;","'",$outline->body);
+            
+            $searches = array("&quot;",'&nbsp;');
+            $replacements = array("'", " ");
+        
+            $html = str_replace($searches,$replacements,$outline->section);
+            $html .= str_replace($searches,$replacements,$outline->body);
 
+             \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
+            
+        }
+        
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
         if(!Storage::exists('accreditation/'. $accreditation->id)) {
             Storage::makeDirectory('accreditation/'. $accreditation->id);
@@ -232,6 +313,31 @@ class AccreditationController extends Controller
             'reference_id'  => $accreditation->id,
         ]);
         return response()->download(storage_path('app/accreditation/'. $accreditation->id . '/' . $accreditation->agency->agency_code . '-' . $accreditation->program->program_code . '-' . $accreditation->created_at->format('Y') . '.docx'));
+    }
+
+
+    public function generateDocument_mergefields(Accreditation $accreditation)
+    {
+       
+        $accreditation->load('agency','program','document','document.outlines');
+        $storage_path = 'app/accreditation/'. $accreditation->id . '/';
+        // $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        // 'app/accreditation/'. $accreditation->id . '/' . $accreditation->agency->agency_code . '-' . $accreditation->program->program_code . '-' . $accreditation->created_at->format('Y') . '.docx')
+        $my_template = new \PhpOffice\PhpWord\TemplateProcessor(storage_path($storage_path. $accreditation->agency->agency_code . '-' . $accreditation->program->program_code . '-' . $accreditation->created_at->format('Y'). '.docx'));
+
+         $my_template->setValue('program_code', $accreditation->program->program_code);
+        // $my_template->setValue('email', $desc1->email);
+        // $my_template->setValue('phone', $desc1->phone);
+        // $my_template->setValue('address', $desc1->address);      
+
+        try{
+            $my_template->saveAs(storage_path($storage_path. $accreditation->agency->agency_code . '-' . $accreditation->program->program_code . '-' . $accreditation->created_at->format('Y'). '.docx'));
+        }catch (Exception $e){
+            //handle exception
+            print_r($e);
+        }
+
+        return response()->download(storage_path('app/accreditation/'. $accreditation->id . '/' . $accreditation->agency->agency_code . '-' . $accreditation->program->program_code . '-' . $accreditation->created_at->format('Y'). '.docx'));
     }
 
     public function showCompleteAccreditation(Timeline $timeline)
