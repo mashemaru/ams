@@ -246,7 +246,6 @@ class AccreditationController extends Controller
             // switch($accreditation->agency->agency_code){
             //     case 'ABET':
                     
-            //         // echo 'derald pogi '.$accreditation->agency->agency_code;
             //         // $section->addText($outline->section,
             //         //     array('name'=>'Courier New','size' => 12,'bold' => true, 'color' => 'ED7540'),
             //         //     array('align' => 'left')
@@ -267,12 +266,11 @@ class AccreditationController extends Controller
             //         // $outline->body
             //     break;
             //     case 'PAASCU':
-            //         echo 'derald pogi '.$accreditation->agency->agency_code;
+
             //         $html = str_replace("&quot;","'",$outline->section);
             //         $html .= str_replace("&quot;","'",$outline->body);
             //     break;
             //     case 'AUN':
-            //         echo 'derald pogi '.$accreditation->agency->agency_code;
             //         $html = str_replace("&quot;","'",$outline->section);
             //         $html .= str_replace("&quot;","'",$outline->body);
             //     break;
@@ -288,9 +286,10 @@ class AccreditationController extends Controller
             // $html = str_replace("&quot;","'",$outline->body);
             
             $searches = array("&quot;",'&nbsp;');
-            $replacements = array("'", " ");
+            $replacements = array(" ", " ");
         
-            $html = str_replace($searches,$replacements,$outline->section);
+            $section_heading = '<b style="font-size:12;">'.$outline->section.'</b>';
+            $html = str_replace($searches,$replacements,$section_heading);
             $html .= str_replace($searches,$replacements,$outline->body);
 
              \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
