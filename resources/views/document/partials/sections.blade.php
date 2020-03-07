@@ -1,6 +1,6 @@
 @foreach($sections as $s)
 <li class="dd-item" data-section="{{ $s->section }}"{!! isset($s->doc_type) ? ' data-doc_type="' . $s->doc_type . '"' : '' !!}{!! isset($s->score) ? ' data-score="' . $s->score . '"' : '' !!}{!! isset($s->description) ? ' data-description="' . $s->description . '"' : '' !!}>
-    <div class="form-inline">
+    <div class="form-inline mb-3">
         <div class="dd-handle"><i class="fas fa-arrows-alt"></i></div>
         <div class="form-group mr-3">
             <div class="input-group input-group-alternative">

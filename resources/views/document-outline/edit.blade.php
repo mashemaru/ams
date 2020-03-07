@@ -17,14 +17,6 @@
                 </div>
                 <div class="card-body">
                     <h4><strong>Doc Type:</strong> {{ $outline->doc_type }}</h4>
-                    @if($outline->evidence_list)
-                    <h3 class="mt-3">Evidence List</h3>
-                    <ol class="mt-3">
-                    @foreach ($outline->evidence_list as $item)
-                        <li>{{ $item }}</li>
-                    @endforeach
-                    </ol>
-                    @endif
                     @if(auth()->user()->hasRole('super-admin'))
                     <a class="btn btn-primary btn-sm mt-2" href="#" data-toggle="modal" data-target="#EditEvidenceList">Edit Evidence List</a>
                     <div class="modal fade" id="EditEvidenceList" tabindex="-1" role="dialog" aria-labelledby="EditEvidenceListLabel" aria-hidden="true">
@@ -44,19 +36,19 @@
                                         <button type="button" class="btn btn-success" id="addRecommendation">Add</button><br>
                                     </div><br>
                                     <div id="Recommendations">
-                                        @if($outline->evidence_list)
-                                        @foreach($outline->evidence_list as $key => $list)
+                                        @if($outline->evidences)
+                                        @foreach($outline->evidences as $list)
                                         <div class="row">
                                             <div class="col-8">
                                                 <div class="form-group mb-3">
                                                     <div class="input-group input-group-alternative">
-                                                        <input class="form-control recommendation" placeholder="Evidence List" name="evidence_list[{{ $key }}]" type="text" value="{{ $list }}">
+                                                        <input class="form-control recommendation" placeholder="Evidence List" name="evidence_list[{{ $list->id }}]" type="text" value="{{ $list->name }}">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-1">
+                                            {{-- <div class="col-1">
                                                 <button class="btn btn-icon btn-2 btn-danger removeRecommendation" type="button">X</button>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                         @endforeach
                                         @endif
@@ -221,258 +213,271 @@
                 @endif
             </form>
             {{-- @endif --}}
-            <div class="card shadow">
-                <div class="card-header border-1">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h3 class="mb-0">Appendices/Exhibits</h3>
+
+            @if($outline->evidences)
+                <div class="accordion search-accordion" id="accordionExample">
+                    @foreach($outline->evidences as $list)
+                    <div class="card">
+                        <div class="card-header" id="heading{{$list->id}}" data-toggle="collapse" data-target="#collapse{{$list->id}}" aria-expanded="false" aria-controls="collapse{{$list->id}}">
+                            <h5 class="mb-0">{{ $list->name }}</h5>
                         </div>
-                    </div>
-                </div>
-                <div class="card-body px-lg-4 py-lg-4">
-                    <div class="table-responsive">
-                        <table class="table align-items-center table-flush">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Code</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Type</th>
-                                    {{-- <th scope="col">Evidences</th> --}}
-                                    <th scope="col" width="2%"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($outline->appendix_exhibit as $data)
-                                <tr>
-                                    <th scope="row">{{ $data->code }}</th>
-                                    <th scope="row">{{ $data->name }}</th>
-                                    <td scope="row">{{ ucfirst($data->type) }}</td>
-                                    {{-- <td scope="row">
-                                        @if($data->evidences->isNotEmpty())
-                                        {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $data->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
-                                        @else
-                                            N/A
-                                        @endif
-                                    </td> --}}
+                        <div id="collapse{{$list->id}}" class="collapse" aria-labelledby="heading{{$list->id}}" data-parent="#accordionExample">
+                            <div class="card shadow">
+                                <div class="card-header border-1">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h3 class="mb-0">Appendices/Exhibits</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body px-lg-4 py-lg-4">
+                                    <div class="table-responsive">
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th scope="col">Code</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Type</th>
+                                                    {{-- <th scope="col">Evidences</th> --}}
+                                                    <th scope="col" width="2%"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($list->appendix_exhibit as $data)
+                                                <tr>
+                                                    <th scope="row">{{ $data->code }}</th>
+                                                    <th scope="row">{{ $data->name }}</th>
+                                                    <td scope="row">{{ ucfirst($data->type) }}</td>
+                                                    {{-- <td scope="row">
+                                                        @if($data->evidences->isNotEmpty())
+                                                        {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $data->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
+                                                        @else
+                                                            N/A
+                                                        @endif
+                                                    </td> --}}
+                                                    @if (!$outline->accreditation->evidence_can_upload)
+                                                    <td class="text-right">
+                                                        @if(!$data->evidence_complete)
+                                                        <div class="dropdown">
+                                                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
+                                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fas fa-ellipsis-v"></i>
+                                                            </a>
+                                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                                @if ($outline->accreditation->progress != 'initial')
+                                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#evidenceModal{{$list->id}}-{{ $data->id }}">Add Evidences</a>
+                                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#selectEvidenceModal{{$list->id}}-{{ $data->id }}">Add Evidences from File Repo</a>
+                                                                @endif
+                                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#viewEvidences{{$list->id}}-{{ $data->id }}">View Evidence List</a>
+                                                                {{-- <a class="dropdown-item" href="#">Remove</a> --}}
+                                                            </div>
+                                                        </div>
+                                                        @endif
+                                                        <div class="modal fade" id="evidenceModal{{$list->id}}-{{ $data->id }}" tabindex="-1" role="dialog" aria-labelledby="evidenceModal{{ $data->id }}Label" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                <div class="modal-content">
+                                                                <form enctype="multipart/form-data" method="post" action="{{ route('evidence.upload', $data) }}" autocomplete="off">
+                                                                    @csrf
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="evidenceModal{{ $data->id }}Label">Add Evidence</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="form-group mb-3">
+                                                                            <label class="form-control-label" style="float: left">Select File(s)</label>
+                                                                            <input type="hidden" name="accreditation" value="{{ $outline->accreditation->id }}">
+                                                                            <input type="hidden" name="evidences" value="{{ $list->name }}">
+                                                                            <input type="file" class="form-control" name="file[]" multiple>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                        <button type="submit" class="btn btn-success">Add</button>
+                                                                    </div>
+                                                                </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal fade" id="selectEvidenceModal{{$list->id}}-{{ $data->id }}" tabindex="-1" role="dialog" aria-labelledby="selectEvidenceModal{{ $data->id }}Label" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="selectEvidenceModal{{ $data->id }}Label">Select Evidences from File Repo</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                <form method="post" class="evidence_select" action="{{ route('evidence.select', $data) }}" autocomplete="off">
+                                                                    @csrf
+                                                                    <input type="hidden" name="selected">
+                                                                    <div class="modal-body">
+                                                                        <div class="table-responsive">
+                                                                            <table class="data-table2 align-items-center table-flush w-100">
+                                                                                <thead class="thead-light">
+                                                                                    <tr>
+                                                                                        <th scope="col"></th>
+                                                                                        <th scope="col">File Name</th>
+                                                                                        <th scope="col">File Type</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                        <button type="submit" class="btn btn-success">Save</button>
+                                                                    </div>
+                                                                </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal fade" id="viewEvidences{{$list->id}}-{{ $data->id }}" tabindex="-1" role="dialog" aria-labelledby="viewEvidencesLabel{{ $data->id }}" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="viewEvidencesLabel{{ $data->id }}">Evidences of {{ $data->name }}</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body text-left">
+                                                                        @if($data->evidences)
+                                                                            @foreach($data->evidences as $evidences)
+                                                                            <form method="post" action="/evidenceRemove/{{$data->id}}/{{$evidences->id}}" autocomplete="off">
+                                                                            @csrf
+                                                                                <p><span class="badge badge-dot mr-4"><i class="bg-info"></i> <a href="#" class="file-repo-download text-primary" data-id="{{ $evidences->id }}">{{ $evidences->file_name }}</a></span> <button type="submit" class="btn btn-danger btn-sm"><i class="ni ni-fat-remove"></i></button></p>
+                                                                            </form>
+                                                                            @endforeach
+                                                                        @endif
+                                                                    </div>
+                                                                    {{-- <div class="modal-body text-left">
+                                                                        {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $data->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
+                                                                    </div> --}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    @endif
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     @if (!$outline->accreditation->evidence_can_upload)
-                                    <td class="text-right">
-                                        @if(!$data->evidence_complete)
-                                        <div class="dropdown">
-                                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
-                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                @if ($outline->accreditation->progress != 'initial')
-                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#evidenceModal{{ $data->id }}">Add Evidences</a>
-                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#selectEvidenceModal{{ $data->id }}">Add Evidences from File Repo</a>
-                                                @endif
-                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#viewEvidences{{ $data->id }}">View Evidence List</a>
-                                                {{-- <a class="dropdown-item" href="#">Remove</a> --}}
+                                    <br>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModal{{$list->id}}"
+                                        style="float:right">
+                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                        Add Appendix/Exhibit
+                                    </button>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#selectModal{{$list->id}}"
+                                        style="float:right; margin-right: 2%">
+                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                        Select Existing Appendix/Exhibit
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="selectModal{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="selectModalLabel{{$list->id}}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="selectModalLabel{{$list->id}}">Select Appendix/Exhibit</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            <form method="post" id="outline_select" action="{{ route('outline.select', $list) }}" autocomplete="off">
+                                                @csrf
+                                                <input type="hidden" name="selected">
+                                                <div class="modal-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table data-table align-items-center table-flush w-100">
+                                                            <thead class="thead-light">
+                                                                <tr>
+                                                                    <th scope="col"></th>
+                                                                    <th scope="col">Code</th>
+                                                                    <th scope="col">Name</th>
+                                                                    <th scope="col">Type</th>
+                                                                    {{-- <th scope="col">Evidences</th> --}}
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                    {{-- @foreach($document_files as $key => $files)
+                                                    <h6 class="heading-small text-muted mb-2">{{ $key }}</h6>
+                                                        @foreach($files as $file)
+                                                        <div class="custom-control custom-checkbox mb-3">
+                                                            <input type="checkbox" class="custom-control-input" name="checkFiles[]" id="customCheck{{ $file->id }}" value="{{ $file->id }}">
+                                                            <label class="custom-control-label" for="customCheck{{ $file->id }}">{{ $file->file_name }}</label>
+                                                        </div>
+                                                        @endforeach
+                                                    @endforeach --}}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-success">Save</button>
+                                                </div>
+                                            </form>
                                             </div>
                                         </div>
-                                        @endif
-                                        <div class="modal fade" id="evidenceModal{{ $data->id }}" tabindex="-1" role="dialog" aria-labelledby="evidenceModal{{ $data->id }}Label" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                <form enctype="multipart/form-data" method="post" action="{{ route('evidence.upload', $data) }}" autocomplete="off">
-                                                    @csrf
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="evidenceModal{{ $data->id }}Label">Add Evidence</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
+                                    </div>
+                                    <div class="modal fade" id="addModal{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="addModalLabel{{$list->id}}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content bg-secondary">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="addModalLabel{{$list->id}}">Add Appendix/Exhibit</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form enctype="multipart/form-data" method="post" action="/document-outlineUpload/{{$outline->id}}/{{$list->id}}" autocomplete="off">
+                                                @csrf
                                                     <div class="modal-body">
                                                         <div class="form-group mb-3">
-                                                            <label class="form-control-label" style="float: left">Select File(s)</label>
-                                                            <input type="hidden" name="accreditation" value="{{ $outline->accreditation->id }}">
+                                                            <label class="form-control-label">Name</label>
+                                                            <div class="input-group input-group-alternative">
+                                                                <input class="form-control" name="name" type="text">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-control-label">Type</label>
+                                                            <div class="input-group input-group-alternative">
+                                                                <select class="form-control" name="type">
+                                                                    <option value="appendix">Appendix</option>
+                                                                    <option value="exhibit">Exhibit</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        @if ($outline->accreditation->progress != 'initial')
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-control-label">File(s)</label>
                                                             <input type="file" class="form-control" name="file[]" multiple>
                                                         </div>
+                                                        @endif
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                                         <button type="submit" class="btn btn-success">Add</button>
                                                     </div>
                                                 </form>
-                                                </div>
                                             </div>
                                         </div>
-                                        <div class="modal fade" id="selectEvidenceModal{{ $data->id }}" tabindex="-1" role="dialog" aria-labelledby="selectEvidenceModal{{ $data->id }}Label" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="selectEvidenceModal{{ $data->id }}Label">Select Evidences from File Repo</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                <form method="post" class="evidence_select" action="{{ route('evidence.select', $data) }}" autocomplete="off">
-                                                    @csrf
-                                                    <input type="hidden" name="selected">
-                                                    <div class="modal-body">
-                                                        <div class="table-responsive">
-                                                            <table class="data-table2 align-items-center table-flush w-100">
-                                                                <thead class="thead-light">
-                                                                    <tr>
-                                                                        <th scope="col"></th>
-                                                                        <th scope="col">File Name</th>
-                                                                        <th scope="col">File Type</th>
-                                                                    </tr>
-                                                                </thead>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                        <button type="submit" class="btn btn-success">Save</button>
-                                                    </div>
-                                                </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal fade" id="viewEvidences{{ $data->id }}" tabindex="-1" role="dialog" aria-labelledby="viewEvidences{{ $data->id }}Label" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="viewEvidences{{ $data->id }}Label">Evidences of {{ $data->name }}</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body text-left">
-                                                        @if($data->evidences)
-                                                            @foreach($data->evidences as $evidences)
-                                                            <form method="post" action="/evidenceRemove/{{$data->id}}/{{$evidences->id}}" autocomplete="off">
-                                                            @csrf
-                                                                <p><span class="badge badge-dot mr-4"><i class="bg-info"></i> {{ $evidences->file_name }}</span> <button type="submit" class="btn btn-danger btn-sm"><i class="ni ni-fat-remove"></i></button></p>
-                                                            </form>
-                                                            @endforeach
-                                                        @endif
-                                                    </div>
-                                                    {{-- <div class="modal-body text-left">
-                                                        {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $data->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
-                                                    </div> --}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
+                                    </div>
                                     @endif
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    @if (!$outline->accreditation->evidence_can_upload)
-                    <br>
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModal"
-                        style="float:right">
-                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                        Add Appendix/Exhibit
-                    </button>
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#selectModal1"
-                        style="float:right; margin-right: 2%">
-                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                        Select Existing Appendix/Exhibit
-                    </button>
-                    @endif
+                @endforeach
                 </div>
-            </div>
+            @endif
         </div>
     </div>
 
     @include('layouts.footers.auth')
-    @if (!$outline->accreditation->evidence_can_upload)
-    <!-- Modal -->
-    <div class="modal fade" id="selectModal1" tabindex="-1" role="dialog" aria-labelledby="selectModalLabel1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="selectModalLabel">Select Appendix/Exhibit</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            <form method="post" id="outline_select" action="{{ route('outline.select', $outline) }}" autocomplete="off">
-                @csrf
-                <input type="hidden" name="selected">
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table data-table align-items-center table-flush w-100">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col"></th>
-                                    <th scope="col">Code</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Type</th>
-                                    {{-- <th scope="col">Evidences</th> --}}
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    {{-- @foreach($document_files as $key => $files)
-                    <h6 class="heading-small text-muted mb-2">{{ $key }}</h6>
-                        @foreach($files as $file)
-                        <div class="custom-control custom-checkbox mb-3">
-                            <input type="checkbox" class="custom-control-input" name="checkFiles[]" id="customCheck{{ $file->id }}" value="{{ $file->id }}">
-                            <label class="custom-control-label" for="customCheck{{ $file->id }}">{{ $file->file_name }}</label>
-                        </div>
-                        @endforeach
-                    @endforeach --}}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success">Save</button>
-                </div>
-            </form>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content bg-secondary">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Add Appendix/Exhibit</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form enctype="multipart/form-data" method="post" action="{{ route('outline.upload', $outline) }}" autocomplete="off">
-                @csrf
-                    <div class="modal-body">
-                        <div class="form-group mb-3">
-                            <label class="form-control-label">Name</label>
-                            <div class="input-group input-group-alternative">
-                                <input class="form-control" name="name" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group mb-3">
-                            <label class="form-control-label">Type</label>
-                            <div class="input-group input-group-alternative">
-                                <select class="form-control" name="type">
-                                    <option value="appendix">Appendix</option>
-                                    <option value="exhibit">Exhibit</option>
-                                </select>
-                            </div>
-                        </div>
-                        @if ($outline->accreditation->progress != 'initial')
-                        <div class="form-group mb-3">
-                            <label class="form-control-label">File(s)</label>
-                            <input type="file" class="form-control" name="file[]" multiple>
-                        </div>
-                        @endif
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-success">Add</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    @endif
 </div>
 @endsection
 
@@ -561,12 +566,12 @@ $(document).ready(function () {
         $('.evidence_select input[name="selected"]').val(dataTable2.rows('.selected').data().pluck('id').toArray());
     } );
 });
-const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000
-})
+// const Toast = Swal.mixin({
+//     toast: true,
+//     position: 'top-end',
+//     showConfirmButton: false,
+//     timer: 3000
+// })
 function uploadImage(image) {
     var data = new FormData();
     data.append("image", image);
@@ -584,19 +589,19 @@ function uploadImage(image) {
     })
 }
 $('#addRecommendation').click(function (e) { //on add input button click
-    var Recommendations = $("#Recommendations .row").length;
-    $("#Recommendations").append('<div class="row"><div class="col-8"><div class="form-group mb-3"><div class="input-group input-group-alternative"><input class="form-control recommendation" placeholder="Evidence List" name="evidence_list['+Recommendations+']" type="text"></div></div></div><div class="col-1"><button class="btn btn-icon btn-2 btn-danger removeRecommendation" type="button">X</button></div></div>');
+    // var Recommendations = $("#Recommendations .row").length;
+    $("#Recommendations").append('<div class="row"><div class="col-8"><div class="form-group mb-3"><div class="input-group input-group-alternative"><input class="form-control recommendation" placeholder="Evidence List" name="new_evidence_list[]" type="text"></div></div></div><div class="col-1"><button class="btn btn-icon btn-2 btn-danger removeRecommendation" type="button">X</button></div></div>');
 });
 
 $("body").on("click",".removeRecommendation", function(e) { //user click on remove text
     if( $("#Recommendations .row").length >= 1 ) {
         $(this).parent().closest('.row').remove();
-        var x = 0;
-        $("#Recommendations .row").each(function() {
-            var recommendation = $(this).find("input.recommendation");
-            recommendation.attr('name', 'evidence_list['+x+']');
-            x++;
-        });
+        // var x = 0;
+        // $("#Recommendations .row").each(function() {
+        //     var recommendation = $(this).find("input.recommendation");
+        //     recommendation.attr('name', 'evidence_list['+x+']');
+        //     x++;
+        // });
     }
     return false;
 });

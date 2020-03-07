@@ -34,8 +34,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('taskComplete/{task}', ['as' => 'task.complete', 'uses' => 'TaskController@taskComplete']);
 	Route::resource('document', 'DocumentController', ['except' => ['show']]);
 	Route::resource('document-outline', 'DocumentOutlineController');
-	Route::post('document-outlineUpload/{document_outline}', ['as' => 'outline.upload', 'uses' => 'DocumentOutlineController@outlineUpload']);
-	Route::post('document-outlineSelect/{document_outline}', ['as' => 'outline.select', 'uses' => 'DocumentOutlineController@outlineSelect']);
+	Route::post('document-outlineUpload/{document_outline}/{evidence_list}', ['as' => 'outline.upload', 'uses' => 'DocumentOutlineController@outlineUpload']);
+	Route::post('document-outlineSelect/{evidence_list}', ['as' => 'outline.select', 'uses' => 'DocumentOutlineController@outlineSelect']);
 	Route::get('select-evidences', ['as' => 'evidence.show', 'uses' => 'FileRepositoryController@showEvidences']);
 	Route::post('select-evidences/{appendix_exhibit}', ['as' => 'evidence.select', 'uses' => 'DocumentOutlineController@selectEvidences']);
 	Route::post('evidenceUpload/{appendix_exhibit}', ['as' => 'evidence.upload', 'uses' => 'DocumentOutlineController@evidenceUpload']);

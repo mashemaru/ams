@@ -51,3 +51,8 @@ $('input[name="custom-radio-score"]').change(function() {
 $(document).ready(function() {
     $('.select2').select2();
 });
+
+$('.file-repo-download').click(function(e) {
+    e.preventDefault();
+    window.location = window.location.protocol+'//'+window.location.hostname+'/file/' + $(this).data('id');
+});
