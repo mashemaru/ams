@@ -54348,6 +54348,10 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name="custom-radio-score"]'
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(function () {
   jquery__WEBPACK_IMPORTED_MODULE_0___default()('.select2').select2();
 });
+jquery__WEBPACK_IMPORTED_MODULE_0___default()('.file-repo-download').click(function (e) {
+  e.preventDefault();
+  window.location = window.location.protocol + '//' + window.location.hostname + '/file/' + jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('id');
+});
 
 /***/ }),
 
@@ -54419,8 +54423,8 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/mash/Sites/ams-project/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/mash/Sites/ams-project/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /mnt/c/Users/Mash/www/ams-project/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /mnt/c/Users/Mash/www/ams-project/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

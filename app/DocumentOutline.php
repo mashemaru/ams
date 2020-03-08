@@ -45,4 +45,9 @@ class DocumentOutline extends Model
     {
         return $query->where('parent_id', 0);
     }
+
+    public function evidences()
+    {
+        return $this->belongsToMany('App\EvidenceList', 'document_outline_evidence_list', 'document_outline_id', 'evidence_lists_id');
+    }
 }

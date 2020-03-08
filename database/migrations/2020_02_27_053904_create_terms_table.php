@@ -47,8 +47,8 @@ class CreateTermsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('terms');
-        Schema::dropIfExists('terms_courses');
         Schema::dropIfExists('terms_courses_profs');
+        Schema::dropIfExists('terms_courses');
+        Schema::dropIfExists('terms');
     }
 }
