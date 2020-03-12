@@ -12,7 +12,7 @@
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('Users') }}</h3>
                             </div>
-                            <div class="col-1 text-right">
+                            <div class="col-4 text-right">
                                 <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('Add user') }}</a>
                             </div>
                         </div>

@@ -131,8 +131,8 @@ class AccreditationController extends Controller
         $accreditation->load('agency','program','document','teams','teams.head','teams.users','accreditation_users');
         // $team_head = User::has('team_head')->get();
         // $users = User::select('id','firstname','mi','surname')->role('member')->get();
-        // $users = User::role('member')->get()->diff($accreditation->accreditation_users);
-        $users = $accreditation->accreditation_users;
+        $users = User::role(['member','faculty'])->get()->diff($accreditation->accreditation_users);
+        // $users = $accreditation->accreditation_users;
         return view('accreditation.show', compact('accreditation','users'));
     }
 
