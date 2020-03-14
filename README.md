@@ -16,4 +16,5 @@
 6. Create and setup database, open .env file and fill in the details for DB settings
 7. Run `php artisan key:generate`.
 8. Run `php artisan serve` to start the server.
-9. Navigate to `localhost:8000` in your browser.
+9. Run `php artisan storage:link`.
+10. Navigate to `localhost:8000` in your browser.
