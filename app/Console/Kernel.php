@@ -58,6 +58,31 @@ class Kernel extends ConsoleKernel
 
         })->daily();
 
+        $schedule->call(function () {
+            $tasks = Task::where('recurring', true)->where('recurring_date', '<=' , Carbon::now())->get();
+ 
+            if($tasks->isNotEmpty()) {
+                foreach($tasks as $task) {
+                    $task->update([
+                        'recurring' => false,
+                    ]);
+                    Task::create([
+                        'task_name'  => $task->task_name,
+                        'assigner'   => $task->assigner,
+                        'asigned_to' => $task->asigned_to,
+                        'due_date'   => $task->due_date,
+                        'remarks'    => $task->remarks,
+                        'priority'   => $task->priority,
+                        'recurring'  => true,
+                        'recurring_freq'  => $task->recurring_freq,
+                        'recurring_date'  => Carbon::now()->addDays($task->recurring_freq),
+                    ]);
+                    event(new LiveNotification('Task ('.$task->task_name.') assigned.',$task->asigned_to));
+                }
+            }
+
+        })->daily();
+
         if (Schema::hasTable('notification_settings')) {
             $notifs = NotificationSettings::where('enabled', true)->get();
             if($notifs) {

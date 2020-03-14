@@ -54352,6 +54352,20 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()('.file-repo-download').click(funct
   e.preventDefault();
   window.location = window.location.protocol + '//' + window.location.hostname + '/file/' + jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('id');
 });
+jquery__WEBPACK_IMPORTED_MODULE_0___default()('#customRecurring').click(function () {
+  if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).is(':checked')) {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('#customRecurringFrequency').show();
+  } else {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('#customRecurringFrequency').hide();
+  }
+});
+jquery__WEBPACK_IMPORTED_MODULE_0___default()('#groupCustomRecurring').click(function () {
+  if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).is(':checked')) {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('#groupCustomRecurringFrequency').show();
+  } else {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('#groupCustomRecurringFrequency').hide();
+  }
+});
 
 /***/ }),
 

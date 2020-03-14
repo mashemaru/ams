@@ -264,10 +264,10 @@
                                                                 <i class="fas fa-ellipsis-v"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                                @if ($outline->accreditation->progress != 'initial')
+                                                                {{-- @if ($outline->accreditation->progress != 'initial') --}}
                                                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#evidenceModal{{$list->id}}-{{ $data->id }}">Add Evidences</a>
                                                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#selectEvidenceModal{{$list->id}}-{{ $data->id }}">Add Evidences from File Repo</a>
-                                                                @endif
+                                                                {{-- @endif --}}
                                                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#viewEvidences{{$list->id}}-{{ $data->id }}">View Evidence List</a>
                                                                 {{-- <a class="dropdown-item" href="#">Remove</a> --}}
                                                             </div>
@@ -451,12 +451,12 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        @if ($outline->accreditation->progress != 'initial')
+                                                        {{-- @if ($outline->accreditation->progress != 'initial') --}}
                                                         <div class="form-group mb-3">
                                                             <label class="form-control-label">File(s)</label>
                                                             <input type="file" class="form-control" name="file[]" multiple>
                                                         </div>
-                                                        @endif
+                                                        {{-- @endif --}}
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

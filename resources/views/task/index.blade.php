@@ -34,6 +34,7 @@
                                     <th scope="col">{{ __('Priority') }}</th>
                                     <th scope="col">{{ __('Remarks') }}</th>
                                     <th scope="col"></th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -49,6 +50,7 @@
                                         </td>
                                         <td>{{ ucfirst($task->priority) }}</td>
                                         <td>{{ $task->remarks }}</td>
+                                        <td>{!! ($task->recurring) ? '<span class="badge badge-dot"><i class="bg-success"></i>Recurring</span>' : '' !!}</td>
                                         <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -158,6 +160,17 @@
                                     <input class="form-control form-control-alternative" name="remarks" type="text">
                                 </div>
                             </div>
+                            <div class="form-group mb-3">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customRecurring" name="recurring">
+                                    <label class="custom-control-label" for="customRecurring">Recurring</label>
+                                </div>
+                            </div>
+                            <div class="form-group mb-3" id="customRecurringFrequency" style="display: none;">
+                                <div class="custom-checkbox">
+                                    <input type="number" name="recurring_freq" id="input-name" min="1" class="form-control form-control-alternative" placeholder="Input number of days">
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -220,6 +233,17 @@
                                     <label class="form-control-label">Remarks</label>
                                     <div class="input-group input-group-alternative">
                                         <input class="form-control form-control-alternative" name="remarks" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="groupCustomRecurring" name="recurring">
+                                        <label class="custom-control-label" for="groupCustomRecurring">Recurring</label>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3" id="groupCustomRecurringFrequency" style="display: none;">
+                                    <div class="custom-checkbox">
+                                        <input type="number" name="recurring_freq" id="input-name" min="1" class="form-control form-control-alternative" placeholder="Input number of days">
                                     </div>
                                 </div>
                             </div>

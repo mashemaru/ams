@@ -56,3 +56,19 @@ $('.file-repo-download').click(function(e) {
     e.preventDefault();
     window.location = window.location.protocol+'//'+window.location.hostname+'/file/' + $(this).data('id');
 });
+
+$('#customRecurring').click(function() {
+    if ($(this).is(':checked')) {
+        $('#customRecurringFrequency').show();
+    } else {
+        $('#customRecurringFrequency').hide();
+    }
+});
+
+$('#groupCustomRecurring').click(function() {
+    if ($(this).is(':checked')) {
+        $('#groupCustomRecurringFrequency').show();
+    } else {
+        $('#groupCustomRecurringFrequency').hide();
+    }
+});

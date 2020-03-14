@@ -6,6 +6,7 @@ use App\Task;
 use App\User;
 use App\Team;
 use App\Notification;
+use Carbon\Carbon;
 use App\Events\LiveNotification;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
@@ -88,6 +89,9 @@ class TaskController extends Controller
                     'due_date'   => $request->due_date,
                     'remarks'    => $request->remarks,
                     'priority'   => $request->priority,
+                    'recurring'  => isset($request->recurring) ? true : false,
+                    'recurring_freq'  => isset($request->recurring) ? $request->recurring_freq : null,
+                    'recurring_date'  => isset($request->recurring) ? Carbon::now()->addDays($request->recurring_freq) : null,
                 ]);
                 event(new LiveNotification('Task ('.$request->task_name.') assigned.',$assign));
             }
@@ -104,6 +108,9 @@ class TaskController extends Controller
                         'due_date'   => $request->due_date,
                         'remarks'    => $request->remarks,
                         'priority'   => $request->priority,
+                        'recurring'  => isset($request->recurring) ? true : false,
+                        'recurring_freq'  => isset($request->recurring) ? $request->recurring_freq : null,
+                        'recurring_date'  => isset($request->recurring) ? Carbon::now()->addDays($request->recurring_freq) : null,
                     ]);
                     event(new LiveNotification('Task ('.$request->task_name.') assigned.',$user->id));
                 }
@@ -117,17 +124,22 @@ class TaskController extends Controller
                 foreach($team as $t) {
                     $users->push($t->head);
                 }
-            }
-            foreach($users as $user) {
-                Task::create([
-                    'task_name'  => $request->task_name,
-                    'assigner'   => auth()->user()->id,
-                    'asigned_to' => $user->id,
-                    'due_date'   => $request->due_date,
-                    'remarks'    => $request->remarks,
-                    'priority'   => $request->priority,
-                ]);
-                event(new LiveNotification('Task ('.$request->task_name.') assigned.',$user->id));
+                if($users) {
+                    foreach($users as $user) {
+                        Task::create([
+                            'task_name'  => $request->task_name,
+                            'assigner'   => auth()->user()->id,
+                            'asigned_to' => $user->id,
+                            'due_date'   => $request->due_date,
+                            'remarks'    => $request->remarks,
+                            'priority'   => $request->priority,
+                            'recurring'  => isset($request->recurring) ? true : false,
+                            'recurring_freq'  => isset($request->recurring) ? $request->recurring_freq : null,
+                            'recurring_date'  => isset($request->recurring) ? Carbon::now()->addDays($request->recurring_freq) : null,
+                        ]);
+                        event(new LiveNotification('Task ('.$request->task_name.') assigned.',$user->id));
+                    }
+                }
             }
         }
 
