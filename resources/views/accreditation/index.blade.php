@@ -51,10 +51,10 @@
                                                 </div>
                                             @else
                                                 <div class="d-flex align-items-center">
-                                                    <span class="mr-2">{{ number_format($a->timeline->status) }}%</span>
+                                                    <span class="mr-2">{{ isset($a->timeline->status) ? number_format($a->timeline->status) . '%': '0%' }}</span>
                                                     <div>
                                                         <div class="progress">
-                                                        <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="{{ $a->timeline->status }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $a->timeline->status }}%;"></div>
+                                                        <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="{{ isset($a->timeline->status) ? $a->timeline->status : '' }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ isset($a->timeline->status) ? $a->timeline->status . '%' : '' }};"></div>
                                                         </div>
                                                     </div>
                                                 </div>
