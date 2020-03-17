@@ -21867,3 +21867,7 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle
 
     height: 3px;
 }
+
+.doc_outline .parent_outline:hover{
+    background-color: #eae7e7;
+}
