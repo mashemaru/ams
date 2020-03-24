@@ -49,7 +49,7 @@
                                             </span>
                                         </td>
                                         <td>{{ ucfirst($task->priority) }}</td>
-                                        <td>{{ $task->remarks }}</td>
+                                        <td>{!! $task->remarks !!}</td>
                                         <td>{!! ($task->recurring) ? '<span class="badge badge-dot"><i class="bg-success"></i>Recurring</span>' : '' !!}</td>
                                         <td class="text-right">
                                             <div class="dropdown">

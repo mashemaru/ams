@@ -27,7 +27,7 @@
                                         <h5 class="mt-1 mb-1">{{ $task->task_name }}</h5>
                                         <small><strong>Due Date:</strong> {{ $task->due_date->format("m-d-Y") }}</small>
                                     </div>
-                                    <p class="text-xs mb-0">{{ $task->remarks }}</p>
+                                    <p class="text-xs mb-0">{!! $task->remarks !!}</p>
                                 </div>
                             @endforeach
                             @endif

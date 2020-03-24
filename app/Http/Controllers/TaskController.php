@@ -146,6 +146,64 @@ class TaskController extends Controller
         return back()->withToastSuccess(__('Task successfully created.'));
     }
 
+    public function storeAppendixTask(Request $request, $document_outline)
+    {
+        $validate = Validator::make($request->all(), [
+            'task_name'     => 'required|max:255',
+        ]);
+    
+        if ($validate->fails()) {
+            return back()->with('error', $validate->messages())->withInput();
+        }
+    
+        $url = url("/document-outline/{$document_outline}/edit?appendix={$request->appendix_id}");
+
+        if($request->assign_to) {
+            foreach($request->assign_to as $assign) {
+                Task::create([
+                    'task_name'  => $request->task_name,
+                    'assigner'   => auth()->user()->id,
+                    'asigned_to' => $assign,
+                    'due_date'   => $request->due_date,
+                    'remarks'    => 'Upload evidence in Appendix/Exhibit (' . $request->appendix_name . ') click <a href="' . $url . '">here</a>',
+                    'priority'   => $request->priority,
+                    'recurring'  => isset($request->recurring) ? true : false,
+                    'recurring_freq'  => isset($request->recurring) ? $request->recurring_freq : null,
+                    'recurring_date'  => isset($request->recurring) ? Carbon::now()->addDays($request->recurring_freq) : null,
+                ]);
+                event(new LiveNotification('Task ('.$request->task_name.') assigned.',$assign));
+            }
+        }
+
+        if($request->assign_to_team) {
+            foreach($request->assign_to_team as $team) {
+                $users = User::whereHas('teams', function($q) use(&$request){ $q->whereIn('id', $request->assign_to_team); })->get();
+                $team = Team::with('head')->whereIn('id', $request->assign_to_team)->get();
+                foreach($team as $t) {
+                    $users->push($t->head);
+                }
+                if($users) {
+                    foreach($users as $user) {
+                        Task::create([
+                            'task_name'  => $request->task_name,
+                            'assigner'   => auth()->user()->id,
+                            'asigned_to' => $user->id,
+                            'due_date'   => $request->due_date,
+                            'remarks'    => 'Upload evidence in Appendix/Exhibit (' . $request->appendix_name . ') click <a href="' . $url . '">here</a>',
+                            'priority'   => $request->priority,
+                            'recurring'  => isset($request->recurring) ? true : false,
+                            'recurring_freq'  => isset($request->recurring) ? $request->recurring_freq : null,
+                            'recurring_date'  => isset($request->recurring) ? Carbon::now()->addDays($request->recurring_freq) : null,
+                        ]);
+                        event(new LiveNotification('Task ('.$request->task_name.') assigned.',$user->id));
+                    }
+                }
+            }
+        }
+
+        return back()->withToastSuccess(__('Task successfully created.'));
+    }
+
     /**
      * Display the specified resource.
      *

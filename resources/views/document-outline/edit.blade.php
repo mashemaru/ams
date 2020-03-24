@@ -218,10 +218,13 @@
                 <div class="accordion search-accordion" id="accordionExample">
                     @foreach($outline->evidences as $list)
                     <div class="card">
-                        <div class="card-header" id="heading{{$list->id}}" data-toggle="collapse" data-target="#collapse{{$list->id}}" aria-expanded="false" aria-controls="collapse{{$list->id}}">
-                            <h5 class="mb-0">{{ $list->name }}</h5>
+                        <div class="card-header{{ (request()->get('appendix') == $list->id) ? ' collapsed' : '' }}" id="heading{{$list->id}}" data-toggle="collapse" data-target="#collapse{{$list->id}}" aria-expanded="false" aria-controls="collapse{{$list->id}}">
+                            <div class="d-flex align-items-center">
+                                <h5 class="mb-0">{{ $list->name }}</h5>
+                                <span class="ml-auto mr-5"><a class="btn btn-primary btn-sm mt-2" href="#" data-toggle="modal" data-target="#taskModal{{$list->id}}">Assign Task</a></span>
+                            </div>
                         </div>
-                        <div id="collapse{{$list->id}}" class="collapse" aria-labelledby="heading{{$list->id}}" data-parent="#accordionExample">
+                        <div id="collapse{{$list->id}}" class="collapse{{ (request()->get('appendix') == $list->id) ? ' show' : '' }}" aria-labelledby="heading{{$list->id}}" data-parent="#accordionExample">
                             <div class="card shadow">
                                 <div class="card-header border-1">
                                     <div class="row align-items-center">
@@ -471,6 +474,97 @@
                             </div>
                         </div>
                     </div>
+                    <div class="modal fade" id="taskModal{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="taskModal{{$list->id}}Label" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h5 class="modal-title" id="taskModal{{$list->id}}Label">Add Task</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>
+                                <form method="post" action="{{ route('task.appendix.store', $outline->id) }}" autocomplete="off">
+                                @csrf
+                                    <input type="hidden" name="appendix_id" value="{{$list->id}}">
+                                    <input type="hidden" name="appendix_name" value="{{$list->name}}">
+                                    <div class="modal-body">
+                                        <div class="form-group{{ $errors->has('task_name') ? ' has-danger' : '' }} mb-3">
+                                            <label class="form-control-label" for="input-task_name">{{ __('Task Name') }}</label>
+                                            <input type="text" name="task_name" id="input-task_name" class="form-control form-control-alternative{{ $errors->has('task_name') ? ' is-invalid' : '' }}" placeholder="{{ __('Task Name') }}" value="{{ old('task_name') }}" required autofocus>
+                                            @if ($errors->has('task_name'))
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $errors->first('task_name') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+                                        <div class="form-group mb-3">
+                                        <label class="form-control-label">Assign to</label>
+                                        <div class="input-group input-group-alternative">
+                                            <select class="form-control form-control-alternative select2" name="assign_to[]" data-toggle="select" multiple >
+                                            @if($users)
+                                                @foreach ($users as $user)
+                                                    @if($user->id != auth()->user()->id)
+                                                    <option value="{{$user->id}}">{{ $user->name }}</option>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                            </select>
+                                        </div>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label class="form-control-label">Assign to team</label>
+                                            <div class="input-group input-group-alternative">
+                                                <select class="form-control form-control-alternative select2" name="assign_to_team[]" data-toggle="select" multiple>
+                                                @if($teams)
+                                                    @foreach ($teams as $team)
+                                                        <option value="{{$team->id}}">{{ $team->team_name }}</option>
+                                                    @endforeach
+                                                @endif
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label class="form-control-label">Due Date</label>
+                                            <div class="input-group input-group-alternative">
+                                                <input class="form-control datepicker" name="due_date" data-date-format="yyyy-mm-dd" placeholder="Select due date" type="text" value="{{ old('due_date') }}" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label class="form-control-label">Priority</label>
+                                            <div class="input-group input-group-alternative">
+                                                <select class="form-control form-control-alternative" name="priority">
+                                                    <option value="low">Low</option>
+                                                    <option value="med">Medium</option>
+                                                    <option value="high">High</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        {{-- <div class="form-group mb-3">
+                                            <label class="form-control-label">Remarks</label>
+                                            <div class="input-group input-group-alternative">
+                                                <input class="form-control form-control-alternative" name="remarks" type="text">
+                                            </div>
+                                        </div> --}}
+                                        <div class="form-group mb-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customRecurring" name="recurring">
+                                                <label class="custom-control-label" for="customRecurring">Recurring</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-3" id="customRecurringFrequency" style="display: none;">
+                                            <div class="custom-checkbox">
+                                                <input type="number" name="recurring_freq" id="input-name" min="1" class="form-control form-control-alternative" placeholder="Input number of days">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
                 </div>
             @endif
@@ -485,7 +579,9 @@
 <script src="/vendor/nestable/jquery.nestable.min.js"></script>
 <link href="/vendor/datatables/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="{{ asset('js/dataTables.js') }}"></script>
+<script src="/vendor/datepicker/bootstrap-datepicker.min.js"></script>
 <script>
+$(".datepicker").datepicker();
 $(document).ready(function () {
     @if ($outline->accreditation->progress != 'formal')
     $('#content').summernote('disable');
