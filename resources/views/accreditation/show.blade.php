@@ -149,6 +149,29 @@
             </div>
         </div>
     </div>
+    @if($accreditation->recommendations && $accreditation->type == 'reaccredit')
+    <br>
+    <div class="row">
+        <div class="col-xl-12 order-xl-1">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mb-0">Recommendations</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul>
+                    @foreach ($accreditation->recommendations as $key => $item)
+                        <li>{{ $item['label'] }}</li>
+                    @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
     <br>
     <div class="row">
         <div class="col-xl-12 order-xl-1">
