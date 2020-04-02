@@ -181,7 +181,7 @@ class FacultyController extends Controller
 
     public function downloadExportFaculty()
     {
-        return response()->download(base_path('fif.zip'))->deleteFileAfterSend();
+        return response()->download(storage_path('app/fif/fif.zip'))->deleteFileAfterSend();
     }
 
     function facultySearch(Request $request)
@@ -225,24 +225,31 @@ class FacultyController extends Controller
         $users = User::role('faculty');
         $teaching_experience = array();
         $professional_practice = array();
+        $relations = array();
 
         if ($request->has('query')) {
             if($request->get('query') == 'teaching_experience') {
+                $relations = $users->with('faculty_teaching_experience_dlsu','faculty_teaching_experience_other')->where(function ($query) {
+                    $query->has('faculty_teaching_experience_dlsu')->orHas('faculty_teaching_experience_other');
+                })->get()->groupBy('rank');
                 $teaching_experience = $users->select("users.rank",
                 \DB::raw('(SELECT SUM(years) FROM faculty_teaching_experience_dlsu WHERE faculty_teaching_experience_dlsu.user_id = users.id) as faculty_experience_dlsu'),
                 \DB::raw('(SELECT SUM(years) FROM faculty_teaching_experience_other WHERE faculty_teaching_experience_other.user_id = users.id) as faculty_experience_other'))
                 ->get()
                 ->groupBy('rank')
                 ->toArray();
-                $pdf = \PDF::loadView('faculty.search.teaching_experience', compact('teaching_experience'));
+                $pdf = \PDF::loadView('faculty.search.teaching_experience', compact('teaching_experience','relations'));
             } else if($request->get('query') == 'professional_practice') {
+                $relations = $users->with('faculty_professional_practice_dlsu','faculty_professional_practice')->where(function ($query) {
+                    $query->has('faculty_professional_practice_dlsu')->orHas('faculty_professional_practice');
+                })->get()->groupBy('rank');
                 $professional_practice = $users->select("users.rank",
                 \DB::raw('(SELECT SUM(years) FROM faculty_professional_practice_dlsu WHERE faculty_professional_practice_dlsu.user_id = users.id) as faculty_experience_dlsu'),
                 \DB::raw('(SELECT SUM(years) FROM faculty_professional_practice WHERE faculty_professional_practice.user_id = users.id) as faculty_experience_other'))
                 ->get()
                 ->groupBy('rank')
                 ->toArray();
-                $pdf = \PDF::loadView('faculty.search.professional_practice', compact('professional_practice'));
+                $pdf = \PDF::loadView('faculty.search.professional_practice', compact('professional_practice','relations'));
             }
             return $pdf->download(now()->format("m-d-Y-his") . '_faculty-search-result.pdf');
         }

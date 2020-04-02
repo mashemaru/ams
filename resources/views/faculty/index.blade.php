@@ -13,7 +13,7 @@
                                 <h3 class="mb-0">{{ __('Faculty Information Management') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                @if(file_exists(base_path('fif.zip'))) 
+                                @if(file_exists(storage_path('app/fif/fif.zip')))
                                 <form method="post" action="{{ route('faculty.download.export') }}" class="d-inline" autocomplete="off">
                                 @csrf
                                     <button type="submit" class="btn btn-primary btn-sm mr-4">
