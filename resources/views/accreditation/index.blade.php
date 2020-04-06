@@ -42,21 +42,11 @@
                                         <td>
                                             @if($a->progress == 'initial')
                                                 <div class="d-flex align-items-center">
-                                                    <span class="mr-2">0%</span>
-                                                    <div>
-                                                        <div class="progress">
-                                                        <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
-                                                        </div>
-                                                    </div>
+                                                    <span class="mr-2">Pre-Accreditation Phase</span>
                                                 </div>
                                             @else
                                                 <div class="d-flex align-items-center">
                                                     <span class="mr-2">{{ isset($a->timeline->status) ? number_format($a->timeline->status) . '%': '0%' }}</span>
-                                                    <div>
-                                                        <div class="progress">
-                                                        <div class="progress-bar bg-gradient-danger" role="progressbar" aria-valuenow="{{ isset($a->timeline->status) ? $a->timeline->status : '' }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ isset($a->timeline->status) ? $a->timeline->status . '%' : '' }};"></div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             @endif
                                         </td>
