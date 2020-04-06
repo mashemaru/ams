@@ -156,8 +156,11 @@
             <div class="card">
                 <div class="card-header border-0">
                     <div class="row">
-                        <div class="col">
+                        <div class="col-md-4">
                             <h3 class="mb-0">Recommendations</h3>
+                        </div>
+                        <div class="col text-right">
+                            <a class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#taskModal{{$accreditation->id}}">Assign Task</a>
                         </div>
                     </div>
                 </div>
@@ -168,6 +171,89 @@
                     @endforeach
                     </ul>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="taskModal{{$accreditation->id}}" tabindex="-1" role="dialog" aria-labelledby="taskModal{{$accreditation->id}}Label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="taskModal{{$accreditation->id}}Label">Add Task</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <form method="post" action="{{ route('task.accreditation.store', $accreditation->id) }}" autocomplete="off">
+                @csrf
+                    <div class="modal-body">
+                        <div class="form-group{{ $errors->has('task_name') ? ' has-danger' : '' }} mb-3">
+                            <label class="form-control-label" for="input-task_name">{{ __('Task Name') }}</label>
+                            <input type="text" name="task_name" id="input-task_name" class="form-control form-control-alternative{{ $errors->has('task_name') ? ' is-invalid' : '' }}" placeholder="{{ __('Task Name') }}" value="{{ old('task_name') }}" required autofocus>
+                            @if ($errors->has('task_name'))
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('task_name') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <div class="form-group mb-3">
+                        <label class="form-control-label">Assign to</label>
+                        <div class="input-group input-group-alternative">
+                            <select class="form-control form-control-alternative select2" name="assign_to[]" data-toggle="select" multiple >
+                            @if($users)
+                                @foreach ($users as $user)
+                                    @if($user->id != auth()->user()->id)
+                                    <option value="{{$user->id}}">{{ $user->name }}</option>
+                                    @endif
+                                @endforeach
+                            @endif
+                            </select>
+                        </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-control-label">Assign to team</label>
+                            <div class="input-group input-group-alternative">
+                                <select class="form-control form-control-alternative select2" name="assign_to_team[]" data-toggle="select" multiple>
+                                @if($teams)
+                                    @foreach ($teams as $team)
+                                        <option value="{{$team->id}}">{{ $team->team_name }}</option>
+                                    @endforeach
+                                @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-control-label">Due Date</label>
+                            <div class="input-group input-group-alternative">
+                                <input class="form-control datepicker" name="due_date" data-date-format="yyyy-mm-dd" placeholder="Select due date" type="text" value="{{ old('due_date') }}" required>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="form-control-label">Priority</label>
+                            <div class="input-group input-group-alternative">
+                                <select class="form-control form-control-alternative" name="priority">
+                                    <option value="low">Low</option>
+                                    <option value="med">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customRecurring" name="recurring">
+                                <label class="custom-control-label" for="customRecurring">Recurring</label>
+                            </div>
+                        </div>
+                        <div class="form-group mb-3" id="customRecurringFrequency" style="display: none;">
+                            <div class="custom-checkbox">
+                                <input type="number" name="recurring_freq" id="input-name" min="1" class="form-control form-control-alternative" placeholder="Input number of days">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
