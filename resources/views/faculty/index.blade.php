@@ -9,30 +9,30 @@
                 <div class="card shadow">
                     <div class="card-header border-0">
                         <div class="row align-items-center">
-                            <div class="col-8">
+                            <div class="col-7">
                                 <h3 class="mb-0">{{ __('Faculty Information Management') }}</h3>
                             </div>
-                            <div class="col-4 text-right">
+                            <div class="col-5 text-right">
+                                <button type="button" class="btn btn-success btn-sm mr-2" data-toggle="modal" data-target="#reminderModal">
+                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                    Remind All Faculty
+                                </button>
+                                <form method="post" action="{{ route('faculty.exportAllFaculty') }}" class="d-inline" autocomplete="off">
+                                @csrf
+                                    <button type="submit" class="btn btn-primary btn-sm mr-2">
+                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                        Generate All FIF
+                                    </button>
+                                </form>
                                 @if(file_exists(storage_path('app/fif/fif.zip')))
                                 <form method="post" action="{{ route('faculty.download.export') }}" class="d-inline" autocomplete="off">
                                 @csrf
-                                    <button type="submit" class="btn btn-primary btn-sm mr-4">
+                                    <button type="submit" class="btn btn-primary btn-sm float-right">
                                         <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
                                         Download FIF.zip
                                     </button>
                                 </form>
                                 @endif
-                                <form method="post" action="{{ route('faculty.exportAllFaculty') }}" class="d-inline" autocomplete="off">
-                                @csrf
-                                    <button type="submit" class="btn btn-primary btn-sm mr-4 float-right">
-                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                                        Generate All FIF
-                                    </button>
-                                </form>
-                                <button type="button" class="btn btn-primary btn-sm mr-4 float-right" data-toggle="modal" data-target="#reminderModal">
-                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                                    Remind All Faculty
-                                </button>
                             </div>
                         </div>
                     </div>

@@ -68,18 +68,8 @@
                                     <label class="form-control-label" for="input-rank">{{ __('Rank') }}</label>
                                     <input class="form-control form-control-alternative" id="input-rank" name="rank" placeholder="Rank" type="text" value="{{ old('rank') }}">
                                 </div>
-                                <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-email">{{ __('Email') }}</label>
-                                    <input type="email" name="email" id="input-email" class="form-control form-control-alternative{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('Email') }}" value="{{ old('email') }}" required>
-
-                                    @if ($errors->has('email'))
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $errors->first('email') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
                                 <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-password">{{ __('Password') }}</label>
+                                    <label class="form-control-label" for="input-password">{{ __('Password') }} <small style="color:red">&nbsp;&nbsp;&nbsp;&nbsp;*please create a password with 6 characters or more</small></label>
                                     <input type="password" name="password" id="input-password" class="form-control form-control-alternative{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('Password') }}" value="" required>
                                     
                                     @if ($errors->has('password'))

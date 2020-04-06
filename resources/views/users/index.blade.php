@@ -13,7 +13,7 @@
                                 <h3 class="mb-0">{{ __('Users') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('Add user') }}</a>
+                                <a href="{{ route('user.create') }}" class="btn btn-sm btn-success"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> {{ __('Add User') }}</a>
                             </div>
                         </div>
                     </div>

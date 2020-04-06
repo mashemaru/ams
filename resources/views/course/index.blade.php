@@ -9,17 +9,17 @@
                 <div class="card shadow">
                     <div class="card-header border-0">
                         <div class="row align-items-center">
-                            <div class="col-8">
+                            <div class="col-10">
                                 <h3 class="mb-0">{{ __('Course Overview') }}</h3>
                             </div>
-                            <div class="col-3 text-right">
-                                <button type="button" class="btn btn-primary btn-sm mr-4 float-right" data-toggle="modal" data-target="#reminderModal">
+                            <div class="col-1">
+                                <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#reminderModal">
                                     <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
                                     Remind All Syllabus Update
                                 </button>
                             </div>
-                            <div class="col-1 text-right">
-                                <a href="{{ route('course.create') }}" class="btn btn-success btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Course</a>
+                            <div class="col-1">
+                                <a href="{{ route('course.create') }}" class="btn btn-success btn-sm float-right"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Course</a>
                             </div>
                         </div>
                     </div>
