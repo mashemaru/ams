@@ -57,6 +57,14 @@ foreach($teaching_experience as $key => $exp) {
     }
 }
 @endphp
+@if(isset($isDownload) && $isDownload)
+<style>
+table{border-collapse:collapse;width:100%}td,th{text-align:left;padding:8px}tr:nth-child(even){background-color:#f2f2f2}.col-md-6{margin-bottom:45px}.card{margin-bottom:45px}
+</style>
+<div class="col-md-12">
+    <h1 class="text-white">Faculty teaching experience as of <small><em>{{ now()->setTimezone('Asia/Singapore')->toDayDateTimeString() }}</em></small></h1>
+</div>
+@endif
 <div class="col-9">
     <div class="card shadow">
         <div class="table-responsive">

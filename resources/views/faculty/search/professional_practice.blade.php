@@ -57,6 +57,14 @@ foreach($professional_practice as $key => $exp) {
     }
 }
 @endphp
+@if(isset($isDownload) && $isDownload)
+<style>
+table{border-collapse:collapse;width:100%}td,th{text-align:left;padding:8px}tr:nth-child(even){background-color:#f2f2f2}.col-md-6{margin-bottom:45px}.card{margin-bottom:45px}
+</style>
+<div class="col-md-12">
+    <h1 class="text-white">Professional practice as of <small><em>{{ now()->setTimezone('Asia/Singapore')->toDayDateTimeString() }}</em></small></h1>
+</div>
+@endif
 <div class="col-9">
     <div class="card shadow">
         <div class="table-responsive">
@@ -67,8 +75,8 @@ foreach($professional_practice as $key => $exp) {
                         <th colspan="4">{{ __('Years of Service') }}</th>
                     </tr>
                     <tr>
-                        <th colspan="2">{{ __('In this school') }}</th>
-                        <th colspan="2">{{ __('In other schools') }}</th>
+                        <th colspan="2">{{ __('IT Industry') }}</th>
+                        <th colspan="2">{{ __('Other Industries') }}</th>
                     </tr>
                     <tr>
                         <th>{{ __('Full-Time') }}</th>
@@ -137,8 +145,8 @@ foreach($professional_practice as $key => $exp) {
                                 <th colspan="3">{{ __('Full Time') }}</th>
                             </tr>
                             <tr>
-                                <th>{{ __('In this school') }}</th>
-                                <th>{{ __('In other schools') }}</th>
+                                <th>{{ __('IT Industry') }}</th>
+                                <th>{{ __('Other Industries') }}</th>
                             </tr>
                         </thead>
                         <tbody align="center">
@@ -165,8 +173,8 @@ foreach($professional_practice as $key => $exp) {
                                 <th colspan="3">{{ __('Part Time') }}</th>
                             </tr>
                             <tr>
-                                <th>{{ __('In this school') }}</th>
-                                <th>{{ __('In other schools') }}</th>
+                                <th>{{ __('IT Industry') }}</th>
+                                <th>{{ __('Other Industries') }}</th>
                             </tr>
                         </thead>
                         <tbody align="center">

@@ -226,7 +226,7 @@ class FacultyController extends Controller
         $teaching_experience = array();
         $professional_practice = array();
         $relations = array();
-
+        $isDownload = true;
         if ($request->has('query')) {
             if($request->get('query') == 'teaching_experience') {
                 $relations = $users->with('faculty_teaching_experience_dlsu','faculty_teaching_experience_other')->where(function ($query) {
@@ -238,7 +238,7 @@ class FacultyController extends Controller
                 ->get()
                 ->groupBy('rank')
                 ->toArray();
-                $pdf = \PDF::loadView('faculty.search.teaching_experience', compact('teaching_experience','relations'));
+                $pdf = \PDF::loadView('faculty.search.teaching_experience', compact('teaching_experience','relations','isDownload'));
             } else if($request->get('query') == 'professional_practice') {
                 $relations = $users->with('faculty_professional_practice_dlsu','faculty_professional_practice')->where(function ($query) {
                     $query->has('faculty_professional_practice_dlsu')->orHas('faculty_professional_practice');
@@ -249,7 +249,7 @@ class FacultyController extends Controller
                 ->get()
                 ->groupBy('rank')
                 ->toArray();
-                $pdf = \PDF::loadView('faculty.search.professional_practice', compact('professional_practice','relations'));
+                $pdf = \PDF::loadView('faculty.search.professional_practice', compact('professional_practice','relations','isDownload'));
             }
             return $pdf->download(now()->format("m-d-Y-his") . '_faculty-search-result.pdf');
         }
