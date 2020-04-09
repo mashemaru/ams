@@ -48,6 +48,32 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
+                                    <div class="form-group{{ $errors->has('college') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-college">{{ __('College') }}</label>
+                                        <input type="text" name="college" id="input-college" class="form-control form-control-alternative{{ $errors->has('college') ? ' is-invalid' : '' }}" placeholder="{{ __('College') }}" value="{{ old('college') }}">
+
+                                        @if ($errors->has('college'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('college') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group{{ $errors->has('college') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-college">{{ __('Department') }}</label>
+                                        <input type="text" name="college" id="input-college" class="form-control form-control-alternative{{ $errors->has('college') ? ' is-invalid' : '' }}" placeholder="{{ __('Department') }}" value="{{ old('college') }}">
+
+                                        @if ($errors->has('college'))
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $errors->first('college') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">{{ __('Course Type') }}</label>
                                         <select class="form-control form-control-alternative" name="course_type" required>
@@ -61,15 +87,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group{{ $errors->has('college') ? ' has-danger' : '' }}">
-                                        <label class="form-control-label" for="input-college">{{ __('College') }}</label>
-                                        <input type="text" name="college" id="input-college" class="form-control form-control-alternative{{ $errors->has('college') ? ' is-invalid' : '' }}" placeholder="{{ __('College') }}" value="{{ old('college') }}">
-
-                                        @if ($errors->has('college'))
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('college') }}</strong>
-                                            </span>
-                                        @endif
+                                    <div class="form-group">
+                                        <label class="form-control-label">{{ __('Course Description') }}</label>
+                                        <textarea class="form-control" placeholder="Description"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -86,8 +106,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-control-label">{{ __('Soft Prerequisite') }}</label>
-                                        <select class="form-control form-control-alternative select2" name="softPrerequisite[]" data-toggle="select" multiple data-placeholder="Select soft prerequisite">
+                                        <label class="form-control-label">{{ __('Co Rerequisite') }}</label>
+                                        <select class="form-control form-control-alternative select2" name="coRequisite[]" data-toggle="select" multiple data-placeholder="Select co rerequisite">
                                             @foreach ($courses as $course)
                                                 <option value="{{$course->id}}">{{ $course->course_name }}</option>
                                             @endforeach
@@ -98,8 +118,8 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-control-label">{{ __('Co Rerequisite') }}</label>
-                                        <select class="form-control form-control-alternative select2" name="coRequisite[]" data-toggle="select" multiple data-placeholder="Select co rerequisite">
+                                        <label class="form-control-label">{{ __('Soft Prerequisite') }}</label>
+                                        <select class="form-control form-control-alternative select2" name="softPrerequisite[]" data-toggle="select" multiple data-placeholder="Select soft prerequisite">
                                             @foreach ($courses as $course)
                                                 <option value="{{$course->id}}">{{ $course->course_name }}</option>
                                             @endforeach

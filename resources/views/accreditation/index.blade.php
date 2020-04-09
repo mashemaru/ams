@@ -13,7 +13,7 @@
                                 <h3 class="mb-0">{{ __('Accreditations') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                <a href="{{ route('accreditation.create') }}" class="btn btn-primary btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Accreditation</a>
+                                <a href="{{ route('accreditation.create') }}" class="btn btn-success btn-sm"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Accreditation</a>
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                                         <td>
                                             @if($a->progress == 'initial')
                                                 <div class="d-flex align-items-center">
-                                                    <span class="mr-2">Pre-Accreditation Phase</span>
+                                                    <span class="mr-2">Pre-Accreditation</span>
                                                 </div>
                                             @else
                                                 <div class="d-flex align-items-center">
@@ -69,10 +69,10 @@
                                                     @if ($a->progress == 'completed' && $a->recommendations == '')
                                                     <a href="{{ route('accreditation.show.recommendation', $a) }}" class="dropdown-item">{{ __('Add Recommendation') }}</a>
                                                     @endif
-                                                    <a href="{{ route('accreditation.show', $a) }}" class="dropdown-item">{{ __('View Summary') }}</a>
+                                                    <a href="{{ route('accreditation.show', $a) }}" class="dropdown-item">{{ __('View Summary') }}</a><!--
                                                     @if ($a->progress != 'completed')
                                                         <a href="{{ route('accreditation.team.create', $a) }}" class="dropdown-item">{{ __('Create Team') }}</a>
-                                                        <a href="{{ route('accreditation.assignTeam', $a) }}" class="dropdown-item">{{ __('Assign Team') }}</a>
+                                                        <a href="{{ route('accreditation.assignTeam', $a) }}" class="dropdown-item">{{ __('Assign Team') }}</a>-->
                                                         <form action="{{ route('accreditation.destroy', $a) }}" method="post">
                                                             @csrf
                                                             @method('delete')

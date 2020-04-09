@@ -268,17 +268,17 @@
                             <h3 class="mb-0">Teams</h3>
                         </div>
                         <div class="col-4 text-right">
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#userModal">
+                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Send Team Invites
+                            </button>
                             @if(auth()->user()->hasAnyRole('super-admin|team-head'))
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createTeamModal">
-                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Create Sub Team
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createTeamModal">
+                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Create Team
                             </button>
                             @endif
                             {{-- <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#taskModal">
                                 <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Task
                             </button> --}}
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#userModal">
-                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Send Member Invites
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -318,18 +318,19 @@
                                             </div>
                                         </div>
                                     </td> --}}
-                                    {{-- <td class="text-right">
+                                    <td class="text-right">
                                         <div class="dropdown">
                                             <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                <a class="dropdown-item" href="#">Add Sub Team</a>
                                                 <a class="dropdown-item" href="#">Edit</a>
                                                 <a class="dropdown-item" href="#">Delete</a>
                                             </div>
                                         </div>
-                                    </td> --}}
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

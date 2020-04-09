@@ -19,7 +19,9 @@
                                 </button>
                             </div>
                             <div class="col-1">
-                                <a href="{{ route('course.create') }}" class="btn btn-success btn-sm float-right"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Course</a>
+                                <button type="button" class="btn btn-success btn-sm float-right">
+                                    <a href="{{ route('course.create') }}" style="color: white;"><span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Course</a>
+                                </button>
                             </div>
                         </div>
                     </div>
