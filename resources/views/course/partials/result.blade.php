@@ -3,6 +3,8 @@
         <tr>
             <th scope="col">{{ __('Course Name') }}</th>
             <th scope="col">{{ __('Course Code') }}</th>
+            <th scope="col">{{ __('Course Type') }}</th>
+            <th scope="col">{{ __('College') }}</th>
             <th>
                 @if(request()->course_type || request()->college)
                 <form method="post" action="{{ route('course.search-download') }}" class="float-right">
@@ -28,6 +30,8 @@
             <tr>
                 <td>{{ $course->course_name }}</td>
                 <td>{{ $course->course_code }}</td>
+                <td>{{ $course->course_type }}</td>
+                <td>{{ $course->college }}</td>
                 <td></td>
             </tr>
         @empty

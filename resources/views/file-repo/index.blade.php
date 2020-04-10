@@ -41,9 +41,8 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col"></th>
-                                    <th scope="col">{{ __('File Name') }}</th>
-                                    <th scope="col">{{ __('File Type') }}</th>
                                     <th scope="col">{{ __('File') }}</th>
+                                    <th scope="col">{{ __('File Type') }}</th>
                                     <th scope="col">{{ __('Uploaded By') }}</th>
                                     <th scope="col">{{ __('Uploaded on') }}</th>
                                     <th scope="col"></th>
@@ -104,9 +103,8 @@
             ajax: "{{ route('file-repository.index') }}",
             columns: [
                 {data: 'id', name: 'id', visible: false},
-                {data: 'file_name', name: 'file_name'},
-                {data: 'file_type', name: 'file_type'},
                 {data: 'file', name: 'file'},
+                {data: 'file_type', name: 'file_type'},
                 {data: 'user_id', name: 'user_id'},
                 {data: 'created_at', name: 'created_at'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
