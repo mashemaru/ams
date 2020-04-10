@@ -24,14 +24,26 @@
                                 </div>
                                 <div id="collapseOne" class="collapse{{ (request()->get('course_type')) ? ' show' : '' }}" aria-labelledby="headingOne" data-parent="#search-accordion">
                                     <div class="card-body">
-                                        <select class="form-control form-control-alternative" name="course_type">
-                                            <option value>Select Course Type</option>
-                                            <option value="general"{{ (request()->get('course_type') == 'general') ? ' selected' : '' }}>General</option>
-                                            <option value="major"{{ (request()->get('course_type') == 'major') ? ' selected' : '' }}>Major</option>
-                                            <option value="professional"{{ (request()->get('course_type') == 'professional') ? ' selected' : '' }}>Professional elective</option>
-                                            <option value="free"{{ (request()->get('course_type') == 'free') ? ' selected' : '' }}>Free elective</option>
-                                            <option value="core"{{ (request()->get('course_type') == 'core') ? ' selected' : '' }}>Core subject</option>
-                                        </select>
+                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline d-block">
+                                            <input class="custom-control-input" name="course_type[]" id="general_course_type" type="checkbox" value="general"{{ (request()->get('course_type') !== null && in_array('general', request()->get('course_type'))) ? ' checked' : '' }}>
+                                            <label class="custom-control-label" for="general_course_type">General</label>
+                                        </div>
+                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline d-block">
+                                            <input class="custom-control-input" name="course_type[]" id="major_course_type" type="checkbox" value="major"{{ (request()->get('course_type') !== null && in_array('major', request()->get('course_type'))) ? ' checked' : '' }}>
+                                            <label class="custom-control-label" for="major_course_type">Major</label>
+                                        </div>
+                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline d-block">
+                                            <input class="custom-control-input" name="course_type[]" id="professional_course_type" type="checkbox" value="professional"{{ (request()->get('course_type') !== null && in_array('professional', request()->get('course_type'))) ? ' checked' : '' }}>
+                                            <label class="custom-control-label" for="professional_course_type">Professional elective</label>
+                                        </div>
+                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline d-block">
+                                            <input class="custom-control-input" name="course_type[]" id="free_course_type" type="checkbox" value="free"{{ (request()->get('course_type') !== null && in_array('free', request()->get('course_type'))) ? ' checked' : '' }}>
+                                            <label class="custom-control-label" for="free_course_type">Free elective</label>
+                                        </div>
+                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline d-block">
+                                            <input class="custom-control-input" name="course_type[]" id="core_course_type" type="checkbox" value="core"{{ (request()->get('course_type') !== null && in_array('core', request()->get('course_type'))) ? ' checked' : '' }}>
+                                            <label class="custom-control-label" for="core_course_type">Core subject</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -41,12 +53,12 @@
                                 </div>
                                 <div id="collapseTwo" class="collapse{{ (request()->get('college')) ? ' show' : '' }}" aria-labelledby="headingTwo" data-parent="#search-accordion">
                                     <div class="card-body">
-                                        <select class="form-control form-control-alternative" name="college">
-                                            <option value>Select College</option>
-                                            @foreach($college as $c)
-                                            <option value="{{ $c->college }}"{{ (request()->get('college') == $c->college) ? ' selected' : '' }}>{{ $c->college }}</option>
-                                            @endforeach
-                                        </select>
+                                        @foreach($college as $c)
+                                        <div class="pl-md-4 mr-5 custom-checkbox form-check form-check-inline d-block">
+                                            <input class="custom-control-input" name="college[]" id="college-{{ $c->id }}" type="checkbox" value="{{ $c->college }}"{{ (request()->get('college') !== null && in_array( $c->college, request()->get('college'))) ? ' checked' : '' }}>
+                                            <label class="custom-control-label" for="college-{{ $c->id }}">{{ $c->college }}</label>
+                                        </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>

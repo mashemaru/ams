@@ -53,7 +53,7 @@
                                         <td>{{ ($a->result) ?: 'N/A' }}</td>
                                         <td>{{ ($a->end_date) ? $a->end_date->format('M d Y') : 'N/A' }}</td>
                                         <td>
-                                            @if ($a->progress != 'completed')
+                                            @if ($a->progress != 'completed' && $a->timeline)
                                             <button class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#timelineModal-{{ $a->id }}"><span class="btn-inner--icon"><i class="ni ni-calendar-grid-58 mr-1"></i></span> Timeline</button>
                                             @endif
                                         </td>
@@ -101,7 +101,11 @@
                                                         <div class="form-group mb-3">
                                                             <label class="form-control-label d-flex align-items-center">
                                                                 <div class="mr-3">{{ $a->program->program_name }} {{ $a->agency->agency_name }} Timeline</div>
-                                                                @role('super-admin')<a href="{{ route('timeline.edit', $a) }}" class="btn btn-primary btn-sm ml-auto">Edit Timeline</a>@endrole
+                                                                @role('super-admin')
+                                                                @if($a->progress == 'initial')
+                                                                <a href="{{ route('timeline.edit', $a) }}" class="btn btn-primary btn-sm ml-auto">Edit Timeline</a>
+                                                                @endif
+                                                                @endrole
                                                             </label><br>
                                                             @foreach($a->timeline->task as $key => $t)
                                                                 <div class="custom-control custom-control-alternative custom-checkbox mb-3">

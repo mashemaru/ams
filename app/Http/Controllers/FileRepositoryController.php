@@ -39,7 +39,8 @@ class FileRepositoryController extends Controller
                     return $data->created_at->diffForHumans();
                 })
                 ->addColumn('action', function($row){
-                    return '<a href="'.route('file-repository.download', $row->id).'" class="btn btn-dark btn-sm"><i class="fas fa-download"></i> Download</a>';
+                    return view('file-repo.partials.action', ['file' => $row->id]);
+                    // return '<a href="'.route('file-repository.download', $row->id).'" class="btn btn-dark btn-sm"><i class="fas fa-download"></i> Download</a>';
                 })
                 ->rawColumns(['file_name','file','action'])
                 ->make(true);
@@ -110,7 +111,8 @@ class FileRepositoryController extends Controller
      */
     public function destroy(FileRepository $fileRepository)
     {
-        //
+        $fileRepository->delete();
+        return back()->withToastSuccess(__('File successfully deleted.'));
     }
 
     public function download(FileRepository $fileRepository)

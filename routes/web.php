@@ -34,7 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('taskComplete/{task}', ['as' => 'task.complete', 'uses' => 'TaskController@taskComplete']);
 	Route::post('storeAppendixTask/{document_outline}', ['as' => 'task.appendix.store', 'uses' => 'TaskController@storeAppendixTask']);
 	Route::post('storeRecommendationTask/{accreditation}', ['as' => 'task.accreditation.store', 'uses' => 'TaskController@storeAccreditationRecommendations']);
-	Route::resource('document', 'DocumentController', ['except' => ['show']]);
+	Route::resource('document', 'DocumentController');
 	Route::resource('document-outline', 'DocumentOutlineController');
 	Route::post('document-outlineUpload/{document_outline}/{evidence_list}', ['as' => 'outline.upload', 'uses' => 'DocumentOutlineController@outlineUpload']);
 	Route::post('document-outlineSelect/{evidence_list}', ['as' => 'outline.select', 'uses' => 'DocumentOutlineController@outlineSelect']);

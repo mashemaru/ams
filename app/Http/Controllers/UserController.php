@@ -82,10 +82,15 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, User $user)
     {
+        if($request->password) {
+            $except = '';
+        } else {
+            $except = 'password';
+        }
         $user->update(
             $request->merge(['password' => Hash::make($request->get('password'))])
-                ->except([$request->get('password') ? '' : 'password']
-        ));
+                ->except($except)
+            );
         $user->syncPermissions($request->permission);
         $user->syncRoles($request->roles);
         return redirect()->route('user.index')->withToastSuccess(__('User successfully updated.'));

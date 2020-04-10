@@ -61,11 +61,15 @@ foreach($professional_practice as $key => $exp) {
 <style>
 table{border-collapse:collapse;width:100%}td,th{text-align:left;padding:8px}tr:nth-child(even){background-color:#f2f2f2}.col-md-6{margin-bottom:45px}.card{margin-bottom:45px}
 </style>
-<div class="col-md-12">
-    <h1 class="text-white">Professional practice as of <small><em>{{ now()->setTimezone('Asia/Singapore')->toDayDateTimeString() }}</em></small></h1>
+<div class="col-md-12" style="text-align: center;margin-bottom: 50px">
+    <h1 class="text-white">Professional Practice Experience Report</h1>
+    as of <small><em>{{ now()->setTimezone('Asia/Singapore')->toDayDateTimeString() }}</em></small>
 </div>
 @endif
 <div class="col-9">
+    @if(isset($isDownload) && $isDownload)
+    <small><em>Table 1.Total Years of Experience</em></small>
+    @endif
     <div class="card shadow">
         <div class="table-responsive">
             <table class="table align-items-center table-flush"">
@@ -136,6 +140,9 @@ table{border-collapse:collapse;width:100%}td,th{text-align:left;padding:8px}tr:n
 
     <div class="row">
         <div class="col-md-6">
+            @if(isset($isDownload) && $isDownload)
+            <small><em>Table 2.List of Full Time Faculty</em></small>
+            @endif
             <div class="card shadow mt-4">
                 <div class="table-responsive">
                     <table class="table align-items-center table-flush"">
@@ -164,6 +171,9 @@ table{border-collapse:collapse;width:100%}td,th{text-align:left;padding:8px}tr:n
         </div>
     
         <div class="col-md-6">
+            @if(isset($isDownload) && $isDownload)
+            <small><em>Table 3.List of Part Time Faculty</em></small>
+            @endif
             <div class="card shadow mt-4">
                 <div class="table-responsive">
                     <table class="table align-items-center table-flush"">
