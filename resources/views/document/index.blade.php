@@ -58,6 +58,7 @@
                                                     <form action="{{ route('document.destroy', $doc) }}" method="post">
                                                         @csrf
                                                         @method('delete')
+                                                        <a class="dropdown-item" href="{{ route('document.show', $doc) }}">{{ __('View') }}</a>
                                                         <a class="dropdown-item" href="{{ route('document.edit', $doc) }}">{{ __('Edit') }}</a>
                                                         <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this document?") }}') ? this.parentElement.submit() : ''">
                                                             {{ __('Delete') }}

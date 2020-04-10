@@ -319,11 +319,11 @@ class CourseController extends Controller
         $college = Course::select('college')->distinct()->get();
 
         if ($request->filled('course_type')) {
-            $courses->where('course_type', $request->get('course_type'));
+            $courses->whereIn('course_type', $request->get('course_type'));
         }
     
         if ($request->filled('college')) {
-            $courses->where('college', $request->get('college'));
+            $courses->whereIn('college', $request->get('college'));
         }
 
         return view('course.search', ['college' => $college, 'courses' => $courses->paginate(10) ]);
@@ -334,11 +334,11 @@ class CourseController extends Controller
         $courses = Course::query();
 
         if ($request->filled('course_type')) {
-            $courses->where('course_type', $request->course_type);
+            $courses->whereIn('course_type', $request->course_type);
         }
     
         if ($request->filled('college')) {
-            $courses->where('college', $request->college);
+            $courses->whereIn('college', $request->college);
         }
         $pdf = \PDF::loadView('course.partials.download', ['courses' => $courses->get()]);
         return $pdf->download(now()->format("m-d-Y-his") . '_course-search-result.pdf');

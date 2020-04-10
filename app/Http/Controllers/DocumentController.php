@@ -71,7 +71,8 @@ class DocumentController extends Controller
      */
     public function show(Document $document)
     {
-        //
+        $agency = Agency::all();
+        return view('document.show', ['agencies' => $agency, 'document' => $document]);
     }
 
     /**

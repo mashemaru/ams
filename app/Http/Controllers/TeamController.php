@@ -30,7 +30,7 @@ class TeamController extends Controller
      */
     public function create()
     {
-        $users = User::select('id','firstname','mi','surname')->role('member')->get();
+        $users = User::select('id','firstname','mi','surname')->get();
 
         return view('team.create',compact('users'));
     }

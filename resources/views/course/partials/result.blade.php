@@ -7,8 +7,16 @@
                 @if(request()->course_type || request()->college)
                 <form method="post" action="{{ route('course.search-download') }}" class="float-right">
                     @csrf
-                    <input type="hidden" name="course_type" value="{{ request()->course_type }}">
-                    <input type="hidden" name="college" value="{{ request()->college }}">
+                    @if(request()->course_type)
+                        @foreach (request()->course_type as $course)
+                        <input type="hidden" name="course_type[]" value="{{ $course }}">
+                        @endforeach
+                    @endif
+                    @if(request()->college)
+                        @foreach (request()->college as $college)
+                        <input type="hidden" name="college[]" value="{{ $college }}">
+                        @endforeach
+                    @endif
                     <button type="submit" class="btn btn-primary btn-sm">Download</button>
                 </form>
                 @endif
