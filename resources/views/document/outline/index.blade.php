@@ -45,7 +45,8 @@ function buildTree($elements, $parentId = 0) {
                                 <tr>
                                     
                                     <th scope="col">{{ __('Section') }}</th>
-                                    <th scope="col">{{ __('Assigned To') }}</th>
+                                    <th scope="col">{{ __('Document Type') }}</th>
+                                    <!-- <th scope="col">{{ __('Assigned To') }}</th> -->
                                     <!-- <th scope="col"></th> -->
                                 </tr>
                             </thead>
