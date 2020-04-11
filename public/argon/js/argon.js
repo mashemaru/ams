@@ -1061,3 +1061,7 @@ var SalesChart = (function() {
 	}
 
 })();
+
+$('.doc_outline .collapse').on('hide.bs.collapse', function(event) {
+	$('.'+event.target.id).removeClass('show');
+})
