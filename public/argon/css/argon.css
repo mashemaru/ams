@@ -21868,6 +21868,10 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle
     height: 3px;
 }
 
-.doc_outline .parent_outline:hover{
-    background-color: #eae7e7;
+.doc_outline .parent_outline{
+    background-color: #F5F5F5;
+}
+
+tr.child td:first-child {
+    padding-left: 50px;
 }

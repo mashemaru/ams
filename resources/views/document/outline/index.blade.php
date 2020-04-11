@@ -43,10 +43,10 @@ function buildTree($elements, $parentId = 0) {
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">{{ __('Document Name') }}</th>
+                                    
                                     <th scope="col">{{ __('Section') }}</th>
-                                    <th scope="col">{{ __('Document Type') }}</th>
-                                    <th scope="col"></th>
+                                    <th scope="col">{{ __('Assigned To') }}</th>
+                                    <!-- <th scope="col"></th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,12 +57,10 @@ function buildTree($elements, $parentId = 0) {
                               
                                 @if($outline->children)
                                 <tr class="clickable-row parent_outline" data-toggle="collapse" id="row{{$outline->id}}" data-target=".row{{$outline->id}}" style="cursor: pointer;">
-                                        <td>
-                                        {{ $accreditation_doc->document->document_name }} -- {{$outline->id}}
-                                        <i class="glyphicon glyphicon-plus"></i></td>
-                                        <td>{{ $outline->section }}</td>
+                                        
+                                        <td><a href="{{ route('document-outline.edit', $outline) }}">{{ $outline->section }}</a></td>
                                         <td>{{ $outline->doc_type }}</td>
-                                        <td class="text-right">
+                                        <!-- <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="fas fa-ellipsis-v"></i>
@@ -71,18 +69,16 @@ function buildTree($elements, $parentId = 0) {
                                                     <a class="dropdown-item" href="{{ route('document-outline.edit', $outline) }}">{{ __('Edit') }}</a>
                                                 </div>
                                             </div>
-                                        </td>
+                                        </td> -->
                                     
                                     </tr>
                                     
                                     @foreach($outline->children as $child)
-                                    <tr class="clickable collapse row{{$outline->id}}" data-toggle="collapse" id="row{{$outline->id}}" data-target=".row{{$outline->id}}">
-                                        <td>
-                                        {{ $accreditation_doc->document->document_name }}
-                                        <i class="glyphicon glyphicon-plus"></i></td>
-                                        <td>{{$child->section}}</td>
-                                        <td>{{ $outline->doc_type }}</td>
-                                        <td class="text-right">
+                                    <tr class="collapse row{{$outline->id}} child" id="row{{$outline->id}}">
+                                        
+                                        <td><a href="{{ route('document-outline.edit', $child) }}">{{$child->section}}</a></td>
+                                        <td>{{$outline->doc_type }}</td>
+                                        <!-- <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="fas fa-ellipsis-v"></i>
@@ -91,7 +87,7 @@ function buildTree($elements, $parentId = 0) {
                                                     <a class="dropdown-item" href="{{ route('document-outline.edit', $outline) }}">{{ __('Edit') }}</a>
                                                 </div>
                                             </div>
-                                        </td>
+                                        </td> -->
                                     
                                     </tr>
                                     @endforeach
