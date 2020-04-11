@@ -30,6 +30,7 @@ class AddRecurringToTasksTable extends Migration
         Schema::table('tasks', function (Blueprint $table) {
             $table->dropColumn('recurring');
             $table->dropColumn('recurring_freq');
+            $table->dropColumn('recurring_date');
         });
     }
 }

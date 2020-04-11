@@ -9,7 +9,7 @@ class AppendixExhibit extends Model
     protected $table = 'appendix_exhibits';
 
     protected $fillable = [
-        'name', 'code', 'type', 'evidence_complete',
+        'name', 'code', 'description', 'type', 'evidence_complete',
     ];
 
     protected $casts = [

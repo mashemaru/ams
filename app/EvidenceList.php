@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class EvidenceList extends Model
 {
     protected $fillable = [
-        'name',
+        'name', 'description',
     ];
 
     public function appendix_exhibit()

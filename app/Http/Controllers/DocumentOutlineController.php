@@ -132,19 +132,21 @@ class DocumentOutlineController extends Controller
 
     public function updateEvidenceList(Request $request, DocumentOutline $document_outline)
     {
-        if(isset($request->new_evidence_list)) {
-            foreach($request->new_evidence_list as $new_evidence_list) {
+        if(isset($request->new_evidence)) {
+            foreach($request->new_evidence as $key => $new_evidence_list) {
                 $new = EvidenceList::create([
-                    'name' => $new_evidence_list
+                    'name' => $new_evidence_list['list'],
+                    'description' => $new_evidence_list['desc'],
                 ]);
                 $document_outline->evidences()->attach($new);
             }
         }
-        if(isset($request->evidence_list)) {
-            foreach($request->evidence_list as $key => $evidence_list) {
+        if(isset($request->evidence)) {
+            foreach($request->evidence as $key => $evidence_list) {
                 $evidence = EvidenceList::findOrFail($key);
                 $evidence->update([
-                    'name' => $evidence_list
+                    'name' => $evidence_list['list'],
+                    'description' => $evidence_list['desc'],
                 ]);
             }
         }
@@ -230,6 +232,7 @@ class DocumentOutlineController extends Controller
 
         $appendix_exhibit = AppendixExhibit::create([
             'name'     => $request->name,
+            'description'     => $request->description,
             'code'     => $request->name,
             'type'     => $request->type,
         ]);

@@ -40,10 +40,11 @@
                                         @foreach($outline->evidences as $list)
                                         <div class="row">
                                             <div class="col-8">
-                                                <div class="form-group mb-3">
+                                                <div class="form-group mb-4">
                                                     <div class="input-group input-group-alternative">
-                                                        <input class="form-control recommendation" placeholder="Evidence List" name="evidence_list[{{ $list->id }}]" type="text" value="{{ $list->name }}">
+                                                        <input class="form-control recommendation" placeholder="Evidence List" name="evidence[{{ $list->id }}][list]" type="text" value="{{ $list->name }}">
                                                     </div>
+                                                    <textarea class="form-control form-control-sm mt-3" rows="2" name="evidence[{{ $list->id }}][desc]" placeholder="Description...">{{ $list->description }}</textarea>
                                                 </div>
                                             </div>
                                             {{-- <div class="col-1">
@@ -166,6 +167,9 @@
                             <br>
                         @endif
                         @if ($outline->accreditation->progress != 'initial')
+                        @if ($outline->description)
+                        <p><em>{{ $outline->description }}</em></p>
+                        @endif
                         <textarea name="content" id="content">{{ $outline->body }}</textarea>
                         @endif
                     </div>
@@ -220,7 +224,7 @@
                     <div class="card">
                         <div class="card-header{{ (request()->get('appendix') == $list->id) ? ' collapsed' : '' }}" id="heading{{$list->id}}" data-toggle="collapse" data-target="#collapse{{$list->id}}" aria-expanded="false" aria-controls="collapse{{$list->id}}">
                             <div class="d-flex align-items-center">
-                                <h5 class="mb-0">{{ $list->name }}</h5>
+                                <h5 class="mb-0">{{ $list->name }} <small><em>{{ '- ' . $list->description }}</em></small></h5>
                                 <span class="ml-auto mr-5"><a class="btn btn-primary btn-sm mt-2" href="#" data-toggle="modal" data-target="#taskModal{{$list->id}}">Assign Task</a></span>
                             </div>
                         </div>
@@ -240,6 +244,7 @@
                                                 <tr>
                                                     <th scope="col">Code</th>
                                                     <th scope="col">Name</th>
+                                                    <th scope="col">Description</th>
                                                     <th scope="col">Type</th>
                                                     {{-- <th scope="col">Evidences</th> --}}
                                                     <th scope="col" width="2%"></th>
@@ -250,6 +255,7 @@
                                                 <tr>
                                                     <th scope="row">{{ $data->code }}</th>
                                                     <th scope="row">{{ $data->name }}</th>
+                                                    <th scope="row">{{ $data->description }}</th>
                                                     <td scope="row">{{ ucfirst($data->type) }}</td>
                                                     {{-- <td scope="row">
                                                         @if($data->evidences->isNotEmpty())
@@ -443,6 +449,12 @@
                                                             <label class="form-control-label">Name</label>
                                                             <div class="input-group input-group-alternative">
                                                                 <input class="form-control" name="name" type="text">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group mb-3">
+                                                            <label class="form-control-label">Description</label>
+                                                            <div class="input-group input-group-alternative">
+                                                                <input class="form-control" name="description" type="text">
                                                             </div>
                                                         </div>
                                                         <div class="form-group mb-3">
@@ -685,8 +697,8 @@ function uploadImage(image) {
     })
 }
 $('#addRecommendation').click(function (e) { //on add input button click
-    // var Recommendations = $("#Recommendations .row").length;
-    $("#Recommendations").append('<div class="row"><div class="col-8"><div class="form-group mb-3"><div class="input-group input-group-alternative"><input class="form-control recommendation" placeholder="Evidence List" name="new_evidence_list[]" type="text"></div></div></div><div class="col-1"><button class="btn btn-icon btn-2 btn-danger removeRecommendation" type="button">X</button></div></div>');
+    var Recommendations = $("#Recommendations .row").length;
+    $("#Recommendations").append('<div class="row"><div class="col-8"><div class="form-group mb-4"><div class="input-group input-group-alternative"><input class="form-control recommendation" placeholder="Evidence List" name="new_evidence['+ Recommendations +'][list]" type="text"></div><textarea class="form-control form-control-sm mt-3" rows="2" name="new_evidence['+ Recommendations +'][desc]" placeholder="Description..."></textarea></div></div><div class="col-1"><button class="btn btn-icon btn-2 btn-danger removeRecommendation" type="button">X</button></div></div>');
 });
 
 $("body").on("click",".removeRecommendation", function(e) { //user click on remove text

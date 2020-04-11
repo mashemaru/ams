@@ -96,6 +96,7 @@ class AccreditationController extends Controller
                 'parent_id'         => 0,
                 'root_parent_id'    => 0,
                 'section'           => $s->section,
+                'description'       => isset($s->description) ? $s->description : null,
                 'doc_type'          => isset($s->doc_type) ? $s->doc_type : 'Narrative',
                 'score_type'        => isset($s->score) ? $s->score : 0,
             ]);

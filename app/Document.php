@@ -38,6 +38,7 @@ class Document extends Model
                     'parent_id'         => $parent,
                     'root_parent_id'    => $root_parent_id,
                     'section'           => $c->section,
+                    'description'       => isset($c->description) ? $c->description : null,
                     'doc_type'          => isset($c->doc_type) ? $c->doc_type : 'Narrative',
                     'score_type'        => isset($c->score) ? $c->score : 0,
                 ]);

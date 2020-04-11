@@ -25,12 +25,12 @@
                         <i class="ni ni-single-02"></i>
                         <span>My Profile</span>
                     </a>
-                    @if(auth()->user()->can('view faculty'))
+                    @role('faculty')
                     <a href="{{ route('faculty.profile' )}}" class="dropdown-item">
                         <i class="ni ni-single-02"></i>
                         <span>Faculty Information Form</span>
                     </a>
-                    @endif
+                    @endrole
                     {{-- <a href="#" class="dropdown-item">
                         <i class="ni ni-support-16"></i>
                         <span>My Team</span>
