@@ -301,41 +301,31 @@ class AccreditationController extends Controller
                         $phpWord->addFontStyle('courier',
                             array('name'=>'Courier')
                         );
-                        $section->addText('NAME OF INSTITUTION:	_____________________________________________',$courierStyle,array('align' => 'both'));
+                        $section->addText('NAME OF INSTITUTION: _________________________________________',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
-                        $section->addText('				LOCATION: _____________________________________________',$courierStyle,array('align' => 'both'));
+                        $section->addText('		 LOCATION: _________________________________________',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
-                        $section->addText('PROGRAM(S) UNDER SURVEY:',$courierStyle,array('align' => 'both'));
+                        $section->addText('PROGRAM(S) UNDER SURVEY:',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	____________________________	___________________________',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	____________________________	___________________________',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
-                        $section->addText('ANALYSIS MADE BY:',$courierStyle,array('align' => 'both'));
+                        $section->addText('ANALYSIS MADE BY:',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	____________________________	___________________________',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	____________________________	___________________________',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('EVALUATION MADE BY:',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
-                        $section->addText('EVALUATION MADE BY:',$courierStyle,array('align' => 'both'));
+                        $section->addText('	____________________________	___________________________',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	____________________________	___________________________',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('DATE COMPLETED:',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
-                        $section->addText('DATE COMPLETED:',$courierStyle,array('align' => 'both'));
-                        $section->addText('');
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
-                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	____________________________	___________________________',$smallFontStyleName,array('align' => 'both'));
                         $section->addText('');
                         $section->addPageBreak();
                         $section->addText('EVALUATIVE CRITERIA',$boldSmallFontStyleName,array('align' => 'center'));
@@ -364,6 +354,7 @@ class AccreditationController extends Controller
                             $smallFontStyleName,
                             array('keepNext' => true, 'indentation' => array('firstLine' => 360),'align' => 'both')
                         );
+                        $section->addText('');
                     }
                     
                     // $searches = array("&quot;",'&nbsp;');
