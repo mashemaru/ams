@@ -214,9 +214,6 @@ class AccreditationController extends Controller
         $accreditation->load('agency','program','document','document.outlines');
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
 
-        // echo '<pre>';
-        // print_r($accreditation);
-        // dd();
         if ($accreditation->type == 'reaccredit') {
             if($accreditation->recommendations) {
                 $output = '<ol>';
@@ -230,18 +227,155 @@ class AccreditationController extends Controller
             }
         }
     
-        // $section = $phpWord->addSection();
-        // $section->addText('Some text <w:br/> another text in the line ');
         $section = $phpWord->addSection();
-        foreach($accreditation->outlines as $outline) {
-            $phpWord->setDefaultParagraphStyle(
-                array(
-                    'alignment'  => \PhpOffice\PhpWord\SimpleType\Jc::BOTH,
-                    'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(12),
-                    'spacebefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(12),
-                    'spacing'    => 120,
-                )
-            );
+        $outline_heading = [];
+        foreach($accreditation->outlines as $key => $outline) {
+            
+            // $phpWord->setDefaultParagraphStyle(
+            //     array(
+            //         'size' => 12,
+            //         // 'alignment'  => \PhpOffice\PhpWord\SimpleType\Jc::BOTH,
+            //         // 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(12),
+            //         // 'spacebefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(12),
+            //         // 'spacing'    => 120,
+            //     )
+            // );
+
+            
+            switch($accreditation->agency->agency_code){
+                case 'PAASCU':
+                    $boldFontStyleName = 'BoldText';
+                    $phpWord->addFontStyle($boldFontStyleName, array('bold' => true));
+
+                    $smallFontStyleName = 'smallText';
+                    $phpWord->addFontStyle($smallFontStyleName, array(
+                        'name' => 'Courier New',
+                        'size' => 12,
+                        // 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),
+                        // 'spacebefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),
+                        // 'spacing'    => 0,
+                        
+                    ));
+                    
+                    $boldSmallFontStyleName = 'BoldSmallText';
+                    $phpWord->addFontStyle($boldSmallFontStyleName, array(
+                        'name' => 'Courier New',
+                        'bold' => true,
+                        'size' => 12,
+                        'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),
+                        'spacebefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),
+                        'spacing'    => 0,
+                    ));
+                    $courierStyle = 'CourierStyle';
+                    $phpWord->addFontStyle($courierStyle, array(
+                        'name' => 'Courier',
+                        'size' => 12,
+                        // 'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),
+                        // 'spacebefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),
+                        // 'spacing'    => 0,
+                        
+                    ));
+                    if($key == 0){
+                        $section->addText('EVALUATION FORM',$boldSmallFontStyleName,array('align' => 'center'),array('space' => array('before' => 0, 'after' => 0)));
+                        $section->addText('');
+                        $section->addText('SECTION II',$boldSmallFontStyleName,array('align' => 'center'));
+                        $section->addText('');
+                        $section->addText('FACULTY',$boldSmallFontStyleName,array('align' => 'center'));
+                        $section->addText('');
+                        $section->addText('CONTENTS',$boldSmallFontStyleName,array('align' => 'left'));
+                        $section->addText('');
+
+                        $section->addText('A. Academic Qualifications',$smallFontStyleName,array('align' => 'both'));
+                        $section->addText('B. Educational and Professional Experience and Length of Service',$smallFontStyleName,array('align' => 'both'));
+                        $section->addText('C. Selection of Faculty Members',$smallFontStyleName,array('align' => 'both'));
+                        $section->addText('D. Ranking and Promotion',$smallFontStyleName,array('align' => 'both'));
+                        $section->addText('E. Teaching Assignments',$smallFontStyleName,array('align' => 'both'));
+                        $section->addText('F. Research',$smallFontStyleName,array('align' => 'both'));
+                        $section->addText('G. Community Service',$smallFontStyleName,array('align' => 'both'));
+                        $section->addText('H. Performance Evaluation',$smallFontStyleName,array('align' => 'both'));
+                        $section->addText('I. Faculty Development',$smallFontStyleName,array('align' => 'both'));
+                        $section->addText('J. Faculty Relationships',$smallFontStyleName,array('align' => 'both'));
+                        $section->addText('K. Salaries and Fringe Benefits',$smallFontStyleName,array('align' => 'both'));
+                        $section->addText('');
+
+                        $phpWord->addFontStyle('courier',
+                            array('name'=>'Courier')
+                        );
+                        $section->addText('NAME OF INSTITUTION:	_____________________________________________',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('				LOCATION: _____________________________________________',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('PROGRAM(S) UNDER SURVEY:',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('ANALYSIS MADE BY:',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('EVALUATION MADE BY:',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('DATE COMPLETED:',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('	______________________________	',$courierStyle,array('align' => 'both'));
+                        $section->addText('');
+                        $section->addPageBreak();
+                        $section->addText('EVALUATIVE CRITERIA',$boldSmallFontStyleName,array('align' => 'center'));
+                        $section->addText('');
+                        $section->addText('');
+                    $footer = $section->addFooter();
+                    $footer->addPreserveText('Faculty {PAGE}', array('italic' => true, 'name' => 'Courier','size' => 12), array('alignment' => \PhpOffice\PhpWord\SimpleType\Jc::RIGHT));
+                    }
+                    
+                    $sectionStyle = 'sectionStyle';
+                    $phpWord->addFontStyle($sectionStyle, array(
+                        'name' => 'Courier New',
+                        'bold' => true,
+                        'size' => 12,
+                        'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),
+                        'spacebefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),
+                        'spacing'    => 0,
+                    ));
+                    
+                    $section->addText($outline->section,$sectionStyle,array('align' => 'left'));
+                    $section->addText('');
+
+                    if($outline->body){
+                        $section->addText(
+                            $outline->body,
+                            $smallFontStyleName,
+                            array('keepNext' => true, 'indentation' => array('firstLine' => 360),'align' => 'both')
+                        );
+                    }
+                    
+                    // $searches = array("&quot;",'&nbsp;');
+                    // $replacements = array(" ", " ");
+                    // $section_heading = '<span style="font-size: 12px; font-weight: bold;font-family: Courier New;">'.$outline->section.'</span>';
+                    // $html = str_replace($searches,$replacements,'<p style="font-family: Courier New; font-size: 12px;">'.$section_heading.'</p>');
+                    // $html .= str_replace($searches,$replacements,'<p style="font-family: Courier New; font-size: 12px;">'.$outline->body.'</p>');
+                    // \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
+                break;
+
+
+            }
             
             
             
@@ -287,14 +421,14 @@ class AccreditationController extends Controller
             // $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$outline->body);
             // $html = str_replace("&quot;","'",$outline->body);
             
-            $searches = array("&quot;",'&nbsp;');
-            $replacements = array(" ", " ");
+            // $searches = array("&quot;",'&nbsp;');
+            // $replacements = array(" ", " ");
         
-            $section_heading = '<b style="font-size:12;">'.$outline->section.'</b>';
-            $html = str_replace($searches,$replacements,$section_heading);
-            $html .= str_replace($searches,$replacements,$outline->body);
+            // $section_heading = '<b style="font-size:12;">'.$outline->section.'</b>';
+            // $html = str_replace($searches,$replacements,$section_heading);
+            // $html .= str_replace($searches,$replacements,$outline->body);
 
-             \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
+            //  \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
             
         }
         
