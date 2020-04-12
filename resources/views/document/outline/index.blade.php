@@ -54,53 +54,47 @@ function buildTree($elements, $parentId = 0) {
                                 @php
                                 //echo '<pre>';
                                     $outlines = buildTree($accreditation_doc->outlines);
-                                    
                                     //print_r($outlines);
                                     //die();
                                 @endphp
                                 @foreach ($outlines as $outline)
-                                    <!-- @if($outline->children) -->
                                     <tr class="root_parent row{{$outline->parent_id}} parent_outline collapsed" data-toggle="collapse" id="row{{$outline->id}}" data-target=".row{{$outline->id}}" style="cursor: pointer;">
                                         <td><a href="{{ route('document-outline.edit', $outline) }}">{{ $outline->section }}</a></td>
                                         <td>{{ $outline->doc_type }}</td>
                                     </tr>
-                                    @foreach($outline->children as $child)
-                                        <tr class="collapse row{{$child->parent_id}} {{($child->children) ? 'parent_outline' : ''}} child1" data-toggle="collapse" id="row{{$child->id}}" data-target=".row{{$child->id}}" data-parent="#row{{$outline->id}}">
-                                            <td><a href="{{ route('document-outline.edit', $child) }}">{{$child->section}}</a></td>
-                                            <td>{{$outline->doc_type }}</td>
-                                        </tr>
-                                        @if($child->children)
-                                            @foreach($child->children as $children)
-                                            <tr class="collapse row{{$children->parent_id}} {{($children->children) ? 'parent_outline' : ''}} child2" data-toggle="collapse" id="row{{$children->id}}" data-target=".row{{$children->id}}" data-parent="#row{{$child->id}}">
-                                                
-                                                <td><a href="{{ route('document-outline.edit', $children) }}">{{$children->section}}</a></td>
-                                                <td>{{$children->doc_type }}</td>
+                                    @if($outline->children)
+                                        @foreach ( $outline->children as $child )
+                                            <tr class="collapse row{{$child->parent_id}} {{($child->children) ? 'parent_outline' : ''}} child1" data-toggle="collapse" id="row{{$child->id}}" data-target=".row{{$child->id}}" data-parent="#row{{$outline->id}}">
+                                                <td><a href="{{ route('document-outline.edit', $child) }}">{{$child->section}}</a></td>
+                                                <td>{{$outline->doc_type }}</td>
                                             </tr>
-                                            @if($children->children)
-                                                @foreach($children->children as $children2)
-                                                <tr class="collapse row{{$children2->parent_id}} {{($children2->children) ? 'parent_outline' : ''}} child3" data-toggle="collapse" id="row{{$children2->id}}" data-target=".row{{$children2->id}}" data-parent="#row{{$children->id}}">
-                                                    
-                                                    <td><a href="{{ route('document-outline.edit', $children2) }}">{{$children2->section}}</a></td>
-                                                    <td>{{$children2->doc_type }}</td>
+                                            @if($child->children)
+                                                @foreach($child->children as $children)
+                                                <tr class="collapse row{{$children->parent_id}} {{($children->children) ? 'parent_outline' : ''}} child2" data-toggle="collapse" id="row{{$children->id}}" data-target=".row{{$children->id}}" data-parent="#row{{$child->id}}">
+                                                    <td><a href="{{ route('document-outline.edit', $children) }}">{{$children->section}}</a></td>
+                                                    <td>{{$children->doc_type }}</td>
                                                 </tr>
-                                                @if($children2->children)
-                                                    @foreach($children2->children as $children3)
-                                                    <tr class="collapse row{{$children3->parent_id}} child4" id="row{{$children3->id}}" data-parent="#row{{$children2->id}}">
-                                                        <td><a href="{{ route('document-outline.edit', $children3) }}">{{$children3->section}}</a></td>
+                                                @if($children->children)
+                                                    @foreach($children->children as $children2)
+                                                    <tr class="collapse row{{$children2->parent_id}} {{($children2->children) ? 'parent_outline' : ''}} child3" data-toggle="collapse" id="row{{$children2->id}}" data-target=".row{{$children2->id}}" data-parent="#row{{$children->id}}">
+                                                        
+                                                        <td><a href="{{ route('document-outline.edit', $children2) }}">{{$children2->section}}</a></td>
                                                         <td>{{$children2->doc_type }}</td>
                                                     </tr>
+                                                    @if($children2->children)
+                                                        @foreach($children2->children as $children3)
+                                                        <tr class="collapse row{{$children3->parent_id}} child4" id="row{{$children3->id}}" data-parent="#row{{$children2->id}}">
+                                                            <td><a href="{{ route('document-outline.edit', $children3) }}">{{$children3->section}}</a></td>
+                                                            <td>{{$children2->doc_type }}</td>
+                                                        </tr>
+                                                        @endforeach
+                                                    @endif
                                                     @endforeach
                                                 @endif
                                                 @endforeach
                                             @endif
-                                            @endforeach
-                                        @endif
-                                    @endforeach
-
-                                    
-                                    <!-- @endif
-                                    @if($outline->children)
-                                    @endif -->
+                                        @endforeach
+                                    @endif
                                 
                                 @endforeach
 
