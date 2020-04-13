@@ -103,7 +103,7 @@
                                                                 <div class="mr-3">{{ $a->program->program_name }} {{ $a->agency->agency_name }} Timeline</div>
                                                                 @role('super-admin')
                                                                 @if($a->progress == 'initial')
-                                                                <a href="{{ route('timeline.edit', $a) }}" class="btn btn-primary btn-sm ml-auto">Edit Timeline</a>
+                                                                <a href="{{ route('timeline.edit', $a->timeline) }}" class="btn btn-primary btn-sm ml-auto">Edit Timeline</a>
                                                                 @endif
                                                                 @endrole
                                                             </label><br>
