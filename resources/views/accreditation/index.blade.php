@@ -100,7 +100,7 @@
                                                     <div class="modal-body">
                                                         <div class="form-group mb-3">
                                                             <label class="form-control-label d-flex align-items-center">
-                                                                <div class="mr-3">{{ $a->program->program_name }} {{ $a->agency->agency_name }} Timeline</div>
+                                                                <div class="mr-3">{{ $a->program->program_code }} {{ $a->agency->agency_code }} Timeline</div>
                                                                 @role('super-admin')
                                                                 @if($a->progress == 'initial')
                                                                 <a href="{{ route('timeline.edit', $a->timeline) }}" class="btn btn-primary btn-sm ml-auto">Edit Timeline</a>

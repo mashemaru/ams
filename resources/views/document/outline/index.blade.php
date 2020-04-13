@@ -45,119 +45,60 @@ function buildTree($elements, $parentId = 0) {
                                 <tr>
                                     
                                     <th scope="col">{{ __('Section') }}</th>
-                                    <th scope="col">{{ __('Document Type') }}</th>
+                                    <th scope="col" width="25">{{ __('Document Type') }}</th>
                                     <!-- <th scope="col">{{ __('Assigned To') }}</th> -->
                                     <!-- <th scope="col"></th> -->
                                 </tr>
                             </thead>
                             <tbody>
                                 @php
+                                //echo '<pre>';
                                     $outlines = buildTree($accreditation_doc->outlines);
+                                    //print_r($outlines);
+                                    //die();
                                 @endphp
                                 @foreach ($outlines as $outline)
-                              
-                                @if($outline->children)
-                                <tr class="clickable-row parent_outline" data-toggle="collapse" id="row{{$outline->id}}" data-target=".row{{$outline->id}}" style="cursor: pointer;">
-                                        
+                                    <tr class="root_parent row{{$outline->parent_id}} parent_outline collapsed" data-toggle="collapse" id="row{{$outline->id}}" data-target=".row{{$outline->id}}" style="cursor: pointer;">
                                         <td><a href="{{ route('document-outline.edit', $outline) }}">{{ $outline->section }}</a></td>
                                         <td>{{ $outline->doc_type }}</td>
-                                        <!-- <td class="text-right">
-                                            <div class="dropdown">
-                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                    <a class="dropdown-item" href="{{ route('document-outline.edit', $outline) }}">{{ __('Edit') }}</a>
-                                                </div>
-                                            </div>
-                                        </td> -->
-                                    
-                                    </tr>
-                                    
-                                    @foreach($outline->children as $child)
-                                    <tr class="collapse row{{$outline->id}} child" id="row{{$outline->id}}">
-                                        
-                                        <td><a href="{{ route('document-outline.edit', $child) }}">{{$child->section}}</a></td>
-                                        <td>{{$outline->doc_type }}</td>
-                                        <!-- <td class="text-right">
-                                            <div class="dropdown">
-                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                    <a class="dropdown-item" href="{{ route('document-outline.edit', $outline) }}">{{ __('Edit') }}</a>
-                                                </div>
-                                            </div>
-                                        </td> -->
-                                    
-                                    </tr>
-                                    @endforeach
-                                @endif
-                                    <!-- <tr class="clickable-row" data-toggle="collapse" id="row{{$outline->id}}" data-target=".row{{$outline->id}}">
-                                        <td>
-                                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample{{$outline->id}}" role="button" aria-expanded="false" aria-controls="collapseExample{{$outline->id}}">
-                                            Link with href
-                                        </a>
-                                        {{ $accreditation_doc->document->document_name }} --- {{$outline->id}}</td>
-                                        <td>{{ $outline->section }} --- {{$outline->root_parent_id}}  </td>
-                                        <td>{{ $outline->doc_type }}</td>
-                                        <td class="text-right">
-                                            <div class="dropdown">
-                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                    <a class="dropdown-item" href="{{ route('document-outline.edit', $outline) }}">{{ __('Edit') }}</a>
-                                                </div>
-                                            </div>
-                                        </td>
                                     </tr>
                                     @if($outline->children)
-                                    
-                                        <tr class="clickable collapse row{{$outline->id}}" data-toggle="collapse" id="row{{$outline->id}}" data-target=".row{{$outline->id}}">
-                                        <td><i class="glyphicon glyphicon-plus"></i></td>
-                                        <td>Supplier2</td>
-                                        <td>Supplier2</td>
-                                        <td>Supplier2</td>
-                                    
-                                    </tr>
-                                    @endif -->
+                                        @foreach ( $outline->children as $child )
+                                            <tr class="collapse row{{$child->parent_id}} {{($child->children) ? 'parent_outline' : ''}} child1" data-toggle="collapse" id="row{{$child->id}}" data-target=".row{{$child->id}}" data-parent="#row{{$outline->id}}">
+                                                <td><a href="{{ route('document-outline.edit', $child) }}">{{$child->section}}</a></td>
+                                                <td>{{$outline->doc_type }}</td>
+                                            </tr>
+                                            @if($child->children)
+                                                @foreach($child->children as $children)
+                                                <tr class="collapse row{{$children->parent_id}} {{($children->children) ? 'parent_outline' : ''}} child2" data-toggle="collapse" id="row{{$children->id}}" data-target=".row{{$children->id}}" data-parent="#row{{$child->id}}">
+                                                    <td><a href="{{ route('document-outline.edit', $children) }}">{{$children->section}}</a></td>
+                                                    <td>{{$children->doc_type }}</td>
+                                                </tr>
+                                                @if($children->children)
+                                                    @foreach($children->children as $children2)
+                                                    <tr class="collapse row{{$children2->parent_id}} {{($children2->children) ? 'parent_outline' : ''}} child3" data-toggle="collapse" id="row{{$children2->id}}" data-target=".row{{$children2->id}}" data-parent="#row{{$children->id}}">
+                                                        
+                                                        <td><a href="{{ route('document-outline.edit', $children2) }}">{{$children2->section}}</a></td>
+                                                        <td>{{$children2->doc_type }}</td>
+                                                    </tr>
+                                                    @if($children2->children)
+                                                        @foreach($children2->children as $children3)
+                                                        <tr class="collapse row{{$children3->parent_id}} child4" id="row{{$children3->id}}" data-parent="#row{{$children2->id}}">
+                                                            <td><a href="{{ route('document-outline.edit', $children3) }}">{{$children3->section}}</a></td>
+                                                            <td>{{$children2->doc_type }}</td>
+                                                        </tr>
+                                                        @endforeach
+                                                    @endif
+                                                    @endforeach
+                                                @endif
+                                                @endforeach
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 
                                 @endforeach
 
-                                <!-- @foreach ($accreditation_doc->outlines as $doc)
-                                
-                                @if($doc->root_parent_id == $doc->parent_id)
-                                    <tr class="clickable-row" data-toggle="collapse" id="row{{$doc->id}}" data-target=".row{{$doc->id}}">
-                                        <td>
-                                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample{{$doc->id}}" role="button" aria-expanded="false" aria-controls="collapseExample{{$doc->id}}">
-                                            Link with href {{$doc->id}}
-                                        </a>
-                                        {{ $accreditation_doc->document->document_name }} --- {{$doc->id}}</td>
-                                        <td>{{ $doc->section }} --- {{$doc->root_parent_id}}  @if($doc->root_parent_id == 328) --- derald pogi @endif</td>
-                                        <td>{{ $doc->doc_type }}</td>
-                                        <td class="text-right">
-                                            <div class="dropdown">
-                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                    <a class="dropdown-item" href="{{ route('document-outline.edit', $doc) }}">{{ __('Edit') }}</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    
-                                        <tr class="clickable collapse row{{$doc->id}}" data-toggle="collapse" id="row{{$doc->id}}" data-target=".row{{$doc->id}}">
-                                        <td><i class="glyphicon glyphicon-plus"></i></td>
-                                        <td>Supplier2</td>
-                                        <td>Supplier2</td>
-                                        <td>Supplier2</td>
-                                    
-                                    </tr>
-                                    
-                                @endif
-                                @endforeach -->
+                               
                             </tbody>
                         </table>
                     </div>

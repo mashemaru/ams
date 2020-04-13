@@ -21870,8 +21870,19 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle
 
 .doc_outline .parent_outline{
     background-color: #F5F5F5;
+    cursor: pointer;
 }
 
-tr.child td:first-child {
+/* tr.child td:first-child {
     padding-left: 50px;
+} */
+
+.doc_outline tr.child1 td:first-child {
+    padding-left: 50px;
+}
+.doc_outline tr.child2 td:first-child {
+    padding-left: 75px;
+}
+.doc_outline tr.child3 td:first-child {
+    padding-left: 100px;
 }
