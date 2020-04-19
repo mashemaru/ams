@@ -207,4 +207,8 @@ class User extends Authenticatable
         return $this->hasMany('App\FacultyCommunityServiceOthers', 'user_id');
     }
     
+    public function invites()
+    {
+        return $this->belongsToMany('App\Accreditation', 'accreditation_teams_users', 'user_id', 'accreditation_id')->withPivot('is_accept', 'reason')->withTimestamps();
+    }
 }

@@ -82,4 +82,9 @@ class Accreditation extends Model
     {
         return $this->belongsToMany('App\AppendixExhibit', 'recommendations_appendix_exhibits', 'accreditation_id', 'appendix_exhibits_id');
     }
+
+    public function invites()
+    {
+        return $this->belongsToMany('App\User', 'accreditation_teams_users', 'accreditation_id', 'user_id')->withPivot('is_accept', 'reason')->withTimestamps();
+    }
 }

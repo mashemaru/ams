@@ -20,6 +20,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/team-invite/{user}', 'TeamController@userAccreditationAssign')->name('team-invite');
+Route::post('/team-invite', ['as' => 'team.invite', 'uses' => 'TeamController@postUserAccreditationAssign']);
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('agency', 'AgencyController', ['except' => ['show','create']]);

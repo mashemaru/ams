@@ -199,9 +199,28 @@ class TeamController extends Controller
             abort(401);
         }
         $accreditation = Accreditation::findOrFail($request->accreditation);
-        $accreditation->accreditation_users()->syncWithoutDetaching($user);
+        // $accreditation->accreditation_users()->syncWithoutDetaching($user);
+        // return back()->withToastSuccess(__('Team successfully created.'));
+        return view('welcome', compact('accreditation','user'));
+        // return 'User successfully added.';
+    }
 
-        return 'User successfully added.';
+    public function postUserAccreditationAssign(Request $request)
+    {
+        $accreditation = Accreditation::findOrFail($request->accreditation);
+        if ($request->invitation == 'accept') {
+            $accreditation->accreditation_users()->syncWithoutDetaching($request->user);
+            $accreditation->invites()->attach($request->user, [
+                'is_accept' => 1
+            ]);
+            return back()->withToastSuccess(__('Team invitation successfully accepted.'));
+        } else if ($request->invitation == 'reject') {
+            $accreditation->invites()->attach($request->user, [
+                'is_accept' => 0,
+                'reason' => $request->reason
+            ]);
+            return back()->withToastSuccess(__('Team invitation successfully rejected.'));
+        }
     }
 
     public function createTeam(Request $request, Accreditation $accreditation)
