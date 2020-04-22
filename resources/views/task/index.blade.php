@@ -13,10 +13,10 @@
                                 <h3 class="mb-0">{{ __('Tasks') }}</h3>
                             </div>
                             <div class="col-4 text-right">
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#groupTaskModal">
-                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Group Task
+                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#groupTaskModal">
+                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Team Task
                                 </button>
-                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#taskModal">
+                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#taskModal">
                                     <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Task
                                 </button>
                             </div>
@@ -104,7 +104,7 @@
                     @csrf
                         <div class="modal-body">
                             <div class="form-group{{ $errors->has('task_name') ? ' has-danger' : '' }} mb-3">
-                                <label class="form-control-label" for="input-task_name">{{ __('Task Name') }}</label>
+                                <label class="form-control-label" for="input-task_name"><strong style="color:red">*</strong>{{ __('Task Name') }}</label>
                                 <input type="text" name="task_name" id="input-task_name" class="form-control form-control-alternative{{ $errors->has('task_name') ? ' is-invalid' : '' }}" placeholder="{{ __('Task Name') }}" value="{{ old('task_name') }}" required autofocus>
                                 @if ($errors->has('task_name'))
                                     <span class="invalid-feedback" role="alert">
@@ -113,7 +113,7 @@
                                 @endif
                             </div>
                             <div class="form-group mb-3">
-                            <label class="form-control-label">Assign to</label>
+                            <label class="form-control-label">Assign to Individual</label>
                             <div class="input-group input-group-alternative">
                                 <select class="form-control form-control-alternative select2" name="assign_to[]" data-toggle="select" multiple >
                                 @if($users)
@@ -139,7 +139,7 @@
                             </div>
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-control-label">Due Date</label>
+                                <label class="form-control-label"><strong style="color:red">*</strong>Due Date</label>
                                 <div class="input-group input-group-alternative">
                                     <input class="form-control datepicker" name="due_date" data-date-format="yyyy-mm-dd" placeholder="Select due date" type="text" value="{{ old('due_date') }}" required>
                                 </div>
@@ -163,11 +163,12 @@
                             <div class="form-group mb-3">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" id="customRecurring" name="recurring">
-                                    <label class="custom-control-label" for="customRecurring">Recurring</label>
+                                    <label class="custom-control-label" for="customRecurring">Recurring Task</label>
                                 </div>
                             </div>
                             <div class="form-group mb-3" id="customRecurringFrequency" style="display: none;">
                                 <div class="custom-checkbox">
+                                    <label class="form-control-label mt-2"><strong style="color:red">*</strong>Number of days</label>
                                     <input type="number" name="recurring_freq" id="input-name" min="1" class="form-control form-control-alternative" placeholder="Input number of days">
                                 </div>
                             </div>
@@ -193,7 +194,7 @@
                         @csrf
                             <div class="modal-body">
                                 <div class="form-group{{ $errors->has('task_name') ? ' has-danger' : '' }} mb-3">
-                                    <label class="form-control-label" for="input-task_name">{{ __('Task Name') }}</label>
+                                    <label class="form-control-label" for="input-task_name"><strong style="color:red">*</strong>{{ __('Task Name') }}</label>
                                     <input type="text" name="task_name" id="input-task_name" class="form-control form-control-alternative{{ $errors->has('task_name') ? ' is-invalid' : '' }}" placeholder="{{ __('Task Name') }}" value="{{ old('task_name') }}" required autofocus>
                                     @if ($errors->has('task_name'))
                                         <span class="invalid-feedback" role="alert">
@@ -202,7 +203,7 @@
                                     @endif
                                 </div>
                                 <div class="form-group mb-3">
-                                <label class="form-control-label">Assign to team</label>
+                                <label class="form-control-label"><strong style="color:red">*</strong>Assign to team</label>
                                 <div class="input-group input-group-alternative">
                                     <select class="form-control form-control-alternative select2" name="assign_to_team[]" data-toggle="select" multiple>
                                     @if($teams)
@@ -214,7 +215,7 @@
                                 </div>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label class="form-control-label">Due Date</label>
+                                    <label class="form-control-label"><strong style="color:red">*</strong>Due Date</label>
                                     <div class="input-group input-group-alternative">
                                         <input class="form-control datepicker" name="due_date" data-date-format="yyyy-mm-dd" placeholder="Select due date" type="text" value="{{ old('due_date') }}" required>
                                     </div>
@@ -238,11 +239,12 @@
                                 <div class="form-group mb-3">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="groupCustomRecurring" name="recurring">
-                                        <label class="custom-control-label" for="groupCustomRecurring">Recurring</label>
+                                        <label class="custom-control-label" for="groupCustomRecurring">Recurring Task</label>
                                     </div>
                                 </div>
                                 <div class="form-group mb-3" id="groupCustomRecurringFrequency" style="display: none;">
                                     <div class="custom-checkbox">
+                                        <label class="form-control-label mt-2"><strong style="color:red">*</strong>Number of days</label>
                                         <input type="number" name="recurring_freq" id="input-name" min="1" class="form-control form-control-alternative" placeholder="Input number of days">
                                     </div>
                                 </div>
