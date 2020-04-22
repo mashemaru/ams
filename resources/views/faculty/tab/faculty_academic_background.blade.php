@@ -73,7 +73,7 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group{{ $errors->has('degrees_earned') ? ' has-danger' : '' }} mb-3">
-                        <label class="form-control-label" for="input-degrees_earned">{{ __('Degrees Earned') }}</label>
+                        <label class="form-control-label" for="input-degrees_earned"><strong style="color:red">*</strong>{{ __('Degree Earned') }}</label>
                         <select class="form-control form-control-alternative{{ $errors->has('degrees_earned') ? ' is-invalid' : '' }}" name="degrees_earned" required>
                             <option value>Select Degrees Eearned</option>
                             <option value="Bachelor's">Bachelor's</option>
@@ -87,7 +87,7 @@
                         @endif
                     </div>
                     <div class="form-group{{ $errors->has('title_of_degree') ? ' has-danger' : '' }} mb-3">
-                        <label class="form-control-label" for="input-title_of_degree">{{ __('Title of Degree') }}</label>
+                        <label class="form-control-label" for="input-title_of_degree"><strong style="color:red">*</strong>{{ __('Title of Degree') }}</label>
                         <input type="text" name="title_of_degree" id="input-title_of_degree" class="form-control form-control-alternative{{ $errors->has('title_of_degree') ? ' is-invalid' : '' }}" placeholder="{{ __('Title of Degree') }}" value="{{ old('title_of_degree') }}">
                         @if ($errors->has('title_of_degree'))
                             <span class="invalid-feedback" role="alert">
@@ -96,7 +96,7 @@
                         @endif
                     </div>
                     <div class="form-group{{ $errors->has('area_of_specialization') ? ' has-danger' : '' }} mb-3">
-                        <label class="form-control-label" for="input-area_of_specialization">{{ __('Area of Specialization') }}</label>
+                        <label class="form-control-label" for="input-area_of_specialization"><strong style="color:red">*</strong>{{ __('Area of Specialization') }}</label>
                         <input type="text" name="area_of_specialization" id="input-area_of_specialization" class="form-control form-control-alternative{{ $errors->has('area_of_specialization') ? ' is-invalid' : '' }}" placeholder="{{ __('Area of Specialization') }}" value="{{ old('area_of_specialization') }}">
                         @if ($errors->has('area_of_specialization'))
                             <span class="invalid-feedback" role="alert">
@@ -105,7 +105,7 @@
                         @endif
                     </div>
                     <div class="form-group{{ $errors->has('year_obtained') ? ' has-danger' : '' }} mb-3">
-                        <label class="form-control-label" for="input-year_obtained">{{ __('Year Obtained') }}</label>
+                        <label class="form-control-label" for="input-year_obtained"><strong style="color:red">*</strong>{{ __('Year Obtained') }}</label>
                         <input type="text" name="year_obtained" id="input-year_obtained" class="form-control form-control-alternative{{ $errors->has('year_obtained') ? ' is-invalid' : '' }}" placeholder="{{ __('Year Obtained') }}" value="{{ old('year_obtained') }}">
                         @if ($errors->has('year_obtained'))
                             <span class="invalid-feedback" role="alert">
@@ -114,7 +114,7 @@
                         @endif
                     </div>
                     <div class="form-group{{ $errors->has('educational_institution') ? ' has-danger' : '' }} mb-3">
-                        <label class="form-control-label" for="input-educational_institution">{{ __('Educational Institution') }}</label>
+                        <label class="form-control-label" for="input-educational_institution"><strong style="color:red">*</strong>{{ __('Educational Institution') }}</label>
                         <input type="text" name="educational_institution" id="input-educational_institution" class="form-control form-control-alternative{{ $errors->has('educational_institution') ? ' is-invalid' : '' }}" placeholder="{{ __('Educational Institution') }}" value="{{ old('educational_institution') }}">
                         @if ($errors->has('educational_institution'))
                             <span class="invalid-feedback" role="alert">
@@ -123,7 +123,7 @@
                         @endif
                     </div>
                     <div class="form-group{{ $errors->has('location') ? ' has-danger' : '' }} mb-3">
-                        <label class="form-control-label" for="input-location">{{ __('Location (City, Country)') }}</label>
+                        <label class="form-control-label" for="input-location"><strong style="color:red">*</strong>{{ __('Location (City, Country)') }}</label>
                         <input type="text" name="location" id="input-location" class="form-control form-control-alternative{{ $errors->has('location') ? ' is-invalid' : '' }}" placeholder="{{ __('Location (City, Country)') }}" value="{{ old('location') }}">
                         @if ($errors->has('location'))
                             <span class="invalid-feedback" role="alert">
@@ -134,11 +134,11 @@
                     <div class="form-group{{ $errors->has('so_number') ? ' has-danger' : '' }} mb-3">
                         <label class="form-control-label" for="input-so_number">{{ __('S.O. Number') }}</label>
                         <input type="text" name="so_number" id="input-so_number" class="form-control form-control-alternative{{ $errors->has('so_number') ? ' is-invalid' : '' }}" placeholder="{{ __('S.O. Number') }}" value="{{ old('so_number') }}">
-                        @if ($errors->has('so_number'))
+                        <!--@if ($errors->has('so_number'))
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $errors->first('so_number') }}</strong>
                             </span>
-                        @endif
+                        @endif-->
                     </div>
                 </div>
                 <div class="modal-footer">

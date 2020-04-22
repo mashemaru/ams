@@ -25,7 +25,7 @@
 
                             <div class="pl-lg-4">
                                 <div class="form-group{{ ($errors->has('firstname') || $errors->has('mi') || $errors->has('surname')) ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-name">{{ __('Name') }}</label>
+                                    <label class="form-control-label" for="input-name"><strong style="color:red">*</strong>{{ __('Name') }}</label>
                                     <div class="input-group input-group-alternative mb-3" id="input-name">
                                         <input type="text" name="firstname" id="input-firstname" class="form-control form-control-alternative col-5{{ $errors->has('firstname') ? ' is-invalid' : '' }}" placeholder="Given Name" value="{{ old('firstname', auth()->user()->firstname) }}">
                                         <input type="text" name="mi" id="input-mi" class="form-control form-control-alternative col-2{{ $errors->has('mi') ? ' is-invalid' : '' }}" placeholder="M.I." value="{{ old('mi', auth()->user()->mi) }}">
@@ -48,7 +48,7 @@
                                     @endif
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-control-label" for="input-gender">{{ __('Gender') }}</label>
+                                    <label class="form-control-label" for="input-gender"><strong style="color:red">*</strong>{{ __('Gender') }}</label>
                                     <select id="input-gender" class="form-control form-control-alternative{{ $errors->has('gender') ? ' is-invalid' : '' }}" placeholder="{{ __('Gender') }}" name="gender" required>
                                         <option value>Select Gender</option>
                                         <option value="male"{{ (auth()->user()->gender == 'male') ? ' selected' : '' }}>Male</option>
@@ -56,15 +56,15 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-control-label" for="input-college">{{ __('College') }}</label>
+                                    <label class="form-control-label" for="input-college"><strong style="color:red">*</strong>{{ __('College') }}</label>
                                     <input class="form-control form-control-alternative" id="input-college" name="college" placeholder="College" type="text" value="{{ old('college', auth()->user()->college) }}">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-control-label" for="input-department">{{ __('Department') }}</label>
+                                    <label class="form-control-label" for="input-department"><strong style="color:red">*</strong>{{ __('Department') }}</label>
                                     <input class="form-control form-control-alternative" id="input-department" name="department" placeholder="Department" type="text" value="{{ old('department', auth()->user()->department) }}">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-control-label" for="input-rank">{{ __('Faculty Classification') }}</label>
+                                    <label class="form-control-label" for="input-rank"><strong style="color:red">*</strong>{{ __('Faculty Classification') }}</label>
                                     <select class="form-control form-control-alternative{{ $errors->has('rank') ? ' is-invalid' : '' }}" name="rank">
                                         <option value>Select Rank</option>
                                         <option value="FT"{{ (auth()->user()->rank == 'FT') ? ' selected' : '' }}>FT</option>
@@ -73,7 +73,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="input-email">{{ __('Email') }}</label>
+                                    <label class="form-control-label" for="input-email"><strong style="color:red">*</strong>{{ __('Email') }}</label>
                                     <input type="email" name="email" id="input-email" class="form-control form-control-alternative{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('Email') }}" value="{{ old('email', auth()->user()->email) }}" required>
 
                                     @if ($errors->has('email'))
