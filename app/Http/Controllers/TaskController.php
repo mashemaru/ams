@@ -79,7 +79,13 @@ class TaskController extends Controller
         if ($validate->fails()) {
             return back()->with('error', $validate->messages())->withInput();
         }
-    
+
+        $task = Task::where('task_name', $request->task_name)->where('status','!=','complete')->where('due_date', '>=' , $request->due_date)->get();
+
+        if($task->isNotEmpty()) {
+            return back()->withToastError(__('There is already a similar task '. $request->task_name . ' with Due Date: ' . $request->due_date));
+        }
+
         if($request->assign_to) {
             foreach($request->assign_to as $assign) {
                 Task::create([
@@ -156,6 +162,12 @@ class TaskController extends Controller
             return back()->with('error', $validate->messages())->withInput();
         }
     
+        $task = Task::where('task_name', $request->task_name)->where('status','!=','complete')->where('due_date', '>=' , $request->due_date)->get();
+
+        if($task->isNotEmpty()) {
+            return back()->withToastError(__('There is already a similar task '. $request->task_name . ' with Due Date: ' . $request->due_date));
+        }
+
         $url = url("/document-outline/{$document_outline}/edit?appendix={$request->appendix_id}");
 
         if($request->assign_to) {
@@ -214,6 +226,12 @@ class TaskController extends Controller
             return back()->with('error', $validate->messages())->withInput();
         }
     
+        $task = Task::where('task_name', $request->task_name)->where('status','!=','complete')->where('due_date', '>=' , $request->due_date)->get();
+
+        if($task->isNotEmpty()) {
+            return back()->withToastError(__('There is already a similar task '. $request->task_name . ' with Due Date: ' . $request->due_date));
+        }
+
         $url = url("/accreditation/{$accreditation}");
 
         if($request->assign_to) {
