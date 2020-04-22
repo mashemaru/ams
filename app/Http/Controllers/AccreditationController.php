@@ -580,6 +580,12 @@ class AccreditationController extends Controller
             return back()->with('error', $validate->messages())->withInput();
         }
     
+        $task = Task::where('task_name', $request->task_name)->where('status','!=','complete')->where('due_date', '>=' , $request->due_date)->get();
+
+        if($task->isNotEmpty()) {
+            return back()->withToastError(__('There is already a similar task '. $request->task_name . ' with Due Date: ' . $request->due_date));
+        }
+
         foreach($request->assign_to as $assign) {
             Task::create([
                 'task_name'  => $request->task_name,
