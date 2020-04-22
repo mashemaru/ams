@@ -693,6 +693,10 @@ class AccreditationController extends Controller
         $team_head = User::where('id', $request->team_head)->first();
         $team_head->assignRole('team-head');
 
+        foreach($request->team_members as $members) {
+            $members->assignRole('member');
+        }
+
         $team->users()->sync($request->team_members);
         $accreditation->teams()->syncWithoutDetaching($team);
         $accreditation->invited_teams()->syncWithoutDetaching($team);

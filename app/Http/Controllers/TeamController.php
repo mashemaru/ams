@@ -65,6 +65,10 @@ class TeamController extends Controller
         $team_head = User::where('id', $request->team_head)->first();
         $team_head->assignRole('team-head');
 
+        foreach($request->team_members as $members) {
+            $members->assignRole('member');
+        }
+
         $team->users()->sync($request->team_members);
 
         if($request->has('save_create'))
@@ -128,6 +132,10 @@ class TeamController extends Controller
         ]);
         $team_head = User::where('id', $request->team_head)->first();
         $team_head->assignRole('team-head');
+
+        foreach($request->team_members as $members) {
+            $members->assignRole('member');
+        }
 
         $team->users()->sync($request->team_members);
 
@@ -254,6 +262,10 @@ class TeamController extends Controller
         $accreditation->invited_teams()->syncWithoutDetaching($team);
         $team_head = User::where('id', $request->team_head)->first();
         $team_head->assignRole('team-head');
+
+        foreach($request->team_members as $members) {
+            $members->assignRole('member');
+        }
 
         $team->users()->sync($request->team_members);
 
