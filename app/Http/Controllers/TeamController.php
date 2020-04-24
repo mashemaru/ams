@@ -6,6 +6,7 @@ use App\Team;
 use App\User;
 use App\Accreditation;
 use App\Notifications\EmailInvitations;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
@@ -192,7 +193,8 @@ class TeamController extends Controller
             foreach($users as $user) {
                 $details = [
                     'user' => $user->name,
-                    'accreditation' => $accreditation->agency->agency_code . '-' . $accreditation->program->program_code,
+                    'agency' => $accreditation->agency->agency_code,
+                    'program' => $accreditation->program->program_name,
                     'actionURL' => URL::signedRoute('team-invite', ['user' => $user->id, 'accreditation' => $accreditation->id])
                 ];
                 $user->notify(new EmailInvitations($details));
@@ -207,9 +209,20 @@ class TeamController extends Controller
             abort(401);
         }
         $accreditation = Accreditation::findOrFail($request->accreditation);
+
+        $result = DB::table('accreditation_teams_users')->where('accreditation_id', $accreditation->id)->where('user_id', $user->id)->first();
+
+        $collection = collect();
+
+        if($result) {
+            $collection = collect([
+                'is_accept' => $result->is_accept,
+                'reason' => $result->reason
+            ]);
+        }
         // $accreditation->accreditation_users()->syncWithoutDetaching($user);
         // return back()->withToastSuccess(__('Team successfully created.'));
-        return view('welcome', compact('accreditation','user'));
+        return view('welcome', compact('accreditation','user','collection'));
         // return 'User successfully added.';
     }
 

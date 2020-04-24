@@ -43,8 +43,8 @@ class EmailInvitations extends Notification implements ShouldQueue
     {
         return (new MailMessage)
                     ->greeting('Hello! '. $this->details['user'])
-                    ->line('Team Accreditation Invitation - ' . $this->details['accreditation'] )
-                    ->action('Click here to accept', $this->details['actionURL'])
+                    ->line('You have been invited to be part of the ' . $this->details['agency'] . ' accreditation for ' . $this->details['program'] . ' We really hope you can join us.')
+                    ->action('View Invitation', $this->details['actionURL'])
                     ->line('Thank you.');
     }
 

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container pt-5">
-    <div class="row row-grid justify-content-center text-lighter">
+    <div class="row row-grid justify-content-center text-center text-lighter">
         <div class="col-lg-10">
             <h1 class="text-light">Hello! <em>{{ $user->name }}</em></h1>
             <p class="mb-5">Team Accreditation Invitation for: {{ $accreditation->agency->agency_code . ' - ' . $accreditation->program->program_code }}</p>
@@ -23,6 +23,12 @@
                     <span class="btn-inner--text">Reject</span>
                 </button>
             </div>
+            @else
+                @if($collection && $collection['is_accept'])
+                    <span class="badge badge-pill badge-lg icon-shape-success">Thank you for joining us!</span>
+                @else
+                    <span class="badge badge-pill badge-lg icon-shape-danger">Sorry to hear that, maybe next time!</span>
+                @endif
             @endif
         </div>
     </div>
@@ -41,8 +47,8 @@
                 <input type="hidden" name="user" value="{{ $user->id }}">
                 <div class="modal-body">
                     <div class="form-group mb-3">
-                        <label class="form-control-label" for="input-name">{{ __('Reason') }}</label>
-                        <input type="text" name="reason" id="input-name" class="form-control form-control-alternative" placeholder="{{ __('Reason') }}" required autofocus>
+                        <label class="form-control-label" for="input-name">Why won't you be able to join us?</label>
+                        <textarea class="form-control" name="reason" id="" cols="30" rows="10" placeholder="{{ __('Reason') }}" required autofocus></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
