@@ -276,9 +276,6 @@
                             {{-- <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#taskModal">
                                 <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Add Task
                             </button> --}}
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#userModal">
-                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Send Member Invites
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -306,6 +303,80 @@
                                         {!! $team->document_teams->where('pivot.accreditation_id', $accreditation->id)->implode('section', '<br>') !!}
                                         @endif
                                     </td>
+                                    {{-- <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="mr-2">80%</span>
+                                            <div>
+                                                <div class="progress">
+                                                    <div class="progress-bar bg-gradient-success" role="progressbar"
+                                                        aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                                        style="width: 80%;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td> --}}
+                                    {{-- <td class="text-right">
+                                        <div class="dropdown">
+                                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                <a class="dropdown-item" href="#">Edit</a>
+                                                <a class="dropdown-item" href="#">Delete</a>
+                                            </div>
+                                        </div>
+                                    </td> --}}
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xl-12 order-xl-1">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="mb-0">User Invites</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#userModal">
+                                <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span> Send Member Invites
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">User</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Reason</th>
+                                    {{-- <th scope="col">Tasks Completed</th> --}}
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($accreditation->invites as $invites)
+                                <tr>
+                                    <td>{{ $invites->name }}</td>
+                                    <td>{{ ($invites->pivot->is_accept) ? 'Accepted' : 'Rejected' }}</td>
+                                    <td>{{ $invites->pivot->reason }}</td>
+                                    {{-- <td>{{ $team->head->name }}</td>
+                                    <td>{!! $team->users->implode('name', '<br>') !!}</td>
+                                    <td>
+                                        @if($team->document_teams->where('pivot.accreditation_id', $accreditation->id))
+                                        {!! $team->document_teams->where('pivot.accreditation_id', $accreditation->id)->implode('section', '<br>') !!}
+                                        @endif
+                                    </td> --}}
                                     {{-- <td>
                                         <div class="d-flex align-items-center">
                                             <span class="mr-2">80%</span>

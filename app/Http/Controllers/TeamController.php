@@ -66,8 +66,11 @@ class TeamController extends Controller
         $team_head = User::where('id', $request->team_head)->first();
         $team_head->assignRole('team-head');
 
-        foreach($request->team_members as $members) {
-            $members->assignRole('member');
+        $members = User::whereIn('id', $request->team_members)->get();
+        if($members) {
+            foreach($members as $member) {
+                $member->assignRole('member');
+            }
         }
 
         $team->users()->sync($request->team_members);
@@ -134,8 +137,11 @@ class TeamController extends Controller
         $team_head = User::where('id', $request->team_head)->first();
         $team_head->assignRole('team-head');
 
-        foreach($request->team_members as $members) {
-            $members->assignRole('member');
+        $members = User::whereIn('id', $request->team_members)->get();
+        if($members) {
+            foreach($members as $member) {
+                $member->assignRole('member');
+            }
         }
 
         $team->users()->sync($request->team_members);
@@ -276,8 +282,11 @@ class TeamController extends Controller
         $team_head = User::where('id', $request->team_head)->first();
         $team_head->assignRole('team-head');
 
-        foreach($request->team_members as $members) {
-            $members->assignRole('member');
+        $members = User::whereIn('id', $request->team_members)->get();
+        if($members) {
+            foreach($members as $member) {
+                $member->assignRole('member');
+            }
         }
 
         $team->users()->sync($request->team_members);

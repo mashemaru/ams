@@ -129,7 +129,7 @@ class AccreditationController extends Controller
      */
     public function show(Accreditation $accreditation)
     {
-        $accreditation->load('agency','program','document','teams','teams.head','teams.users','accreditation_users');
+        $accreditation->load('agency','program','document','teams','teams.head','teams.users','accreditation_users','invites');
         // $team_head = User::has('team_head')->get();
         // $users = User::select('id','firstname','mi','surname')->role('member')->get();
         $users = User::role(['member','faculty'])->get()->diff($accreditation->accreditation_users);
@@ -699,8 +699,11 @@ class AccreditationController extends Controller
         $team_head = User::where('id', $request->team_head)->first();
         $team_head->assignRole('team-head');
 
-        foreach($request->team_members as $members) {
-            $members->assignRole('member');
+        $members = User::whereIn('id', $request->team_members)->get();
+        if($members) {
+            foreach($members as $member) {
+                $member->assignRole('member');
+            }
         }
 
         $team->users()->sync($request->team_members);
