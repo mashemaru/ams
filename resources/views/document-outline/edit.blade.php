@@ -246,6 +246,7 @@
                                                     <th scope="col">Name</th>
                                                     <th scope="col">Description</th>
                                                     <th scope="col">Type</th>
+                                                    <th scope="col">Files</th>
                                                     {{-- <th scope="col">Evidences</th> --}}
                                                     <th scope="col" width="2%"></th>
                                                 </tr>
@@ -257,6 +258,7 @@
                                                     <th scope="row">{{ $data->name }}</th>
                                                     <th scope="row">{{ $data->description }}</th>
                                                     <td scope="row">{{ ucfirst($data->type) }}</td>
+                                                    <td scope="row">{{ ($data->evidences) ? count($data->evidences) : '0'  }}</td>
                                                     {{-- <td scope="row">
                                                         @if($data->evidences->isNotEmpty())
                                                         {!! '<span class="badge badge-dot mr-4"><i class="bg-info"></i> '. $data->evidences->implode('file_name', '</span><br> <span class="badge badge-dot mr-4"><i class="bg-info"></i> ') . '</span>' !!}
