@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table align-items-center table-flush">
+                        <table class="table data-table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
@@ -68,11 +68,11 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="card-footer py-4">
+                    <!-- <div class="card-footer py-4">
                         <nav class="d-flex justify-content-end" aria-label="...">
                             {{ $users->links() }}
                         </nav>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -81,3 +81,20 @@
     </div>
 
 @endsection
+
+@push('js')
+<link href="/vendor/datatables/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="{{ asset('js/dataTables.js') }}"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.data-table').DataTable({
+            language: {
+                paginate: {
+                    previous: "<i class='fas fa-angle-left'>",
+                    next: "<i class='fas fa-angle-right'>"
+                }
+            },
+        });
+    });
+</script>
+@endpush
