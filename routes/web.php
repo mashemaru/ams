@@ -29,6 +29,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('userEmailInvitation/{accreditation}', ['as' => 'email.invitation', 'uses' => 'TeamController@userEmailInvitation']);
 	Route::resource('scoring', 'ScoringTypeController', ['except' => ['show']]);
 	Route::resource('task', 'TaskController', ['except' => ['show']]);
+	Route::get('task-search', ['as' => 'task.search', 'uses' => 'TaskController@TaskSearch']);
+	Route::post('task-search-download', ['as' => 'task.search-download', 'uses' => 'TaskController@TaskSearchDownload']);
 	Route::get('notification', ['as' => 'notification.index', 'uses' => 'NotificationController@index']);
 	Route::get('activities', ['as' => 'activities.index', 'uses' => 'HomeController@activities']);
 	Route::post('taskInProgress/{task}', ['as' => 'task.in-progress', 'uses' => 'TaskController@taskInProgress']);

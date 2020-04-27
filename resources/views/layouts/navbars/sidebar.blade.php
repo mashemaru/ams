@@ -174,6 +174,13 @@
                                 </a>
                             </li>
                             @endif
+                            @hasanyrole('super-admin|team-head')
+                            <li class="nav-item">
+                                <a class="nav-link{{ Route::is('task.*') ? ' active' : '' }}" href="/task-search">
+                                    Task
+                                </a>
+                            </li>
+                            @endhasanyrole
                         </ul>
                     </div>
                 </li>

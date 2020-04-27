@@ -349,4 +349,82 @@ class TaskController extends Controller
         ]);
         return back()->withToastSuccess(__('Action completed successfully.'));
     }
+
+    function TaskSearch(Request $request)
+    {
+        $task = Task::select('status');
+        $teams = collect();
+        $selected_team = collect();
+            // \DB::raw('(SELECT SUM(status) FROM tasks WHERE status = "pending") as pending'),
+            // \DB::raw('(SELECT SUM(status) FROM tasks WHERE status = "overdue") as overdue'),
+            // \DB::raw('(SELECT SUM(status) FROM tasks WHERE status = "in-progress") as "in-progress"'),
+            // \DB::raw('(SELECT SUM(status) FROM tasks WHERE status = "complete") as complete'))
+            // ->get()
+            // ->groupBy('status');
+
+        
+        if(auth()->user()->hasRole('super-admin')) {
+            $teams = Team::all();
+            // $task->get()->groupBy('status');
+            if ($request->has('query') && (($request->input('query') ?? null))) {
+                $result = Team::where('id', $request->input('query'))->first();
+                $selected_team = $result;
+                $task = $task->where('assigner', $result->team_head)->get()->groupBy('status');
+                // dd($task->where('assigner', $result->team_head)->get()->groupBy('status'));
+            } else {
+                $task = $task->get()->groupBy('rank');
+            }
+        } else {
+            if(auth()->user()->hasRole('team-head')) {
+                $teams = Team::where('team_head', auth()->user()->id)->first();
+                $selected_team = $teams;
+                $task = $task->where('assigner', auth()->user()->id)->get()->groupBy('status');
+            }
+        }
+
+        // if ($request->has('query')) {
+        //     // if($request->get('query') == 'teaching_experience') {
+        //     //     $relations = $users->with('faculty_teaching_experience_dlsu','faculty_teaching_experience_other')->where(function ($query) {
+        //     //         $query->has('faculty_teaching_experience_dlsu')->orHas('faculty_teaching_experience_other');
+        //     //     })->get()->groupBy('rank');
+        //     //     $teaching_experience = $users->select("users.rank",
+        //     //     \DB::raw('(SELECT SUM(years) FROM faculty_teaching_experience_dlsu WHERE faculty_teaching_experience_dlsu.user_id = users.id) as faculty_experience_dlsu'),
+        //     //     \DB::raw('(SELECT SUM(years) FROM faculty_teaching_experience_other WHERE faculty_teaching_experience_other.user_id = users.id) as faculty_experience_other'))
+        //     //     ->get()
+        //     //     ->groupBy('rank')
+        //     //     ->toArray();
+        //     // }
+
+        // }
+
+        // $users = User::role('faculty')->paginate(15);
+        return view('task.search', compact('teams','task','selected_team'));
+    }
+
+    public function TaskSearchDownload(Request $request)
+    {
+        $task = Task::select('status');
+
+        if(auth()->user()->hasRole('super-admin')) {
+            $teams = Team::all();
+            $selected_team = collect();
+            // $task->get()->groupBy('status');
+            if ($request->has('query') && (($request->input('query') ?? null))) {
+                $result = Team::where('id', $request->input('query'))->first();
+                $selected_team = $result;
+                $task = $task->where('assigner', $result->team_head)->get()->groupBy('status');
+                // dd($task->where('assigner', $result->team_head)->get()->groupBy('status'));
+            } else {
+                $task = $task->get()->groupBy('rank');
+            }
+        } else {
+            if(auth()->user()->hasRole('team-head')) {
+                $teams = Team::where('team_head', auth()->user()->id)->first();
+                $task = $task->where('assigner', auth()->user()->id)->get()->groupBy('status');
+            }
+        }
+
+        $pdf = \PDF::loadView('task.result', compact('teams','task','selected_team'));
+        return $pdf->download(now()->format("m-d-Y-his") . '_task-search-result.pdf');
+    }
 }
