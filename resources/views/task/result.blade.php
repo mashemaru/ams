@@ -1,5 +1,6 @@
 @php
     $total = 0;
+    $complete = isset($task['complete']) ? $task['complete']->count() : 0;
 @endphp
 <div class="col-9">
     <div class="row mb-5">
@@ -33,7 +34,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Task Burndown</strong></td>
-                                <td><strong>{{ $task['complete']->count() }} / {{ $total }}</strong> {{ round($task['complete']->count() / $total, 2) }}%</td>
+                                <td><strong>{{ $complete }} / {{ $total }}</strong> {{ round($complete / $total, 2) }}%</td>
                             </tr>
                         </tfoot>
                         @endif
