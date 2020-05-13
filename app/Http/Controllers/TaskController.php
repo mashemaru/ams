@@ -38,7 +38,7 @@ class TaskController extends Controller
         $assigned->push(auth()->user()->id);
 
         if(auth()->user()->hasRole('super-admin')) {
-            $query = $task->whereIn('asigned_to', $assigned)->latest()->paginate(15);
+            $query = $task->latest()->paginate(15);
         } else {
             $query = $task->where('asigned_to', auth()->user()->id)->latest()->paginate(15);
         }
@@ -352,7 +352,7 @@ class TaskController extends Controller
 
     function TaskSearch(Request $request)
     {
-        $task = Task::select('status');
+        $task = Task::with('user');
         $teams = collect();
         $selected_team = collect();
             // \DB::raw('(SELECT SUM(status) FROM tasks WHERE status = "pending") as pending'),
@@ -369,6 +369,7 @@ class TaskController extends Controller
             if ($request->has('query') && (($request->input('query') ?? null))) {
                 $result = Team::where('id', $request->input('query'))->first();
                 $selected_team = $result;
+                $assigned = $task->where('assigner', $result->team_head)->get()->groupBy('asigned_to');
                 $task = $task->where('assigner', $result->team_head)->get()->groupBy('status');
                 // dd($task->where('assigner', $result->team_head)->get()->groupBy('status'));
             } else {
@@ -378,10 +379,11 @@ class TaskController extends Controller
             if(auth()->user()->hasRole('team-head')) {
                 $teams = Team::where('team_head', auth()->user()->id)->first();
                 $selected_team = $teams;
+                $assigned = $task->where('assigner', auth()->user()->id)->get()->groupBy('asigned_to');
                 $task = $task->where('assigner', auth()->user()->id)->get()->groupBy('status');
             }
         }
-
+        // dd($assigned);
         // if ($request->has('query')) {
         //     // if($request->get('query') == 'teaching_experience') {
         //     //     $relations = $users->with('faculty_teaching_experience_dlsu','faculty_teaching_experience_other')->where(function ($query) {
@@ -398,7 +400,7 @@ class TaskController extends Controller
         // }
 
         // $users = User::role('faculty')->paginate(15);
-        return view('task.search', compact('teams','task','selected_team'));
+        return view('task.search', compact('teams','task','selected_team','assigned'));
     }
 
     public function TaskSearchDownload(Request $request)

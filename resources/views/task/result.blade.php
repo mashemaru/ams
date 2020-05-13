@@ -43,4 +43,33 @@
             </div>
         </div>
     </div>
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="table-responsive">
+                    <h2 class="m-0 p-3">Task Breakdown</h2>
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">{{ __('Member') }}</th>
+                                <th scope="col">{{ __('Pending') }}</th>
+                                <th scope="col">{{ __('In-progress') }}</th>
+                                <th scope="col">{{ __('Complete') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($assigned as $key => $user)
+                            <tr>
+                                <td>{{ $user->first()->user->name }}</td>
+                                <td>{{ isset($user->groupby('status')['pending']) ? $user->groupby('status')['pending']->count() : 0 }}</td>
+                                <td>{{ isset($user->groupby('status')['in-progress']) ? $user->groupby('status')['in-progress']->count() : 0 }}</td>
+                                <td>{{isset($user->groupby('status')['complete']) ? $user->groupby('status')['complete']->count() : 0 }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
