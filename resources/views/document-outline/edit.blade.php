@@ -156,22 +156,51 @@
                     </div>
 
                     <div class="card-body px-lg-5 py-lg-5">
-                        @if ($outline->score_type != 0)
-                        <h4>Score: <span class="score">{{ ($outline->score) ?? 'N/A' }}</span>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-sm mb-4" data-toggle="modal" data-target="#scoreModal" style="float:right">
-                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                                    Score Section
-                                </button>
-                            </h4>
-                            <br>
-                        @endif
-                        @if ($outline->accreditation->progress != 'initial')
-                        @if ($outline->description)
-                        <p><em>{{ $outline->description }}</em></p>
-                        @endif
-                        <textarea name="content" id="content">{{ $outline->body }}</textarea>
-                        @endif
+                        {{-- @role('member') --}}
+                        @hasanyrole('member|super-admin')
+                            @if ($outline->score_type != 0)
+                            <h4>Score: <span class="score">{{ ($outline_user) ? $outline_user->pivot->score : 'N/A' }}</span>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary btn-sm mb-4" data-toggle="modal" data-target="#scoreModal" style="float:right">
+                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                        Score Section
+                                    </button>
+                                </h4>
+                                <br>
+                            @endif
+                            @if ($outline->accreditation->progress != 'initial')
+                            @if ($outline->description)
+                            <p><em>{{ $outline->description }}</em></p>
+                            @endif
+                            <textarea name="content" id="content">{{ ($outline_user) ? $outline_user->pivot->body : '' }}</textarea>
+                            @endif
+                        @endrole
+
+                        @role('super-admin')
+                        {{-- @role('team-head') --}}
+                            <div class="custom-control custom-radio mb-3">
+                                <input name="user-outline" class="custom-control-input" id="customRadio0" type="radio" value=""{{ (null == $outline_selected_user) ? ' checked' : '' }}>
+                                <label class="custom-control-label" for="customRadio0"><strong>---</strong></label>
+                            </div>
+                            @foreach($outline->outline_user as $user)
+                                <div class="custom-control custom-radio mb-3">
+                                    <input name="user-outline" class="custom-control-input" id="customRadio{{ $user->id }}" type="radio" value="{{ $user->id }}"{{ ($outline_selected_user && $user->id == $outline_selected_user->id) ? ' checked' : '' }}>
+                                    <label class="custom-control-label" for="customRadio{{ $user->id }}"><strong>{{ $user->name }}</strong></label>
+                                    <a data-toggle="modal" id="getMessage" data-target="#messageBoard" class="btn btn-primary btn-sm ml-4" data-id="{{ $user->id }}" href="#"> View </a>
+                                </div>
+                                
+                                <div class="modal fade" id="messageBoard" role="dialog">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <!-- Modal content-->
+                                        <div class="modal-content message-modal p-4">
+                                            <div class="modal-body">
+                                                test
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endrole
                     </div>
                     @if ($outline->accreditation->progress == 'formal')
                     <div class="card-footer py-4">
@@ -674,7 +703,26 @@ $(document).ready(function () {
     $('.data-table2 tbody').on( 'click', 'tr', function () {
         $(this).toggleClass('selected');
         $('.evidence_select input[name="selected"]').val(dataTable2.rows('.selected').data().pluck('id').toArray());
-    } );
+    });
+
+    $(document).on('click', '#getMessage', function(e){
+        e.preventDefault();
+        var url = $(this).data('id');
+        $('.message-modal').html('');   
+        $.ajax({
+            url: '/getDocument_outline_users/' + {{ $outline->id }} + '/?user=' + url,
+            type: 'GET',
+            dataType: 'html'
+        })
+        .done(function(data){
+           // console.log(data);  
+            $('.message-modal').html('');    
+            $('.message-modal').html(data); // load response 
+        })
+        .fail(function(){
+            $('.message-modal').html('<i class="glyphicon glyphicon-info-sign"></i> Something went wrong, Please try again...');
+        });
+    });
 });
 // const Toast = Swal.mixin({
 //     toast: true,

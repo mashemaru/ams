@@ -50,4 +50,9 @@ class DocumentOutline extends Model
     {
         return $this->belongsToMany('App\EvidenceList', 'document_outline_evidence_list', 'document_outline_id', 'evidence_lists_id');
     }
+
+    public function outline_user()
+    {
+        return $this->belongsToMany('App\User', 'document_outline_users', 'document_outline_id', 'user_id')->withPivot('body', 'score')->withTimestamps();
+    }
 }

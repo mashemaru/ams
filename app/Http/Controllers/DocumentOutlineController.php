@@ -95,10 +95,12 @@ class DocumentOutlineController extends Controller
      */
     public function edit(DocumentOutline $document_outline)
     {
-        $document_outline->with('scoring_type','comments','document.agency','accreditation.teams','accreditation.accreditation_users','evidences.appendix_exhibit')->get();
+        $document_outline->with('scoring_type','comments','document.agency','accreditation.teams','accreditation.accreditation_users','evidences.appendix_exhibit','outline_user')->get();
         // $document_files = $document_outline->document->appendix_exhibit->unique()->diff($document_outline->appendix_exhibit);
-        
-        return view('document-outline.edit', ['outline' => $document_outline, 'teams' => $document_outline->accreditation->teams, 'users' => $document_outline->accreditation->accreditation_users]);
+        $outline_user = $document_outline->outline_user()->where('user_id', auth()->user()->id)->first();
+        $outline_selected_user = $document_outline->outline_user()->where('selected', true)->first();
+        // dd($outline_selected_user);
+        return view('document-outline.edit', ['outline' => $document_outline, 'teams' => $document_outline->accreditation->teams, 'users' => $document_outline->accreditation->accreditation_users, 'outline_user' => $outline_user, 'outline_selected_user' => $outline_selected_user]);
         // return view('document-outline.edit', ['outline' => $document_outline, 'document_files' => $document_files->groupBy('file_type')]);
     }
 
@@ -111,12 +113,62 @@ class DocumentOutlineController extends Controller
      */
     public function update(Request $request, DocumentOutline $document_outline)
     {
-        $document_outline->update([
-            'body'  => $request->content,
-            'score' => $request->get('custom-radio-score'),
-        ]);
-
+        if(auth()->user()->hasRole(['member', 'super-admin'])) {
+            $document_outline->outline_user()->syncWithoutDetaching([
+                auth()->user()->id => [
+                    'body' => $request->content,
+                    'score' => $request->get('custom-radio-score'),
+                ],
+            ]);
+            $result = \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->where('user_id', auth()->user()->id)->where('selected', true)->first();
+            if($result) {
+                $document_outline->update([
+                    'body'  => $result->body,
+                    'score' => $result->score,
+                ]);
+            }
+        } elseif(auth()->user()->hasRole('team-head')) {
+            if($request->get('user-outline')) {
+                $result = \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->where('user_id', $request->get('user-outline'))->first();
+                if($result) {
+                    $document_outline->update([
+                        'body'  => $result->body,
+                        'score' => $result->score,
+                    ]);
+                    \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->update([
+                        'selected'  => false
+                    ]);
+                    \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->where('user_id', $request->get('user-outline'))->update([
+                        'selected'  => true
+                    ]);
+                }
+            } else {
+                $document_outline->update([
+                    'body'  => null,
+                    'score' => null,
+                ]);
+                \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->update([
+                    'selected'  => false
+                ]);
+            }
+            // $document_outline->outline_user()->syncWithoutDetaching([
+            //     auth()->user()->id => [
+            //         'body' => $request->content,
+            //         'score' => $request->get('custom-radio-score'),
+            //     ],
+            // ]);
+        }
+        // $document_outline->update([
+        //     'body'  => $request->content,
+        //     'score' => $request->get('custom-radio-score'),
+        // ]);
         return back()->withToastSuccess(__('Document successfully updated.'));
+    }
+
+    public function getDocument_outline_users(DocumentOutline $document_outline, Request $request)
+    {
+        $outline_user = \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->where('user_id', $request->user)->first();
+        return view('document-outline.show', ['outline_user' => $outline_user]);
     }
 
     /**
