@@ -113,7 +113,7 @@ class DocumentOutlineController extends Controller
      */
     public function update(Request $request, DocumentOutline $document_outline)
     {
-        if(auth()->user()->hasRole(['member', 'super-admin'])) {
+        if(auth()->user()->hasRole(['member', 'super-admin']) && !auth()->user()->hasRole('team-head')) {
             $document_outline->outline_user()->syncWithoutDetaching([
                 auth()->user()->id => [
                     'body' => $request->content,

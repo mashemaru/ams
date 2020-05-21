@@ -157,6 +157,7 @@
 
                     <div class="card-body px-lg-5 py-lg-5">
                         {{-- @role('member') --}}
+                        @unlessrole('team-head')
                         @hasanyrole('member|super-admin')
                             @if ($outline->score_type != 0)
                             <h4>Score: <span class="score">{{ ($outline_user) ? $outline_user->pivot->score : 'N/A' }}</span>
@@ -172,13 +173,20 @@
                             @if ($outline->description)
                             <p><em>{{ $outline->description }}</em></p>
                             @endif
-                            <textarea name="content" id="content">{{ ($outline_user) ? $outline_user->pivot->body : '' }}</textarea>
+                            <textarea name="content" id="content" disabled>{{ ($outline_user) ? $outline_user->pivot->body : '' }}</textarea>
                             @endif
                         @endrole
+                        @endunlessrole
 
-                        @role('super-admin')
-                        {{-- @role('team-head') --}}
-                            <div class="custom-control custom-radio mb-3">
+                        {{-- @role('super-admin') --}}
+                        @role('team-head')
+                            @if ($outline->accreditation->progress != 'initial')
+                            @if ($outline->description)
+                            <p><em>{{ $outline->description }}</em></p>
+                            @endif
+                            <textarea name="content" id="content">{{ $outline->body }}</textarea>
+                            @endif
+                            <div class="custom-control custom-radio mb-3 mt-4">
                                 <input name="user-outline" class="custom-control-input" id="customRadio0" type="radio" value=""{{ (null == $outline_selected_user) ? ' checked' : '' }}>
                                 <label class="custom-control-label" for="customRadio0"><strong>---</strong></label>
                             </div>
@@ -629,6 +637,9 @@ $(document).ready(function () {
     @if ($outline->accreditation->progress != 'formal')
     $('#content').summernote('disable');
     @endif
+    @role('team-head')
+    $('#content').summernote('disable');
+    @endrole
     $('.dd-list .removeclass').remove();
     $('.dd-list input').attr('disabled', true);
     $('.dd-list select').attr('disabled', true);
