@@ -344,82 +344,28 @@ class AccreditationController extends Controller
                         'spacebefore' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),
                         'spacing'    => 0,
                     ));
-                    
-                    $section->addText($outline->section,$sectionStyle,array('align' => 'left'));
+                    $searches = array("&quot;",'&nbsp;');
+                    $replacements = array(" ", " ");
+                    $section->addText(str_replace($searches,$replacements,$outline->section),$sectionStyle,array('align' => 'left'));
                     $section->addText('');
-
+                    
+                    
                     if($outline->body){
-                        $section->addText(
-                            $outline->body,
-                            $smallFontStyleName,
-                            array('keepNext' => true, 'indentation' => array('firstLine' => 360),'align' => 'both')
-                        );
+                        // $searches = array("&quot;","&nbsp;","<p>","</p>");
+                        // $replacements = array(" "," "," "," ");
+                        // $section->addText(
+                        //     htmlspecialchars($outline->body),
+                        //     $smallFontStyleName,
+                        //     array('keepNext' => true, 'indentation' => array('firstLine' => 360),'align' => 'both')
+                        // );
+                        
+                         $html = str_replace($searches,$replacements,'<span align="justify" style="font-family: Courier New; font-size: 12pt;text-indent: 30pt">'.$outline->body.'</span>');
+                        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html, false, false);
                         $section->addText('');
+
                     }
-                    
-                    // $searches = array("&quot;",'&nbsp;');
-                    // $replacements = array(" ", " ");
-                    // $section_heading = '<span style="font-size: 12px; font-weight: bold;font-family: Courier New;">'.$outline->section.'</span>';
-                    // $html = str_replace($searches,$replacements,'<p style="font-family: Courier New; font-size: 12px;">'.$section_heading.'</p>');
-                    // $html .= str_replace($searches,$replacements,'<p style="font-family: Courier New; font-size: 12px;">'.$outline->body.'</p>');
-                    // \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
                 break;
-
-
             }
-            
-            
-            
-            // switch($accreditation->agency->agency_code){
-            //     case 'ABET':
-                    
-            //         // $section->addText($outline->section,
-            //         //     array('name'=>'Courier New','size' => 12,'bold' => true, 'color' => 'ED7540'),
-            //         //     array('align' => 'left')
-            //         // );
-            //         // $section->addText($outline->body,
-            //         //     array('name'=>'Courier New','size' => (($outline->parent_id == 0) ? 12 : 20),'bold' => true),
-            //         //     array('align' => 'left')
-            //         // );
-            //         // $html->addText($outline->body,
-            //         // // $html = preg_replace('/(\>)\s*(\<)/m', '$1$2', $outline->body);
-            //         // // $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$outline->body);
-            //         $html = str_replace("&quot;","'",$outline->section);
-            //         $html .= str_replace("&quot;","'",$outline->body);
-                    
-            //         // print_r($outline->body);
-            //         // dd();
-            //         // $html = str_replace(array("\n", "\r"), '', $outline->body);
-            //         // $outline->body
-            //     break;
-            //     case 'PAASCU':
-
-            //         $html = str_replace("&quot;","'",$outline->section);
-            //         $html .= str_replace("&quot;","'",$outline->body);
-            //     break;
-            //     case 'AUN':
-            //         $html = str_replace("&quot;","'",$outline->section);
-            //         $html .= str_replace("&quot;","'",$outline->body);
-            //     break;
-            //     default;
-            //         echo 'testing ';
-            // }
-        //     print_r($html);
-        //    dd();
-        // $html = $outline->body;
-            // $section->addText($outline->section,array('name'=>'Arial','size' => (($outline->parent_id == 0) ? 24 : 20),'bold' => true));
-    
-            // $html = str_replace('<table class="table table-bordered">','<table style="width: 100%; border: 4px #000000 single;">',$outline->body);
-            // $html = str_replace("&quot;","'",$outline->body);
-            
-            // $searches = array("&quot;",'&nbsp;');
-            // $replacements = array(" ", " ");
-        
-            // $section_heading = '<b style="font-size:12;">'.$outline->section.'</b>';
-            // $html = str_replace($searches,$replacements,$section_heading);
-            // $html .= str_replace($searches,$replacements,$outline->body);
-
-            //  \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
             
         }
         
