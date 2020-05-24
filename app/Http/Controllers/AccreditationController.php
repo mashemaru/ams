@@ -510,7 +510,8 @@ class AccreditationController extends Controller
 
     public function generateAppendixExhibitList(Accreditation $accreditation)
     {
-        $accreditation->load('appendix_exhibit');
+        $accreditation->load('appendix_exhibit','outlines.evidences');
+        // dd($accreditation);
         $pdf = \PDF::loadView('accreditation.appendix-exhibits-export', compact('accreditation'));
         return $pdf->download(now()->format("m-d-Y-his") . '_AppendixExhibit-List.pdf');
     }
