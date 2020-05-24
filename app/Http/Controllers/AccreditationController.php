@@ -216,13 +216,13 @@ class AccreditationController extends Controller
 
         if ($accreditation->type == 'reaccredit') {
             if($accreditation->recommendations) {
-                $output = '<ol>';
+                $output = '<ol style="font-family: Courier New; font-size: 12pt;">';
                 foreach ($accreditation->recommendations as $key => $item) {
                     $output .= '<li>'.$item['label'].'<ul><li>'.$item['answer'].'</li></ul>'.'</li>';
                 }
                 $output .= '</ol>';
                 $section = $phpWord->addSection();
-                $section->addText('Recommendations',array('name'=>'Arial','size' => 24,'bold' => true));
+                $section->addText('Recommendations',array('name'=>'Courier New','size' => 24,'bold' => true));
                 \PhpOffice\PhpWord\Shared\Html::addHtml($section, $output);
             }
         }
