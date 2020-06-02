@@ -74,6 +74,10 @@ class Kernel extends ConsoleKernel
                         'recurring_freq'  => $recurring_task->recurring_freq,
                         'recurring_date'  => Carbon::now()->addDays($recurring_task->recurring_freq),
                     ]);
+                    Notification::create([
+                        'user_id' => $recurring_task->asigned_to,
+                        'text'    => 'A new task has been added <strong>('.$task->task_name.')</strong>',
+                    ]);
                     event(new LiveNotification('Task ('.$recurring_task->task_name.') assigned.',$recurring_task->asigned_to));
                 }
             }

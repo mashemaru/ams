@@ -158,33 +158,33 @@
                     <div class="card-body px-lg-5 py-lg-5">
                         {{-- @role('member') --}}
                         @unlessrole('team-head')
-                        @hasanyrole('member|super-admin')
-                            @if ($outline->score_type != 0)
-                            <h4>Score: <span class="score">{{ ($outline_user) ? $outline_user->pivot->score : 'N/A' }}</span>
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-primary btn-sm mb-4" data-toggle="modal" data-target="#scoreModal" style="float:right">
-                                        <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                                        Score Section
-                                    </button>
-                                </h4>
-                                <br>
-                            @endif
-                            @if ($outline->accreditation->progress != 'initial')
-                            @if ($outline->description)
-                            <p><em>{{ $outline->description }}</em></p>
-                            @endif
-                            <textarea name="content" id="content" disabled>{{ ($outline_user) ? $outline_user->pivot->body : '' }}</textarea>
-                            @endif
-                        @endrole
+                            @hasanyrole('member|super-admin')
+                                @if ($outline->score_type != 0)
+                                <h4>Score: <span class="score">{{ ($outline_user) ? $outline_user->pivot->score : 'N/A' }}</span>
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-primary btn-sm mb-4" data-toggle="modal" data-target="#scoreModal" style="float:right">
+                                            <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                            Score Section
+                                        </button>
+                                    </h4>
+                                    <br>
+                                @endif
+                                @if ($outline->accreditation->progress != 'initial')
+                                    @if ($outline->description)
+                                    <p><em>{{ $outline->description }}</em></p>
+                                    @endif
+                                    <textarea name="content" id="content">{{ ($outline_user) ? $outline_user->pivot->body : '' }}</textarea>
+                                @endif
+                            @endrole
                         @endunlessrole
 
                         {{-- @role('super-admin') --}}
                         @role('team-head')
                             @if ($outline->accreditation->progress != 'initial')
-                            @if ($outline->description)
-                            <p><em>{{ $outline->description }}</em></p>
-                            @endif
-                            <textarea name="content" id="content">{{ $outline->body }}</textarea>
+                                @if ($outline->description)
+                                    <p><em>{{ $outline->description }}</em></p>
+                                @endif
+                                <textarea name="content" id="content" disabled>{{ $outline->body }}</textarea>
                             @endif
                             <div class="custom-control custom-radio mb-3 mt-4">
                                 <input name="user-outline" class="custom-control-input" id="customRadio0" type="radio" value=""{{ (null == $outline_selected_user) ? ' checked' : '' }}>
