@@ -251,6 +251,7 @@ class FacultyController extends Controller
                 ->toArray();
                 $pdf = \PDF::loadView('faculty.search.professional_practice', compact('professional_practice','relations','isDownload'));
             }
+            $pdf->getDomPDF()->set_option("enable_php", true);
             return $pdf->download(now()->format("m-d-Y-his") . '_faculty-search-result.pdf');
         }
     }
