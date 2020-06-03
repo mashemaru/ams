@@ -11,6 +11,7 @@ use App\Timeline;
 use App\Task;
 use App\FileRepository;
 use App\Document;
+use App\Notification;
 use App\DocumentTeam;
 use App\AppendixExhibit;
 use App\Events\LiveNotification;
@@ -541,6 +542,10 @@ class AccreditationController extends Controller
                 'due_date'   => $request->due_date,
                 'remarks'    => $request->remarks,
                 'priority'   => $request->priority,
+            ]);
+            Notification::create([
+                'user_id' => $assign,
+                'text'    => 'A new task has been added <strong>('.$request->task_name.')</strong>',
             ]);
             event(new LiveNotification('Task ('.$request->task_name.') assigned.',$assign));
         }

@@ -99,6 +99,10 @@ class TaskController extends Controller
                     'recurring_freq'  => isset($request->recurring) ? $request->recurring_freq : null,
                     'recurring_date'  => isset($request->recurring) ? Carbon::now()->addDays($request->recurring_freq) : null,
                 ]);
+                Notification::create([
+                    'user_id' => $assign,
+                    'text'    => 'A new task has been added <strong>('.$request->task_name.')</strong>',
+                ]);
                 event(new LiveNotification('Task ('.$request->task_name.') assigned.',$assign));
             }
         }
@@ -117,6 +121,10 @@ class TaskController extends Controller
                         'recurring'  => isset($request->recurring) ? true : false,
                         'recurring_freq'  => isset($request->recurring) ? $request->recurring_freq : null,
                         'recurring_date'  => isset($request->recurring) ? Carbon::now()->addDays($request->recurring_freq) : null,
+                    ]);
+                    Notification::create([
+                        'user_id' => $user->id,
+                        'text'    => 'A new task has been added <strong>('.$request->task_name.')</strong>',
                     ]);
                     event(new LiveNotification('Task ('.$request->task_name.') assigned.',$user->id));
                 }
@@ -142,6 +150,10 @@ class TaskController extends Controller
                             'recurring'  => isset($request->recurring) ? true : false,
                             'recurring_freq'  => isset($request->recurring) ? $request->recurring_freq : null,
                             'recurring_date'  => isset($request->recurring) ? Carbon::now()->addDays($request->recurring_freq) : null,
+                        ]);
+                        Notification::create([
+                            'user_id' => $user->id,
+                            'text'    => 'A new task has been added <strong>('.$request->task_name.')</strong>',
                         ]);
                         event(new LiveNotification('Task ('.$request->task_name.') assigned.',$user->id));
                     }
@@ -183,6 +195,10 @@ class TaskController extends Controller
                     'recurring_freq'  => isset($request->recurring) ? $request->recurring_freq : null,
                     'recurring_date'  => isset($request->recurring) ? Carbon::now()->addDays($request->recurring_freq) : null,
                 ]);
+                Notification::create([
+                    'user_id' => $assign,
+                    'text'    => 'A new task has been added <strong>('.$request->task_name.')</strong>',
+                ]);
                 event(new LiveNotification('Task ('.$request->task_name.') assigned.',$assign));
             }
         }
@@ -206,6 +222,10 @@ class TaskController extends Controller
                             'recurring'  => isset($request->recurring) ? true : false,
                             'recurring_freq'  => isset($request->recurring) ? $request->recurring_freq : null,
                             'recurring_date'  => isset($request->recurring) ? Carbon::now()->addDays($request->recurring_freq) : null,
+                        ]);
+                        Notification::create([
+                            'user_id' => $user->id,
+                            'text'    => 'A new task has been added <strong>('.$request->task_name.')</strong>',
                         ]);
                         event(new LiveNotification('Task ('.$request->task_name.') assigned.',$user->id));
                     }
@@ -247,6 +267,10 @@ class TaskController extends Controller
                     'recurring_freq'  => isset($request->recurring) ? $request->recurring_freq : null,
                     'recurring_date'  => isset($request->recurring) ? Carbon::now()->addDays($request->recurring_freq) : null,
                 ]);
+                Notification::create([
+                    'user_id' => $assign,
+                    'text'    => 'A new task has been added <strong>('.$request->task_name.')</strong>',
+                ]);
                 event(new LiveNotification('Task ('.$request->task_name.') assigned.',$assign));
             }
         }
@@ -270,6 +294,10 @@ class TaskController extends Controller
                             'recurring'  => isset($request->recurring) ? true : false,
                             'recurring_freq'  => isset($request->recurring) ? $request->recurring_freq : null,
                             'recurring_date'  => isset($request->recurring) ? Carbon::now()->addDays($request->recurring_freq) : null,
+                        ]);
+                        Notification::create([
+                            'user_id' => $user->id,
+                            'text'    => 'A new task has been added <strong>('.$request->task_name.')</strong>',
                         ]);
                         event(new LiveNotification('Task ('.$request->task_name.') assigned.',$user->id));
                     }
