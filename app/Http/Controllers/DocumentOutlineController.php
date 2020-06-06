@@ -99,8 +99,14 @@ class DocumentOutlineController extends Controller
         // $document_files = $document_outline->document->appendix_exhibit->unique()->diff($document_outline->appendix_exhibit);
         $outline_user = $document_outline->outline_user()->where('user_id', auth()->user()->id)->first();
         $outline_selected_user = $document_outline->outline_user()->where('selected', true)->first();
-        // dd($outline_selected_user);
-        return view('document-outline.edit', ['outline' => $document_outline, 'teams' => $document_outline->accreditation->teams, 'users' => $document_outline->accreditation->accreditation_users, 'outline_user' => $outline_user, 'outline_selected_user' => $outline_selected_user]);
+        $collection = \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->get();
+        // dd($collection->groupby('score'));
+        return view('document-outline.edit', ['outline' => $document_outline,
+                                            'teams' => $document_outline->accreditation->teams,
+                                            'users' => $document_outline->accreditation->accreditation_users,
+                                            'outline_user' => $outline_user,
+                                            'outline_selected_user' => $outline_selected_user,
+                                            'collection' => $collection]);
         // return view('document-outline.edit', ['outline' => $document_outline, 'document_files' => $document_files->groupBy('file_type')]);
     }
 
@@ -113,6 +119,12 @@ class DocumentOutlineController extends Controller
      */
     public function update(Request $request, DocumentOutline $document_outline)
     {
+        $hasCopy = array();
+        foreach ($request->all() as $id => $value) {
+            if (preg_match('/^user_(\w+)/i', $id)) {
+                $hasCopy[$id] = $value;
+            }
+        }
         if(auth()->user()->hasRole(['member', 'super-admin']) && !auth()->user()->hasRole('team-head')) {
             $document_outline->outline_user()->syncWithoutDetaching([
                 auth()->user()->id => [
@@ -120,36 +132,59 @@ class DocumentOutlineController extends Controller
                     'score' => $request->get('custom-radio-score'),
                 ],
             ]);
-            $result = \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->where('user_id', auth()->user()->id)->where('selected', true)->first();
-            if($result) {
-                $document_outline->update([
-                    'body'  => $result->body,
-                    'score' => $result->score,
-                ]);
-            }
+            // $result = \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->where('user_id', auth()->user()->id)->where('selected', true)->first();
+            // if($result) {
+            //     $document_outline->update([
+            //         'body'  => $result->body,
+            //         'score' => $result->score,
+            //     ]);
+            // }
         } elseif(auth()->user()->hasRole('team-head')) {
-            if($request->get('user-outline')) {
-                $result = \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->where('user_id', $request->get('user-outline'))->first();
+            if($hasCopy) {
+                $keys = array_keys($hasCopy);
+                $string = implode("", $keys);
+                $user = substr($string, strpos($string, "_") + 1);
+                $result = \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->where('user_id', $user)->first();
                 if($result) {
                     $document_outline->update([
                         'body'  => $result->body,
                         'score' => $result->score,
                     ]);
-                    \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->update([
-                        'selected'  => false
-                    ]);
-                    \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->where('user_id', $request->get('user-outline'))->update([
-                        'selected'  => true
-                    ]);
+                    // \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->update([
+                    //     'selected'  => false
+                    // ]);
+                    // \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->where('user_id', $user)->update([
+                    //     'selected'  => true
+                    // ]);
                 }
             } else {
                 $document_outline->update([
-                    'body'  => null,
-                    'score' => null,
+                    'body'  => $request->content,
+                    'score' => $request->get('custom-radio-score'),
                 ]);
-                \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->update([
-                    'selected'  => false
-                ]);
+                // if($request->get('user-outline')) {
+                //     $result = \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->where('user_id', $request->get('user-outline'))->first();
+                //     if($result) {
+                //         $document_outline->update([
+                //             'body'  => $result->body,
+                //             'score' => $result->score,
+                //         ]);
+                //         \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->update([
+                //             'selected'  => false
+                //         ]);
+                //         \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->where('user_id', $request->get('user-outline'))->update([
+                //             'selected'  => true
+                //         ]);
+                //     }
+                // } else {
+                //     $document_outline->update([
+                //         'body'  => null,
+                //         'score' => null,
+                //     ]);
+                //     \DB::table('document_outline_users')->where('document_outline_id', $document_outline->id)->update([
+                //         'selected'  => false
+                //     ]);
+                // }
             }
             // $document_outline->outline_user()->syncWithoutDetaching([
             //     auth()->user()->id => [

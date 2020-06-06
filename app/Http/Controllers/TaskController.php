@@ -383,6 +383,7 @@ class TaskController extends Controller
         $task = Task::with('user');
         $teams = collect();
         $selected_team = collect();
+        $assigned = collect();
             // \DB::raw('(SELECT SUM(status) FROM tasks WHERE status = "pending") as pending'),
             // \DB::raw('(SELECT SUM(status) FROM tasks WHERE status = "overdue") as overdue'),
             // \DB::raw('(SELECT SUM(status) FROM tasks WHERE status = "in-progress") as "in-progress"'),

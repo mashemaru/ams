@@ -34,7 +34,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Task Burndown</strong></td>
-                                <td><strong>{{ $complete }} / {{ $total }}</strong> {{ round($complete / $total, 2) }}%</td>
+                                <td><strong>{{ $complete }} / {{ $total }}</strong> ({{ round($complete / $total, 2) * 100 }}%)</td>
                             </tr>
                         </tfoot>
                         @endif
@@ -55,15 +55,25 @@
                                 <th scope="col">{{ __('Pending') }}</th>
                                 <th scope="col">{{ __('In-progress') }}</th>
                                 <th scope="col">{{ __('Complete') }}</th>
+                                <th scope="col">{{ __('Overdue') }}</th>
+                                <th scope="col">{{ __('On-Time') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($assigned as $key => $user)
+                            @php
+                            $complete = 0;
+                            $overdue = 0;
+                            if(isset($user->groupby('status')['complete'])) $complete = $user->groupby('status')['complete']->count();
+                            if(isset($user->groupby('status')['overdue'])) $overdue = $user->groupby('status')['overdue']->count();
+                            @endphp
                             <tr>
                                 <td>{{ $user->first()->user->name }}</td>
                                 <td>{{ isset($user->groupby('status')['pending']) ? $user->groupby('status')['pending']->count() : 0 }}</td>
                                 <td>{{ isset($user->groupby('status')['in-progress']) ? $user->groupby('status')['in-progress']->count() : 0 }}</td>
-                                <td>{{isset($user->groupby('status')['complete']) ? $user->groupby('status')['complete']->count() : 0 }}</td>
+                                <td>{{ $complete }}</td>
+                                <td>{{ $overdue }}</td>
+                                <td>{{ $complete - $overdue }}</td>
                             </tr>
                             @endforeach
                         </tbody>

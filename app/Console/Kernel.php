@@ -7,6 +7,7 @@ use App\User;
 use App\Notification;
 use App\NotificationSettings;
 use App\Events\LiveNotification;
+use App\Notifications\RecurringTask;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Console\Scheduling\Schedule;
@@ -45,13 +46,13 @@ class Kernel extends ConsoleKernel
                             'user_id' => $task->asigned_to,
                             'text'    => 'Your <strong>Task ('.$task->task_name.')</strong> is overdue.',
                         ]);
-                        event(new LiveNotification('Your Task ('.$task->task_name.') is overdue.',$task->asigned_to));
+                        // event(new LiveNotification('Your Task ('.$task->task_name.') is overdue.',$task->asigned_to));
                     } else {
                         Notification::create([
                             'user_id' => $task->asigned_to,
                             'text'    => 'You have an approaching deadline on <strong>Task ('.$task->task_name.')</strong>',
                         ]);
-                        event(new LiveNotification('You have an approaching deadline on Task ('.$task->task_name.')',$task->asigned_to));
+                        // event(new LiveNotification('You have an approaching deadline on Task ('.$task->task_name.')',$task->asigned_to));
                     }
                 }
             }
@@ -78,7 +79,15 @@ class Kernel extends ConsoleKernel
                         'user_id' => $recurring_task->asigned_to,
                         'text'    => 'A new task has been added <strong>('.$task->task_name.')</strong>',
                     ]);
-                    event(new LiveNotification('Task ('.$recurring_task->task_name.') assigned.',$recurring_task->asigned_to));
+                    $user = User::where('id', $recurring_task->asigned_to)->get();
+                    if($user) {
+                        $details = [
+                            'user' => $user->name,
+                            'task' => $recurring_task->task_name,
+                        ];
+                        $user->notify(new RecurringTask($details));                        
+                    }
+                    // event(new LiveNotification('Task ('.$recurring_task->task_name.') assigned.',$recurring_task->asigned_to));
                 }
             }
 
@@ -98,7 +107,7 @@ class Kernel extends ConsoleKernel
                                         'user_id' => $user->id,
                                         'text'    => 'Update All <strong>Course Syllabus</strong>',
                                     ]);
-                                    event(new LiveNotification('Update All Course Syllabus',$user->id));
+                                    // event(new LiveNotification('Update All Course Syllabus',$user->id));
                                 }
                             }
                         } elseif ($notif->name == 'fif') {
@@ -108,7 +117,7 @@ class Kernel extends ConsoleKernel
                                     'user_id' => $user->id,
                                     'text'    => 'Update <strong>Faculty Information Form</strong>',
                                 ]);
-                                event(new LiveNotification('Update Faculty Information Form',$user->id));
+                                // event(new LiveNotification('Update Faculty Information Form',$user->id));
                             }
                         }
                     })->cron($notif->cron)->timezone('Asia/Manila');

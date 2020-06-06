@@ -156,19 +156,38 @@
                     </div>
 
                     <div class="card-body px-lg-5 py-lg-5">
+                        @if ($outline->score_type != 0)
+                        @role('team-head')
+                            @if($collection)
+                            <h4>Score Breakdown</h4>
+                            <ul>
+                                @foreach( $collection->groupby('score') as $key => $score)
+                                    @if($key == '')
+                                        <li><strong>No Answer</strong> - {{ $score->count() }}</li>
+                                    @else
+                                        <li><strong>{{ $key }}</strong> - {{ $score->count() }}</li>
+                                    @endif
+                                @endforeach
+                            </ul>
+                            @endif
+                            <h4>Score: <span class="score">{{ ($outline->score) ? $outline->score : 'N/A' }}</span>
+                        @endrole
+                        @unlessrole('team-head')
+                            @hasanyrole('member|super-admin')
+                            <h4>Score: <span class="score">{{ ($outline_user) ? $outline_user->pivot->score : 'N/A' }}</span>
+                            @endrole
+                        @endunlessrole
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary btn-sm mb-4" data-toggle="modal" data-target="#scoreModal" style="float:right">
+                                    <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
+                                    Score Section
+                                </button>
+                            </h4>
+                            <br>
+                        @endif
                         {{-- @role('member') --}}
                         @unlessrole('team-head')
                             @hasanyrole('member|super-admin')
-                                @if ($outline->score_type != 0)
-                                <h4>Score: <span class="score">{{ ($outline_user) ? $outline_user->pivot->score : 'N/A' }}</span>
-                                        <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-primary btn-sm mb-4" data-toggle="modal" data-target="#scoreModal" style="float:right">
-                                            <span class="btn-inner--icon"><i class="ni ni-fat-add"></i></span>
-                                            Score Section
-                                        </button>
-                                    </h4>
-                                    <br>
-                                @endif
                                 @if ($outline->accreditation->progress != 'initial')
                                     @if ($outline->description)
                                     <p><em>{{ $outline->description }}</em></p>
@@ -184,17 +203,19 @@
                                 @if ($outline->description)
                                     <p><em>{{ $outline->description }}</em></p>
                                 @endif
-                                <textarea name="content" id="content" disabled>{{ $outline->body }}</textarea>
+                                <textarea name="content" id="content">{{ $outline->body }}</textarea>
                             @endif
-                            <div class="custom-control custom-radio mb-3 mt-4">
+                            {{-- <div class="custom-control custom-radio mb-3 mt-4">
                                 <input name="user-outline" class="custom-control-input" id="customRadio0" type="radio" value=""{{ (null == $outline_selected_user) ? ' checked' : '' }}>
                                 <label class="custom-control-label" for="customRadio0"><strong>---</strong></label>
-                            </div>
+                            </div> --}}
+                            <p class="mt-4"></p>
                             @foreach($outline->outline_user as $user)
-                                <div class="custom-control custom-radio mb-3">
-                                    <input name="user-outline" class="custom-control-input" id="customRadio{{ $user->id }}" type="radio" value="{{ $user->id }}"{{ ($outline_selected_user && $user->id == $outline_selected_user->id) ? ' checked' : '' }}>
-                                    <label class="custom-control-label" for="customRadio{{ $user->id }}"><strong>{{ $user->name }}</strong></label>
+                                <div class="mb-3">
+                                    {{-- <input name="user-outline" class="custom-control-input" id="customRadio{{ $user->id }}" type="radio" value="{{ $user->id }}"{{ ($outline_selected_user && $user->id == $outline_selected_user->id) ? ' checked' : '' }}> --}}
+                                    <label><strong>{{ $user->name }}</strong></label>
                                     <a data-toggle="modal" id="getMessage" data-target="#messageBoard" class="btn btn-primary btn-sm ml-4" data-id="{{ $user->id }}" href="#"> View </a>
+                                    <button type="submit" name="user_{{ $user->id }}" class="btn btn-success btn-sm ml-1">Copy</button>
                                 </div>
                                 
                                 <div class="modal fade" id="messageBoard" role="dialog">
@@ -637,9 +658,9 @@ $(document).ready(function () {
     @if ($outline->accreditation->progress != 'formal')
     $('#content').summernote('disable');
     @endif
-    @role('team-head')
-    $('#content').summernote('disable');
-    @endrole
+    // @role('team-head')
+    // $('#content').summernote('disable');
+    // @endrole
     $('.dd-list .removeclass').remove();
     $('.dd-list input').attr('disabled', true);
     $('.dd-list select').attr('disabled', true);
