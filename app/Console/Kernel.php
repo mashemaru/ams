@@ -79,7 +79,7 @@ class Kernel extends ConsoleKernel
                         'user_id' => $recurring_task->asigned_to,
                         'text'    => 'A new task has been added <strong>('.$task->task_name.')</strong>',
                     ]);
-                    $user = User::where('id', $recurring_task->asigned_to)->get();
+                    $user = User::where('id', $recurring_task->asigned_to)->first();
                     if($user) {
                         $details = [
                             'user' => $user->name,
